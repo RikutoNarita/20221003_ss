@@ -160,8 +160,9 @@
     <ClCompile Include="..\Library\Debug\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Library\Debug\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Library\Debug\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\DirectX.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\D3DManager.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
+    <ClCompile Include="..\Source\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Library\Debug\imgui\imconfig.h" />
@@ -172,11 +173,15 @@
     <ClInclude Include="..\Library\Debug\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\Library\Debug\imgui\imstb_textedit.h" />
     <ClInclude Include="..\Library\Debug\imgui\imstb_truetype.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\DirectX.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\D3DManager.h" />
     <ClInclude Include="..\Source\main.h" />
     <ClInclude Include="..\Source\framework.h" />
     <ClInclude Include="..\Source\Resource.h" />
     <ClInclude Include="..\Source\targetver.h" />
+    <ClInclude Include="..\Source\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="memo.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

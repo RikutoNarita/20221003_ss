@@ -19,6 +19,12 @@
     <Filter Include="GraphicsSystem">
       <UniqueIdentifier>{cedd977a-64b7-4939-b3cc-34d40f0bad5d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GraphicsSystem\DirectX">
+      <UniqueIdentifier>{f3cc8261-c070-4ff4-8bca-93cbd9abcf26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hlsl">
+      <UniqueIdentifier>{35a44a2d-7ac7-4cd6-9bbf-bdb033ff2d2a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="20221003_ss.rc">
@@ -55,8 +61,11 @@
     <ClCompile Include="..\Library\Debug\imgui\imgui_widgets.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\DirectX.cpp">
-      <Filter>GraphicsSystem</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\D3DManager.cpp">
+      <Filter>GraphicsSystem\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Window.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -96,8 +105,16 @@
     <ClInclude Include="..\Library\Debug\imgui\imstb_truetype.h">
       <Filter>Debug</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\DirectX.h">
-      <Filter>GraphicsSystem</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\D3DManager.h">
+      <Filter>GraphicsSystem\DirectX</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Window.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="memo.txt">
+      <Filter>リソース ファイル</Filter>
+    </Text>
   </ItemGroup>
 </Project>
