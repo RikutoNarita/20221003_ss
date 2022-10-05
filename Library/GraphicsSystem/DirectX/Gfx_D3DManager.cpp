@@ -5,7 +5,7 @@
 //==============================================================================
 
 //! インクルード
-#include <GraphicsSystem/DirectX/D3DManager.h>
+#include <GraphicsSystem/DirectX/Gfx_D3DManager.h>
 #include <main.h>
 
 #if 1
@@ -21,45 +21,45 @@ using namespace DirectX;
 using Microsoft::WRL::ComPtr;
 
 //! 静的メンバ変数宣言
-D3DManager* D3DManager::m_pInstance = nullptr;
+GfxD3DManager* GfxD3DManager::m_pInstance = nullptr;
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
-D3DManager::D3DManager()
+GfxD3DManager::GfxD3DManager()
 {
 }
 
 //------------------------------------------------------------------------------
 /// デストラクタ
 ///
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
-D3DManager::~D3DManager()
+GfxD3DManager::~GfxD3DManager()
 {
 }
 
 //------------------------------------------------------------------------------
 /// インスタンス作成
 ///
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
-void D3DManager::CreateInstance()
+void GfxD3DManager::CreateInstance()
 {
     if (!m_pInstance)
     {
-        m_pInstance = new D3DManager();
+        m_pInstance = new GfxD3DManager();
     }
 }
 
 //------------------------------------------------------------------------------
 /// インスタンス取得
 ///
-/// return クラスのインスタンス
+/// \return クラスのインスタンス
 //------------------------------------------------------------------------------
-D3DManager* D3DManager::GetInstance()
+GfxD3DManager* GfxD3DManager::GetInstance()
 {
     return m_pInstance;
 }
@@ -67,9 +67,9 @@ D3DManager* D3DManager::GetInstance()
 //------------------------------------------------------------------------------
 /// インスタンス削除
 ///
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
-void D3DManager::DeleteInstance()
+void GfxD3DManager::DeleteInstance()
 {
     if (m_pInstance)
     {
@@ -77,7 +77,7 @@ void D3DManager::DeleteInstance()
     }
 }
 
-HRESULT D3DManager::Init(HWND hWnd, UINT width, UINT height)
+HRESULT GfxD3DManager::Init(HWND hWnd, UINT width, UINT height)
 {
     HRESULT hr = S_OK;
 
@@ -163,17 +163,17 @@ HRESULT D3DManager::Init(HWND hWnd, UINT width, UINT height)
     return hr;
 }
 
-void D3DManager::BeginDraw()
+void GfxD3DManager::BeginDraw()
 {
     // バックバッファ＆Ｚバッファのクリア
-    float ClearColor[4] = { 0.417647f, 0.754902f, 0.852941f, 1.0f };
+    float ClearColor[4] = { 0.417647f, 0.754902f, 0.4f, 1.0f };
     m_pDeviceContext->ClearRenderTargetView(m_pRentderTarget.Get(), ClearColor);
     //g_pImmContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
     // 各ターゲットビューをレンダーターゲットに設定
     m_pDeviceContext->OMSetRenderTargets(1, m_pRentderTarget.GetAddressOf(), nullptr);
 
 }
-void D3DManager::EndDraw()
+void GfxD3DManager::EndDraw()
 {
     // バックバッファとフロントバッファの入れ替え
     m_pSwapChain->Present(0, 0);

@@ -4,261 +4,20 @@
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
-////! インクルード
-//#include <framework.h>
-//#include <main.h>
-//#include <Debug\imgui\imgui.h>
-//#include <Debug\imgui\imgui_impl_win32.h>
-//#include <Debug\imgui\imgui_impl_dx11.h>
-//#include <GraphicsSystem\DirectX\DirectX.h>
-//#include <vector>
-//
-////! マクロ定義
-//#define MAX_LOADSTRING 100
-//
-////! グローバル変数:
-//HINSTANCE hInst;                                //! 現在のインターフェイス
-//WCHAR szTitle[MAX_LOADSTRING];                  //! タイトル バーのテキスト
-//WCHAR szWindowClass[MAX_LOADSTRING];            //! メイン ウィンドウ クラス名
-//HWND g_hWnd;                                    //! ウィンドウ ハンドル
-//
-////! このコード モジュールに含まれる関数の宣言を転送します:
-//ATOM                MyRegisterClass(HINSTANCE hInstance);
-//BOOL                InitInstance(HINSTANCE, int);
-//LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
-//INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
-//
-//int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-//                     _In_opt_ HINSTANCE hPrevInstance,
-//                     _In_ LPWSTR    lpCmdLine,
-//                     _In_ int       nCmdShow)
-//{
-//    UNREFERENCED_PARAMETER(hPrevInstance);
-//    UNREFERENCED_PARAMETER(lpCmdLine);
-//
-//    // TODO: ここにコードを挿入してください。
-//
-//    // グローバル文字列を初期化する
-//    LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-//    LoadStringW(hInstance, IDC_MY20221003SS, szWindowClass, MAX_LOADSTRING);
-//    MyRegisterClass(hInstance);
-//    
-//    // アプリケーション初期化の実行:
-//    if (!InitInstance (hInstance, nCmdShow))
-//    {
-//        return FALSE;
-//    }
-//
-//    //! DirectXの初期化
-//    DirectX11Manager manager;
-//    HRESULT hr = S_OK;
-//    hr = manager.Init(g_hWnd, hInst, nCmdShow);
-//    if (FAILED(hr))
-//    {
-//        return FALSE;
-//    }
-//
-//    //Shaderを作成
-//    VertexShader vs;
-//    PixelShader ps;
-//    InputLayout il;
-//    vs.Attach(manager.CreateVertexShader("Shader/2DPipeLineVS.hlsl", "vsMain"));
-//    ps.Attach(manager.CreatePixelShader("Shader/2DPipeLinePS.hlsl", "psMain"));
-//
-//    //InputLayoutの作成
-//    D3D11_INPUT_ELEMENT_DESC elem[] = {
-//        { "POSITION",   0,  DXGI_FORMAT_R32G32B32_FLOAT,    0,  0,  D3D11_INPUT_PER_VERTEX_DATA,    0},
-//        { "TEXCOORD",   0,  DXGI_FORMAT_R32G32B32A32_FLOAT, 0,  12, D3D11_INPUT_PER_VERTEX_DATA,    0}
-//    };
-//    il.Attach(manager.CreateInputLayout(elem, 2, "Shader/2DPipeLineVS.hlsl", "vsMain"));
-//
-//    //頂点情報を設定
-//    struct Vertex
-//    {
-//        XMFLOAT3 pos;
-//        XMFLOAT4 col;
-//    };
-//    vector<Vertex> vertexs =
-//    {
-//        { XMFLOAT3(-0.5f,-0.5f,0), XMFLOAT4(1,0,0,1)},
-//        { XMFLOAT3(0.5f,-0.5f,0), XMFLOAT4(0,1,0,1)},
-//        { XMFLOAT3(0.5f, 0.5f,0), XMFLOAT4(0,0,1,1)},
-//        { XMFLOAT3(-0.5f, 0.5f,0), XMFLOAT4(0,0,0,1)}
-//    };
-//    VertexBuffer vb;
-//    vb.Attach(manager.CreateVertexBuffer(vertexs.data(), static_cast<UINT>(vertexs.size())));
-//
-//    //インデックス情報の設定
-//    vector<UINT> idxs = { 0,1,2,0,2,3 };
-//    IndexBuffer ib;
-//    ib.Attach(manager.CreateIndexBuffer(idxs.data(), static_cast<UINT>(idxs.size())));
-//
-//    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY20221003SS));
-//
-//    MSG msg;
-//
-//    // メイン メッセージ ループ:
-//    while (GetMessage(&msg, nullptr, 0, 0))
-//    {
-//        if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-//        {
-//            TranslateMessage(&msg);
-//            DispatchMessage(&msg);
-//        }
-//
-//        //MainLoop
-//        manager.DrawBegin();
-//        //ポリゴンを書くための各種パラメータセット
-//        manager.SetVertexShader(vs.Get());
-//        manager.SetPixelShader(ps.Get());
-//        manager.SetInputLayout(il.Get());
-//        manager.SetVertexBuffer(vb.Get(), sizeof(Vertex));
-//        manager.SetIndexBuffer(ib.Get());
-//        //DrawCall
-//        manager.DrawIndexed(static_cast<UINT>(idxs.size()));
-//        manager.DrawEnd();
-//    }
-//
-//    return (int) msg.wParam;
-//}
-//
-//
-//
-////
-////  関数: MyRegisterClass()
-////
-////  目的: ウィンドウ クラスを登録します。
-////
-//ATOM MyRegisterClass(HINSTANCE hInstance)
-//{
-//    WNDCLASSEXW wcex;
-//
-//    wcex.cbSize = sizeof(WNDCLASSEX);
-//
-//    wcex.style          = CS_HREDRAW | CS_VREDRAW;
-//    wcex.lpfnWndProc    = WndProc;
-//    wcex.cbClsExtra     = 0;
-//    wcex.cbWndExtra     = 0;
-//    wcex.hInstance      = hInstance;
-//    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MY20221003SS));
-//    wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
-//    wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-//    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_MY20221003SS);
-//    wcex.lpszClassName  = szWindowClass;
-//    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
-//
-//    return RegisterClassExW(&wcex);
-//}
-//
-////
-////   関数: InitInstance(HINSTANCE, int)
-////
-////   目的: インスタンス ハンドルを保存して、メイン ウィンドウを作成します
-////
-////   コメント:
-////
-////        この関数で、グローバル変数でインスタンス ハンドルを保存し、
-////        メイン プログラム ウィンドウを作成および表示します。
-////
-//BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
-//{
-//   hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
-//
-//   g_hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-//      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
-//
-//   if (!g_hWnd)
-//   {
-//      return FALSE;
-//   }
-//
-//   ShowWindow(g_hWnd, nCmdShow);
-//   UpdateWindow(g_hWnd);
-//
-//   return TRUE;
-//}
-//
-////
-////  関数: WndProc(HWND, UINT, WPARAM, LPARAM)
-////
-////  目的: メイン ウィンドウのメッセージを処理します。
-////
-////  WM_COMMAND  - アプリケーション メニューの処理
-////  WM_PAINT    - メイン ウィンドウを描画する
-////  WM_DESTROY  - 中止メッセージを表示して戻る
-////
-////
-//LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-//{
-//    switch (message)
-//    {
-//    case WM_COMMAND:
-//        {
-//            int wmId = LOWORD(wParam);
-//            // 選択されたメニューの解析:
-//            switch (wmId)
-//            {
-//            case IDM_ABOUT:
-//                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-//                break;
-//            case IDM_EXIT:
-//                DestroyWindow(hWnd);
-//                break;
-//            default:
-//                return DefWindowProc(hWnd, message, wParam, lParam);
-//            }
-//        }
-//        break;
-//    case WM_PAINT:
-//        {
-//            PAINTSTRUCT ps;
-//            /*HDC hdc = */BeginPaint(hWnd, &ps);
-//            // TODO: HDC を使用する描画コードをここに追加してください...
-//            EndPaint(hWnd, &ps);
-//        }
-//        break;
-//    case WM_DESTROY:
-//        PostQuitMessage(0);
-//        break;
-//    default:
-//        return DefWindowProc(hWnd, message, wParam, lParam);
-//    }
-//    return 0;
-//}
-//
-//// バージョン情報ボックスのメッセージ ハンドラーです。
-//INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-//{
-//    UNREFERENCED_PARAMETER(lParam);
-//    switch (message)
-//    {
-//    case WM_INITDIALOG:
-//        return (INT_PTR)TRUE;
-//
-//    case WM_COMMAND:
-//        if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-//        {
-//            EndDialog(hDlg, LOWORD(wParam));
-//            return (INT_PTR)TRUE;
-//        }
-//        break;
-//    }
-//    return (INT_PTR)FALSE;
-//}
-//
-//
-//HWND GetWnd()
-//{
-//    return g_hWnd;
-//}
-
 //! インクルード
 #include <main.h>
 #include <Debug/imgui/imgui.h>
 #include <Debug/imgui/imgui_impl_win32.h>
 #include <Debug/imgui/imgui_impl_dx11.h>
 
-#include <GraphicsSystem/DirectX/D3DManager.h>
+#include <GraphicsSystem/DirectX/Gfx_D3DManager.h>
+#include <GraphicsSystem\DirectX\Gfx_Shader.h>
+#include <GraphicsSystem\DirectX\Gfx_VertexShader.h>
+#include <GraphicsSystem\DirectX\Gfx_PixelShader.h>
+#include <GraphicsSystem\DirectX\Gfx_DXBuffer.h>
+#include <GraphicsSystem\DirectX\Gfx_ConstantBuffer.h>
+#include <memory>
+
 //#include <GraphicsSystem/DirectX/Polygon.h>
 
 //! ライブラリのリンク
@@ -271,8 +30,15 @@ void Uninit();            //! 終了
 void Update();            //! 更新
 void Draw();              //! 描画
 
+//! グローバル変数
+std::shared_ptr<GfxVertexShader> g_pVertex2D;
+std::shared_ptr<GfxPixelShader> g_pPixel2D;
+std::shared_ptr<GfxDXBuffer> g_pTriangle;
+//std::shared_ptr<GfxConstantBuffer> g_pTriangle;
+
+
 //! エントリーポイント
-int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdLine, int nCmdShow)
+int WINAPI _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
     UNREFERENCED_PARAMETER(hPrevInstance);  //! 未使用宣言
     UNREFERENCED_PARAMETER(lpCmdLine);      //! 未使用宣言
@@ -280,8 +46,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
     //! COM初期化
     if (FAILED(CoInitializeEx(nullptr, COINIT_MULTITHREADED))) {
-     MessageBox(NULL, _T("COMの初期化に失敗しました。"), _T("error"), MB_OK);
-     return -1;
+        MessageBox(NULL, _T("COMの初期化に失敗しました。"), _T("error"), MB_OK);
+        return -1;
     }
 
     //! インスタンス ハンドル保存
@@ -297,9 +63,10 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 
     //! DirectXの初期化(ウィンドウを作成してから行う)
     if (FAILED(Init(WINDOW->GetWndHandle()))) {
-     return -1;
+        return -1;
     }
 
+    // メッセージループ
     while (WINDOW->Run())
     {
         //! FPS制御
@@ -338,40 +105,78 @@ HRESULT Init(HWND hWnd)
     //! DirectX初期化
     D3D->CreateInstance();
     D3D->Init(hWnd, (UINT)SCREEN_WIDTH, (UINT)SCREEN_HEIGHT);
-    if (FAILED(hr)) {
+    if (FAILED(hr))
+    {
         return hr;
     }
 
-    // ポリゴン表示初期化
-    //hr = CPolygon::Init(GetDevice());
-    //if (FAILED(hr)) return hr;
+ //! ポリゴン表示初期化
+ //hr = CPolygon::Init(GetDevice());
+ //if (FAILED(hr)) return hr;
 
-    // 入力処理初期化
-    //hr = INPUT->Init();
-    //if (FAILED(hr)) return hr;
+ //! 入力処理初期化
+ //hr = INPUT->Init();
+ //if (FAILED(hr)) return hr;
 
-    // Imgui初期化
+    //! Imgui初期化
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
-    // カラーテーマ設定
+    //! カラーテーマ設定
     ImGui::StyleColorsClassic();
-    // プラットフォーム/レンダラの初期化
+    //! プラットフォーム/レンダラの初期化
     ImGui_ImplWin32_Init(hWnd);
 #if 0
     ImGui_ImplDX11_Init(GetDevice(), GetDeviceContext());
-    #else
+ #else
 
     ImGui_ImplDX11_Init(D3D->GetDevice(), D3D->GetDeviceContext());
 #endif // 0
 
 
-    // シェーダーの読み込み
+    //! シェーダーの読み込み
     //SHADER->LoadAll(GetDevice());
 
-    // カメラの初期化
+    //! カメラの初期化
     //CAMERA->Init();
+    struct Vertex
+    {
+        float pos[3];
+        float normal[3];
+        float uv[2];
+    };
+    Vertex vtx[] =
+    {
+        {{ 0.0f,  0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+        {{ 0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+        {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}},
+    };
 
+    // description 記述方法の設定
+    GfxDXBuffer::Desc desk = {};
+    desk.pVtx = vtx;    // 頂点データ
+    desk.vtxCount = _countof(vtx); // 頂点のサイズ
+    desk.vtxSize = sizeof(Vertex);  // 1頂点のデータサイズ
+    desk.topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST; // 頂点の結び方
+    //! 頂点バッファ作成
+    g_pTriangle = std::make_shared<GfxDXBuffer>();
+    hr = g_pTriangle->Create(desk);
+    if (FAILED(hr))
+    {
+        return E_FAIL;
+    }
+    g_pVertex2D = std::make_shared<GfxVertexShader>();
+    hr = g_pVertex2D->Load("data/Vertex2D.cso");
+    if (FAILED(hr))
+    {
+        return E_FAIL;
+    }
+    g_pPixel2D = std::make_shared<GfxPixelShader>();
+    hr = g_pPixel2D->Load("data/Pixel2D.cso");
+    if (FAILED(hr))
+    {
+        return E_FAIL;
+    }
 
     return hr;
 }
@@ -419,8 +224,7 @@ void Draw()
     ImGui::NewFrame();
 #endif
 
-    //ID3D11DeviceContext* pDC = GetDeviceContext();
-    //ClearScreen();
+    //! 描画開始
     D3D->BeginDraw();
 
 #ifdef _DEBUG
@@ -431,24 +235,21 @@ void Draw()
     Begin("ImGuiTest");
     Text("FPS : %d", (int)(GetIO().Framerate)); //! FPS
     End();
+#endif //! _DEBUG
 
- //! 入力情報の表示
- //INPUT->Draw();
+    //! 各シェーダーをセット
+    g_pVertex2D->Bind();
+    g_pPixel2D->Bind();
 
-#endif // _DEBUG
+    // 三角形描画
+    g_pTriangle->Draw();
 
 #ifdef _DEBUG
-
-    //! Zバッファ無効(Zチェック無&Z更新無)
-    //SetZBuffer(false);
-    //SetBlendState(BS_ALPHABLEND);
-
     //! ImGui Render
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+#endif //! _DEBUG
 
-#endif // _DEBUG
-
-    //Swap();
+    //! バックバッファとフロントバッファ入れ替え
     D3D->EndDraw();
 }

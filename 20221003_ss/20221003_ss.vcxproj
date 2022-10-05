@@ -160,7 +160,12 @@
     <ClCompile Include="..\Library\Debug\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="..\Library\Debug\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Library\Debug\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\D3DManager.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_D3DManager.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_ConstantBuffer.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_DXBuffer.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_PixelShader.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_Shader.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_VertexShader.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\Window.cpp" />
   </ItemGroup>
@@ -173,7 +178,12 @@
     <ClInclude Include="..\Library\Debug\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\Library\Debug\imgui\imstb_textedit.h" />
     <ClInclude Include="..\Library\Debug\imgui\imstb_truetype.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\D3DManager.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_D3DManager.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_ConstantBuffer.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_DXBuffer.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_PixelShader.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_Shader.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_VertexShader.h" />
     <ClInclude Include="..\Source\main.h" />
     <ClInclude Include="..\Source\framework.h" />
     <ClInclude Include="..\Source\Resource.h" />
@@ -182,6 +192,36 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="memo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Shader\Pixel2D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shader\Vertex2D.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)data\%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

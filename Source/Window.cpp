@@ -31,7 +31,7 @@ WindowManager* WindowManager::m_pWindow = nullptr;
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
 WindowManager::WindowManager()
 : m_hWnd(nullptr), m_hInst(nullptr)
@@ -41,7 +41,7 @@ WindowManager::WindowManager()
 //------------------------------------------------------------------------------
 /// デストラクタ
 ///
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
 WindowManager::~WindowManager()
 {
@@ -53,7 +53,7 @@ WindowManager::~WindowManager()
 //------------------------------------------------------------------------------
 /// 初期化
 /// 
-/// return 成功時 true
+/// \return 成功時 true
 //------------------------------------------------------------------------------
 bool WindowManager::Init()
 {
@@ -61,27 +61,27 @@ bool WindowManager::Init()
     WNDCLASSEX wcex;
     ZeroMemory(&wcex, sizeof(wcex)); //! ゼロクリア
 
-    wcex.hInstance = GetModuleHandle(NULL);
+    wcex.hInstance = GetModuleHandle(NULL);                     //! ウィンドウ プロシージャを含むインスタンスへのハンドル
     wcex.lpszClassName = CLASS_NAME;                            //! ウインドウのクラス名
     wcex.lpfnWndProc = WndProc;                                 //! ウィンドウのメッセージ処理をするコールバック関数のポインタ
     wcex.style = CS_CLASSDC | CS_DBLCLKS;                       //! ウィンドウのスタイル
     wcex.cbSize = sizeof(WNDCLASSEX);                           //! 構造体のサイズ
-    wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
-    wcex.hIconSm = wcex.hIcon;
+    wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);               //! クラス アイコンへのハンドル
+    wcex.hIconSm = wcex.hIcon;                                  //! クラス アイコンへのハンドル
     wcex.hCursor = LoadCursor(NULL, IDC_ARROW);                 //! マウスカーソルのハンドル
     wcex.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);   //! ウィンドウの背景色
 
-    // ウィンドウクラス情報の登録
+    //! ウィンドウクラス情報の登録
     if (!RegisterClassEx(&wcex))
     {
         MessageBox(NULL, L"Failed to RegisterClassEx", L"Error", MB_OK | MB_ICONERROR);
         return false;
     }
 
-    // ウィンドウの作成
-    RECT rect = { 0, 0, (long)SCREEN_WIDTH, (long)SCREEN_HEIGHT };
-    DWORD style = WS_CAPTION | WS_SYSMENU;
-    DWORD exStyle = WS_EX_OVERLAPPEDWINDOW;
+    //! ウィンドウの作成
+    RECT rect = { 0, 0, (long)SCREEN_WIDTH, (long)SCREEN_HEIGHT };  //! ウィンドウの大きさ
+    DWORD style = WS_CAPTION | WS_SYSMENU;                          //! ウィンドウスタイル
+    DWORD exStyle = WS_EX_OVERLAPPEDWINDOW;                         //! 拡張ウィンドウスタイル
     AdjustWindowRectEx(&rect, style, false, exStyle);
     m_hWnd = CreateWindowEx(exStyle, wcex.lpszClassName, WINDOW_NAME, style, CW_USEDEFAULT, CW_USEDEFAULT,
         rect.right - rect.left, rect.bottom - rect.top, HWND_DESKTOP, NULL, wcex.hInstance, NULL);
@@ -128,7 +128,7 @@ bool WindowManager::Run()
 //------------------------------------------------------------------------------
 /// ウィンドウハンドルの取得
 /// 
-/// return ウィンドウハンドル
+/// \return ウィンドウハンドル
 //------------------------------------------------------------------------------
 HWND WindowManager::GetWndHandle()
 {
@@ -140,7 +140,7 @@ HWND WindowManager::GetWndHandle()
 /// 
 /// \param[in] hInstance インスタンスハンドル
 /// 
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
 void WindowManager::SetInstance(HINSTANCE hInst)
 {
@@ -150,7 +150,7 @@ void WindowManager::SetInstance(HINSTANCE hInst)
 //------------------------------------------------------------------------------
 /// インスタンスハンドルの取得
 /// 
-/// return ウィンドウハンドル
+/// \return ウィンドウハンドル
 //------------------------------------------------------------------------------
 HINSTANCE WindowManager::GetInstance()
 {
@@ -160,7 +160,7 @@ HINSTANCE WindowManager::GetInstance()
 //------------------------------------------------------------------------------
 /// クラスのインスタンス取得
 ///
-/// return クラスのインスタンス
+/// \return クラスのインスタンス
 //------------------------------------------------------------------------------
 WindowManager* WindowManager::Get()
 {
@@ -174,7 +174,7 @@ WindowManager* WindowManager::Get()
 //------------------------------------------------------------------------------
 /// 終了処理
 ///
-/// return void
+/// \return void
 //------------------------------------------------------------------------------
 void WindowManager::Fin()
 {
@@ -220,7 +220,7 @@ LRESULT CALLBACK WindowManager::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 /// 
 /// \param[in] hWnd ウィンドウハンドル
 /// 
-/// return 成功時 0
+/// \return 成功時 0
 //------------------------------------------------------------------------------
 int WindowManager::OnCreate(HWND hWnd)
 {
