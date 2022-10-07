@@ -6,7 +6,6 @@
 
 // インクルード
 #include <Win_Window.h>
-//#include <resource.h>
 #include <wingdi.h>
 #include <WinUser.h>
 #include <tchar.h>

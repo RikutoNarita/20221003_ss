@@ -162,6 +162,7 @@ HRESULT Init(HWND hWnd)
         return hr;
     }
 
+#ifdef _DEBUG
     // Imgui初期化
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -178,6 +179,7 @@ HRESULT Init(HWND hWnd)
     font = io.Fonts->AddFontFromFileTTF("data/Font/BIZenAntique-Bold.ttf",
         16.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
     IM_ASSERT(font != NULL);
+#endif // _DEBUG
 
     // 2D頂点データ作成-----------
     struct Vertex
@@ -452,10 +454,12 @@ void Uninit()
     //! シェーダー終了処理
     //SHADER->Uninit();
 
+#ifdef _DEBUG
     // Imgui 終了
     ImGui_ImplDX11_Shutdown();
     ImGui_ImplWin32_Shutdown();
     ImGui::DestroyContext();
+#endif // DEBUG
 
     // 入力処理終了処理
     //INPUT->Uninit();
