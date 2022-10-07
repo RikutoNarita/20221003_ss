@@ -4,7 +4,7 @@
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
-//! インクルード
+// インクルード
 #include <GraphicsSystem\DirectX\Gfx_PixelShader.h>
 #include <GraphicsSystem\DirectX\Gfx_D3DManager.h>
 #include <d3dcompiler.h>
@@ -15,8 +15,8 @@
 /// \return void
 //------------------------------------------------------------------------------
 GfxPixelShader::GfxPixelShader()
- : GfxShader(GfxShader::PixelShader)
- , m_pPS(nullptr)
+    : GfxShader(Kind::PixelShader)
+    , m_pPS(nullptr)
 {
 }
 
@@ -38,7 +38,7 @@ GfxPixelShader::~GfxPixelShader()
 void GfxPixelShader::Bind()
 {
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
-    //! ピクセルシェーダーをセット
+    // ピクセルシェーダーをセット
     pContext->PSSetShader(m_pPS, nullptr, 0);
 }
 
@@ -58,7 +58,7 @@ UINT size)
 {
     HRESULT hr;
     ID3D11Device* pDevice = D3D->GetDevice();
-    //! ピクセルシェーダー作成
+    // ピクセルシェーダー作成
     hr = pDevice->CreatePixelShader(pData, size, nullptr, &m_pPS);
     return hr;
 }

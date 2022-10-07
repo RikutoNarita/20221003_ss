@@ -9,7 +9,7 @@
 #define __CONSTANT_BUFFER_H__
 
 //! インクルード
-#include <main.h>
+#include <Win_Main.h>
 #include <d3d11.h>
 
 //! クラス定義

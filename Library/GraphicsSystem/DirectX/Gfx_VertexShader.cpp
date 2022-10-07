@@ -17,9 +17,9 @@ std::map<std::string, ID3D11InputLayout*> GfxVertexShader::m_inputLayoutList;
 /// \return void
 //------------------------------------------------------------------------------
 GfxVertexShader::GfxVertexShader()
- : GfxShader(GfxShader::VertexShader)
- , m_pVS(nullptr)
- , m_pInputLayout(nullptr)
+    : GfxShader(GfxShader::Kind::VertexShader)
+    , m_pVS(nullptr)
+    , m_pInputLayout(nullptr)
 {
 }
 
@@ -41,9 +41,9 @@ GfxVertexShader::~GfxVertexShader()
 void GfxVertexShader::Bind()
 {
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
-    //! 頂点シェーダーをセット
+    // 頂点シェーダーをセット
     pContext->VSSetShader(m_pVS, nullptr, 0);
-    //! インプットレイアウトをセット
+    // インプットレイアウトをセット
     pContext->IASetInputLayout(m_pInputLayout);
 }
 
@@ -70,11 +70,7 @@ void GfxVertexShader::ReleaseInputLayout()
 /// 
 /// \return シェーダー作成の成否
 //------------------------------------------------------------------------------
-HRESULT GfxVertexShader::MakeShader(
-/*[in]*/
-void* pData,
-/*[in]*/
-UINT size)
+HRESULT GfxVertexShader::MakeShader(void* pData, UINT size)
 {
     HRESULT hr;
     ID3D11Device* pDevice = D3D->GetDevice();
@@ -102,12 +98,14 @@ UINT size)
             DXGI_FORMAT_R32G32_UINT,
             DXGI_FORMAT_R32G32B32_UINT,
             DXGI_FORMAT_R32G32B32A32_UINT,
-        }, {
+        },
+        {
             DXGI_FORMAT_R32_SINT,
             DXGI_FORMAT_R32G32_SINT,
             DXGI_FORMAT_R32G32B32_SINT,
             DXGI_FORMAT_R32G32B32A32_SINT,
-        }, {
+        },
+        {
             DXGI_FORMAT_R32_FLOAT,
             DXGI_FORMAT_R32G32_FLOAT,
             DXGI_FORMAT_R32G32B32_FLOAT,
@@ -120,7 +118,7 @@ UINT size)
 
     pReflection->GetDesc(&shaderDesc);
     pInputDesc = new D3D11_INPUT_ELEMENT_DESC[shaderDesc.InputParameters];
-    for (int i = 0; i < shaderDesc.InputParameters; ++i)
+    for (int i = 0; i < (int)shaderDesc.InputParameters; ++i)
     {
         pReflection->GetInputParameterDesc(i, &sigDesc);
         pInputDesc[i].SemanticName = sigDesc.SemanticName;
@@ -130,41 +128,46 @@ UINT size)
         BYTE elementCount = sigDesc.Mask;
         elementCount = (elementCount & 0x05) + ((elementCount >> 1) & 0x05);
         elementCount = (elementCount & 0x03) + ((elementCount >> 2) & 0x03);
+        // 警告の対処　読み取り可能な範囲ではないときの処理を追加
+        if (elementCount > 4)
+        {
+            continue;
+        }
 
         switch (sigDesc.ComponentType)
         {
-        case D3D_REGISTER_COMPONENT_UINT32:
+            case D3D_REGISTER_COMPONENT_UINT32:
             pInputDesc[i].Format = formats[0][elementCount - 1];
             break;
-        case D3D_REGISTER_COMPONENT_SINT32:
+            case D3D_REGISTER_COMPONENT_SINT32:
             pInputDesc[i].Format = formats[1][elementCount - 1];
             break;
-        case D3D_REGISTER_COMPONENT_FLOAT32:
+            case D3D_REGISTER_COMPONENT_FLOAT32:
             pInputDesc[i].Format = formats[2][elementCount - 1];
             break;
+            }
+            pInputDesc[i].InputSlot = 0;
+            pInputDesc[i].AlignedByteOffset = i == 0 ? 0 : D3D11_APPEND_ALIGNED_ELEMENT;
+            pInputDesc[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+            pInputDesc[i].InstanceDataStepRate = 0;
+
+            key += sigDesc.SemanticName;
+            key += '0' + (unsigned char)sigDesc.SemanticIndex;
         }
-        pInputDesc[i].InputSlot = 0;
-        pInputDesc[i].AlignedByteOffset = i == 0 ? 0 : D3D11_APPEND_ALIGNED_ELEMENT;
-        pInputDesc[i].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-        pInputDesc[i].InstanceDataStepRate = 0;
 
-        key += sigDesc.SemanticName;
-        key += '0' + sigDesc.SemanticIndex;
-    }
-
-    std::map<std::string, ID3D11InputLayout*>::iterator it = m_inputLayoutList.begin();
-    while (it != m_inputLayoutList.end())
-    {
-        if (it->first == key)
+        std::map<std::string, ID3D11InputLayout*>::iterator it = m_inputLayoutList.begin();
+        while (it != m_inputLayoutList.end())
         {
-            m_pInputLayout = it->second;
-            break;
+            if (it->first == key)
+            {
+                m_pInputLayout = it->second;
+                break;
+            }
+            ++it;
         }
-        ++it;
-    }
-    if (it == m_inputLayoutList.end())
-    {
-        hr = pDevice->CreateInputLayout(
+        if (it == m_inputLayoutList.end())
+        {
+            hr = pDevice->CreateInputLayout(
             pInputDesc, shaderDesc.InputParameters,
             pData, size, &m_pInputLayout
         );

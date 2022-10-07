@@ -78,7 +78,7 @@ public:
     {
         return m_pDevice.Get();
     }
-   
+ 
     //------------------------------------------------------------------------------
     /// スワップチェーンの取得
     ///
@@ -130,26 +130,26 @@ private:
     
     //---------------------------------------------------------------------------
     static GfxD3DManager* m_pInstance;
-    ComPtr<ID3D11Device>            m_pDevice;
-    ComPtr<IDXGISwapChain>          m_pSwapChain;
-    ComPtr<ID3D11DeviceContext>     m_pDeviceContext;
+    ComPtr<ID3D11Device>  m_pDevice;
+    ComPtr<IDXGISwapChain>  m_pSwapChain;
+    ComPtr<ID3D11DeviceContext> m_pDeviceContext;
     ComPtr<ID3D11RenderTargetView>  m_pRentderTarget;
-    //ComPtr<ID3D11Texture2D>         m_pTexrure2D ;
-    //ComPtr<ID3D11DepthStencilView>  m_pDepthStencilView;
-    //ComPtr<ID3D11RasterizerState>   m_pRasterizerState;
-    //ComPtr<ID3D11BlendState>        m_pBlendState;
+    //ComPtr<ID3D11Texture2D> m_pTexrure2D ;
+    ComPtr<ID3D11DepthStencilView>  m_pDepthStencilView;
+    //ComPtr<ID3D11RasterizerState> m_pRasterizerState;
+    //ComPtr<ID3D11BlendState>  m_pBlendState;
     //ComPtr<ID3D11DepthStencilState> m_pDepthStencilState;
     //---------------------------------------------------------------------------
     /// <summary>
-    /// m_pDevice               デバイス
-    /// m_pSwapChain            スワップチェーン
-    /// m_pDeviceContext        デバイスコンテキスト
-    /// m_pTexrure2D            2Dテクスチャ
+    /// m_pDevice デバイス
+    /// m_pSwapChain  スワップチェーン
+    /// m_pDeviceContext  デバイスコンテキスト
+    /// m_pTexrure2D  2Dテクスチャ
     /// ID3D11RenderTargetView  レンダーターゲットビュー
-    /// m_pDepthStencilView     デプスステンシルビュー
-    /// m_pRasterizerState      ラスタライザステート
-    /// m_pBlendState           アルファブレンディング
-    /// m_pDepthStencilState    デプスステンシルステート
+    /// m_pDepthStencilView デプスステンシルビュー
+    /// m_pRasterizerState  ラスタライザステート
+    /// m_pBlendState アルファブレンディング
+    /// m_pDepthStencilState  デプスステンシルステート
     /// </summary> 
 };
 
@@ -157,20 +157,20 @@ private:
 
 //! 列挙体定義
 //enum EBlendState {
-//    BS_NONE = 0,          //! 半透明合成無し
-//    BS_ALPHABLEND,        //! 半透明合成
-//    BS_ADDITIVE,          //! 加算合成
-//    BS_SUBTRACTION,       //! 減算合成
+//  BS_NONE = 0,  //! 半透明合成無し
+//  BS_ALPHABLEND,  //! 半透明合成
+//  BS_ADDITIVE,  //! 加算合成
+//  BS_SUBTRACTION, //! 減算合成
 //
-//    MAX_BLENDSTATE
+//  MAX_BLENDSTATE
 //};
 //
 //enum ECullMode {
-//    CULLMODE_NONE = 0,    //! カリングしない
-//    CULLMODE_CW,          //! 前面カリング
-//    CULLMODE_CCW,         //! 背面カリング
+//  CULLMODE_NONE = 0,  //! カリングしない
+//  CULLMODE_CW,  //! 前面カリング
+//  CULLMODE_CCW, //! 背面カリング
 //
-//    MAX_CULLMODE
+//  MAX_CULLMODE
 //};
 //
 ////! プロトタイプ宣言

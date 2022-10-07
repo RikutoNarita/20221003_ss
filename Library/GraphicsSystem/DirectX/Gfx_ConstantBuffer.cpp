@@ -14,7 +14,7 @@
 /// \return void
 //------------------------------------------------------------------------------
 GfxConstantBuffer::GfxConstantBuffer()
-    : m_pBuffer(nullptr)
+  : m_pBuffer(nullptr)
 {
 }
 
