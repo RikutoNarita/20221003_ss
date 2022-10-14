@@ -40,8 +40,8 @@
 // 構造体定義
 struct VS_OUTPUT
 {
-    float4 pos : SV_POSITION;
-    float2 uv : TEXCOORD;
+    float4 pos  : SV_POSITION;
+    float2 uv   : TEXCOORD;
 };
 
 Texture2D<float4> g_texture : register(t0); // 0番スロットのテクスチャ

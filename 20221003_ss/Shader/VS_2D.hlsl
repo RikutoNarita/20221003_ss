@@ -38,8 +38,8 @@
 // ç\ë¢ëÃíËã`
 struct VS_INPUT
 {
-    float3 pos : POSITION;
-    float2 uv : TEXCOORD;
+    float3 pos  : POSITION;
+    float2 uv   : TEXCOORD;
 };
 struct VS_OUTPUT
 {

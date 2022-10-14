@@ -8,7 +8,7 @@
 #ifndef __D3D_MANAGER_H__
 #define __D3D_MANAGER_H__
 
-#define DX12
+//#define DX12
 
 // インクルード
 #ifdef DX12

@@ -7,10 +7,10 @@
 // 頂点シェーダーから受け取るデータの構造体
 struct PS_IN
 {
-  float4 pos : SV_POSITION;     // 座標
-  float2 uv : TEXCOORD0;        // uv
+  float4 pos    : SV_POSITION;  // 座標
+  float2 uv     : TEXCOORD0;    // uv
   float3 normal : TEXCOORD1;    // 法線
-  float4 color : TEXCOORD2;     // カラー
+  float4 color  : TEXCOORD2;    // カラー
 };
 
 // ライトの情報
@@ -38,17 +38,17 @@ float4 main(PS_IN pin) : SV_TARGET
     // 法線の正規化
     float3 nrm = normalize(pin.normal);
     // ライトの向きの正規化（計算上向きを逆転させる）
-    float3 light = normalize(-float3(lightDir.x, lightDir.y, lightDir.z));
+    float3 light = normalize(-float3(0.0f, -0.4f, 1.0f));
     // 影の度合いを計算
     float sahdow = dot(nrm, light);
     // 色に反映
     color *= sahdow;
     
-    if (texFlag)
-    {
+    //if (texFlag)
+    //{
         // テクスチャ反映
         color *= g_texture.Sample(g_sampler, pin.uv);
-    }
+    //}
     
     return color;
 }

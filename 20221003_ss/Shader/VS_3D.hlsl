@@ -7,10 +7,10 @@
 // CPUから受け取るときの頂点の構造
 struct VS_IN
 {
-    float3 pos : POSITION0;
-    float3 normal : NORMAL0;
-    float2 uv : TEXCOORD0;
-    float4 color : TEXCOORD1;
+    float3 pos      : POSITION;
+    float3 normal   : NORMAL;
+    float2 uv       : TEXCOORD;
+    float4 color    : COLOR;
 };
 
 // ピクセルシェーダーに渡すデータの構造体 
