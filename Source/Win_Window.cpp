@@ -17,8 +17,8 @@
 #pragma comment(lib, "imm32")
 
 // exturn宣言
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
- HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+//extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
+// HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // マクロ定義
 #define CLASS_NAME  _T("AppClass")          // ウインドウのクラス名
@@ -204,9 +204,9 @@ void WinWindow::Fin()
 //------------------------------------------------------------------------------
 LRESULT CALLBACK WinWindow::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // imguiプロシージャ
-    if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
-      return true;
+    //// imguiプロシージャ
+    //if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
+    //  return true;
 
     switch (uMsg)
     {

@@ -14,9 +14,15 @@
 /// \return void
 //------------------------------------------------------------------------------
 GfxDXBuffer::GfxDXBuffer()
+#ifdef DX12
+    : m_vtxSize(0), m_vtxCount(0)
+    , m_idxSize(0), m_idxCount(0)
+    , m_topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
+#else
     : m_pVtxBuffer(nullptr), m_vtxSize(0), m_vtxCount(0)
     , m_pIdxBuffer(nullptr), m_idxSize(0), m_idxCount(0)
     , m_topology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST)
+#endif // DX12
 {
 }
 
@@ -27,8 +33,11 @@ GfxDXBuffer::GfxDXBuffer()
 //------------------------------------------------------------------------------
 GfxDXBuffer::~GfxDXBuffer()
 {
+#ifdef DX12
+#else
     SAFE_RELEASE(m_pIdxBuffer);
     SAFE_RELEASE(m_pVtxBuffer);
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -72,6 +81,13 @@ HRESULT GfxDXBuffer::Create(const Desc& desc)
 //------------------------------------------------------------------------------
 HRESULT GfxDXBuffer::CreateVertexBuffer(const void* pVtx, UINT size, UINT count, bool isWrite)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(pVtx);
+    UNREFERENCED_PARAMETER(size);
+    UNREFERENCED_PARAMETER(count);
+    UNREFERENCED_PARAMETER(isWrite);
+    return S_OK;
+#else
     //--- 作成するバッファの情報
     D3D11_BUFFER_DESC bufDesc = {};
     bufDesc.ByteWidth = size * count;
@@ -99,6 +115,7 @@ HRESULT GfxDXBuffer::CreateVertexBuffer(const void* pVtx, UINT size, UINT count,
         m_vtxCount = count;
     }
     return hr;
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -112,6 +129,9 @@ HRESULT GfxDXBuffer::CreateVertexBuffer(const void* pVtx, UINT size, UINT count,
 //------------------------------------------------------------------------------
 HRESULT GfxDXBuffer::CreateIndexBuffer(const void* pIdx, UINT size, UINT count)
 {
+    UNREFERENCED_PARAMETER(pIdx);
+    UNREFERENCED_PARAMETER(size);
+    UNREFERENCED_PARAMETER(count);
     // インデックスサイズの確認
     switch (size)
     {
@@ -123,7 +143,9 @@ HRESULT GfxDXBuffer::CreateIndexBuffer(const void* pIdx, UINT size, UINT count)
     case 4:
         break;
     }
-
+#ifdef DX12
+    return S_OK;
+#else
     // バッファの情報を設定
     D3D11_BUFFER_DESC bufDesc = {};
     bufDesc.ByteWidth = size * count;
@@ -144,6 +166,7 @@ HRESULT GfxDXBuffer::CreateIndexBuffer(const void* pIdx, UINT size, UINT count)
     }
 
   return hr;
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -155,6 +178,10 @@ HRESULT GfxDXBuffer::CreateIndexBuffer(const void* pIdx, UINT size, UINT count)
 //------------------------------------------------------------------------------
 void GfxDXBuffer::Draw(int count)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(count);
+
+#else
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
     UINT stride = m_vtxSize;
     UINT offset = 0;
@@ -180,6 +207,7 @@ void GfxDXBuffer::Draw(int count)
         // 頂点バッファのみで描画
         pContext->Draw(count ? count : m_vtxCount, 0);
     }
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -191,6 +219,11 @@ void GfxDXBuffer::Draw(int count)
 //------------------------------------------------------------------------------
 HRESULT GfxDXBuffer::Write(void* pVtx)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(pVtx);
+
+    return S_OK;
+#else
     HRESULT hr;
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
     D3D11_MAPPED_SUBRESOURCE mapResource;
@@ -204,4 +237,5 @@ HRESULT GfxDXBuffer::Write(void* pVtx)
         pContext->Unmap(m_pVtxBuffer, 0);
     }
     return hr;
+#endif // DX12
 }

@@ -25,7 +25,11 @@ public:
         const void* pIdx;
         UINT idxSize;
         UINT idxCount;
+#ifdef DX12
+        D3D12_PRIMITIVE_TOPOLOGY topology;
+#else
         D3D11_PRIMITIVE_TOPOLOGY topology;
+#endif // DX12
     };
     //---------------------------------------------------------------------------
     /// <summary>
@@ -135,13 +139,19 @@ private:
     //------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------
+#ifdef DX12
+    //ID3D12Buffer* m_pVtxBuffer;
+    //ID3D12Buffer* m_pIdxBuffer;
+    D3D12_PRIMITIVE_TOPOLOGY m_topology;
+#else
     ID3D11Buffer* m_pVtxBuffer;
+    ID3D11Buffer* m_pIdxBuffer;
+    D3D11_PRIMITIVE_TOPOLOGY m_topology;
+#endif // DX12
     UINT m_vtxSize;
     UINT m_vtxCount;
-    ID3D11Buffer* m_pIdxBuffer;
     UINT m_idxSize;
     UINT m_idxCount;
-    D3D11_PRIMITIVE_TOPOLOGY m_topology;
     //------------------------------------------------------------------------------
     /// <summary>
     /// m_pVtxBuffer  頂点バッファ

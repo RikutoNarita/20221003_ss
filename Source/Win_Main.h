@@ -9,6 +9,7 @@
 #include <tchar.h>
 #include <Win_Window.h>
 #include <DirectXMath.h>
+#include <debugapi.h>
 
 #define SCREEN_HEIGHT (720)     // ‰æ–Ê‚Ì•
 #define SCREEN_WIDTH  (1280)    // ‰æ–Ê‚Ì‚‚³

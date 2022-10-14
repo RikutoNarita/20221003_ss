@@ -35,7 +35,8 @@ GfxTexture::~GfxTexture()
 HRESULT GfxTexture::Init()
 {
     HRESULT hr = S_OK;
-
+#ifdef DX12
+#else
     // テクスチャ サンプラ生成
     D3D11_SAMPLER_DESC sd;
     ZeroMemory(&sd, sizeof(sd));
@@ -53,6 +54,7 @@ HRESULT GfxTexture::Init()
     {
         return hr;
     }
+#endif // DX12
 
     return hr;
 }
@@ -64,6 +66,8 @@ HRESULT GfxTexture::Init()
 //------------------------------------------------------------------------------
 HRESULT GfxTexture::CreateShaderResourceFromTexture2D()
 {
+#ifdef DX12
+#else
     HRESULT hr = S_OK;
     const UINT pixelSizeX = 32;
     const UINT pixelSizeY = 32;
@@ -246,6 +250,7 @@ HRESULT GfxTexture::CreateShaderResourceFromTexture2D()
     {
         return hr;
     }
+#endif // DX12
 
     return S_OK;
 }
@@ -259,11 +264,16 @@ HRESULT GfxTexture::CreateShaderResourceFromTexture2D()
 //------------------------------------------------------------------------------
 void GfxTexture::SetTextureVS(UINT slot)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(slot);
+
+#else
     ID3D11ShaderResourceView* srv[] =
     {
         m_pShaderResourceView.Get()
     };
     D3D->GetDeviceContext()->VSSetShaderResources(slot, 1, srv);
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -275,11 +285,16 @@ void GfxTexture::SetTextureVS(UINT slot)
 //------------------------------------------------------------------------------
 void GfxTexture::SetTexturePS( UINT slot)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(slot);
+
+#else
     ID3D11ShaderResourceView* srv[] =
     {
         m_pShaderResourceView.Get()
     };
     D3D->GetDeviceContext()->PSSetShaderResources(slot, 1, srv);
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -291,5 +306,10 @@ void GfxTexture::SetTexturePS( UINT slot)
 //------------------------------------------------------------------------------
 void GfxTexture::SetSamplerPS(UINT slot)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(slot);
+
+#else
     D3D->GetDeviceContext()->PSSetSamplers(slot, 1, &m_pSamplerState);
+#endif // DX12
 }

@@ -37,6 +37,11 @@ GfxConstantBuffer::~GfxConstantBuffer()
 //------------------------------------------------------------------------------
 HRESULT GfxConstantBuffer::Create(UINT size)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(size);
+
+    return S_OK;
+#else
     /* 定数バッファ作成時の注意
     定数バッファの大きさは4バイト区切り(
     4バイトアライメント)でないと作成できない
@@ -54,6 +59,7 @@ HRESULT GfxConstantBuffer::Create(UINT size)
     hr = pDevice->CreateBuffer(&bufDesc, nullptr, &m_pBuffer);
 
     return hr;
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -65,9 +71,14 @@ HRESULT GfxConstantBuffer::Create(UINT size)
 //------------------------------------------------------------------------------
 void GfxConstantBuffer::Write(const void* pData)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(pData);
+
+#else
     // 定数バッファへの書き込み
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
     pContext->UpdateSubresource(m_pBuffer, 0, nullptr, pData, 0, 0);
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -79,6 +90,10 @@ void GfxConstantBuffer::Write(const void* pData)
 //------------------------------------------------------------------------------
 void GfxConstantBuffer::BindVS(UINT slot)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(slot);
+
+#else
     /*
     定数バッファのデータを送る際、
     どの位置に格納するかを1つ目の引数(StartSlot)に
@@ -88,6 +103,7 @@ void GfxConstantBuffer::BindVS(UINT slot)
     */
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
     pContext->VSSetConstantBuffers(slot, 1, &m_pBuffer);
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -99,6 +115,11 @@ void GfxConstantBuffer::BindVS(UINT slot)
 //------------------------------------------------------------------------------
 void GfxConstantBuffer::BindPS(UINT slot)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(slot);
+
+#else
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
     pContext->PSSetConstantBuffers(slot, 1, &m_pBuffer);
+#endif // DX12
 }

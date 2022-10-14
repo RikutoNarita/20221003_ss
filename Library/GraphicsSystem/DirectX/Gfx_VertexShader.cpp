@@ -40,11 +40,14 @@ GfxVertexShader::~GfxVertexShader()
 //------------------------------------------------------------------------------
 void GfxVertexShader::Bind()
 {
+#ifdef DX12
+#else
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
     // 頂点シェーダーをセット
     pContext->VSSetShader(m_pVS, nullptr, 0);
     // インプットレイアウトをセット
     pContext->IASetInputLayout(m_pInputLayout);
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -72,6 +75,12 @@ void GfxVertexShader::ReleaseInputLayout()
 //------------------------------------------------------------------------------
 HRESULT GfxVertexShader::MakeShader(void* pData, UINT size)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(pData);
+    UNREFERENCED_PARAMETER(size);
+
+    return S_OK;
+#else
     HRESULT hr;
     ID3D11Device* pDevice = D3D->GetDevice();
 
@@ -180,4 +189,5 @@ HRESULT GfxVertexShader::MakeShader(void* pData, UINT size)
 
     delete[] pInputDesc;
     return hr;
+#endif // DX12
 }

@@ -37,9 +37,12 @@ GfxPixelShader::~GfxPixelShader()
 //------------------------------------------------------------------------------
 void GfxPixelShader::Bind()
 {
+#ifdef DX12
+#else
     ID3D11DeviceContext* pContext = D3D->GetDeviceContext();
     // ピクセルシェーダーをセット
     pContext->PSSetShader(m_pPS, nullptr, 0);
+#endif // DX12
 }
 
 //------------------------------------------------------------------------------
@@ -56,9 +59,16 @@ void* pData,
 /*[in]*/
 UINT size)
 {
+#ifdef DX12
+    UNREFERENCED_PARAMETER(pData);
+    UNREFERENCED_PARAMETER(size);
+
+    return S_OK;
+#else
     HRESULT hr;
     ID3D11Device* pDevice = D3D->GetDevice();
     // ピクセルシェーダー作成
     hr = pDevice->CreatePixelShader(pData, size, nullptr, &m_pPS);
     return hr;
+#endif // DX12
 }

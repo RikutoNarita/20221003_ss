@@ -22,7 +22,7 @@
 
 // ライブラリのリンク
 #pragma comment(lib, "winmm")
-#pragma comment(lib, "d3d11")
+//#pragma comment(lib, "d3d11")
 
 // マクロ定義
 #define ASPECT_RATE     (16.0f / 9.0f)  // アスペクト比
@@ -64,6 +64,8 @@ void Update();
 void Draw();
 
 // グローバル変数
+#ifdef DX12
+#else
 std::shared_ptr<GfxVertexShader>    g_pVertex2D;
 std::shared_ptr<GfxVertexShader>    g_pVertex3D;
 std::shared_ptr<GfxPixelShader>     g_pPixel2D;
@@ -79,6 +81,7 @@ DirectX::XMFLOAT4 g_light;
 DirectX::XMFLOAT3 g_cameraPos;
 float g_fAngle;
 float g_fDir;
+#endif // DX12
 
 //! エントリーポイント
 int WINAPI _tWinMain(
@@ -162,23 +165,29 @@ HRESULT Init(HWND hWnd)
         return hr;
     }
 
+#ifdef DX12
+    
+
+#else
 #ifdef _DEBUG
-    // Imgui初期化
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    //! カラーテーマ設定
-    ImGui::StyleColorsClassic();
-    //! プラットフォーム/レンダラの初期化
-    ImGui_ImplWin32_Init(hWnd);
-    ImGui_ImplDX11_Init(D3D->GetDevice(), D3D->GetDeviceContext());
+    //// Imgui初期化
+    //IMGUI_CHECKVERSION();
+    //ImGui::CreateContext();
+    //ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ////! カラーテーマ設定
+    //ImGui::StyleColorsClassic();
+    ////! プラットフォーム/レンダラの初期化
+    //ImGui_ImplWin32_Init(hWnd);
+    //ImGui_ImplDX11_Init(D3D->GetDevice(), D3D->GetDeviceContext());
+    //ImGui_ImplDX12_Init();
+
 
     //フォント読込
-    io = ImGui::GetIO();
-    ImFont* font = nullptr;
-    font = io.Fonts->AddFontFromFileTTF("data/Font/BIZenAntique-Bold.ttf",
-        16.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
-    IM_ASSERT(font != NULL);
+    //io = ImGui::GetIO();
+    //ImFont* font = nullptr;
+    //font = io.Fonts->AddFontFromFileTTF("data/Font/BIZenAntique-Bold.ttf",
+    //    16.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != NULL);
 #endif // _DEBUG
 
     // 2D頂点データ作成-----------
@@ -191,13 +200,13 @@ HRESULT Init(HWND hWnd)
     };
     Vertex vtx[] =
     {
-        /*0*/{{ -0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        /*1*/{{  0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        /*3*/{{ -0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-
-        /*2*/{{  0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        /*3*/{{ -0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {0.0f, 1.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
-        /*1*/{{  0.5f,  0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 0.0f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+        /*0*/{{ -0.5f,  0.5f, 0.0f},/* {0.0f, 0.0f, -1.0f}, */{0.0f, 0.0f},/* {1.0f, 1.0f, 1.0f, 1.0f}*/},
+        /*1*/{{  0.5f,  0.5f, 0.0f},/* {0.0f, 0.0f, -1.0f}, */{1.0f, 0.0f},/* {1.0f, 1.0f, 1.0f, 1.0f}*/},
+        /*3*/{{ -0.5f, -0.5f, 0.0f},/* {0.0f, 0.0f, -1.0f}, */{0.0f, 1.0f},/* {1.0f, 1.0f, 1.0f, 1.0f}*/},
+                                    /*                      */             /*                         */
+        /*2*/{{  0.5f, -0.5f, 0.0f},/* {0.0f, 0.0f, -1.0f}, */{1.0f, 1.0f},/* {1.0f, 1.0f, 1.0f, 1.0f}*/},
+        /*3*/{{ -0.5f, -0.5f, 0.0f},/* {0.0f, 0.0f, -1.0f}, */{0.0f, 1.0f},/* {1.0f, 1.0f, 1.0f, 1.0f}*/},
+        /*1*/{{  0.5f,  0.5f, 0.0f},/* {0.0f, 0.0f, -1.0f}, */{1.0f, 0.0f},/* {1.0f, 1.0f, 1.0f, 1.0f}*/},
 
     };
     UINT indecies[] =
@@ -426,6 +435,7 @@ HRESULT Init(HWND hWnd)
     g_light.y = -1.0f;
     g_light.x = 1.0f * sinf(g_fDir);
     g_light.z = 1.0f * cosf(g_fDir);
+#endif // DX12
 
     return hr;
 }
@@ -437,6 +447,8 @@ void Uninit()
     INPUT->Uninit();
 
     // 開放処理
+#ifdef DX12
+#else
     g_pVertex2D->ReleaseInputLayout();
 
     g_pLight.reset();
@@ -447,28 +459,17 @@ void Uninit()
     g_pVertex2D.reset();
     g_pPixel2D.reset();
     g_pTriangle.reset();
+#endif // DX12
 
-    // カメラの終了処理
-    //CAMERA->Uninit();
-
-    //! シェーダー終了処理
-    //SHADER->Uninit();
-
+#ifdef DX12
+#else
 #ifdef _DEBUG
-    // Imgui 終了
-    ImGui_ImplDX11_Shutdown();
-    ImGui_ImplWin32_Shutdown();
-    ImGui::DestroyContext();
+    //// Imgui 終了
+    //ImGui_ImplDX11_Shutdown();
+    //ImGui_ImplWin32_Shutdown();
+    //ImGui::DestroyContext();
 #endif // DEBUG
-
-    // 入力処理終了処理
-    //INPUT->Uninit();
-
-    // ポリゴン表示終了処理
-    //CPolygon::Fin();
-
-    //--- DirectX終了処理
-    //ReleaseDirectX();
+#endif // DX12
 
     D3D->DeleteInstance();
 }
@@ -479,6 +480,8 @@ void Update()
     // 入力処理更新
     INPUT->Update(); // 必ずUpdate関数の先頭で実行
 
+#ifdef DX12
+#else
     if (INPUT->GetKeyPress(DIK_LEFT))
     {
         g_fAngle -= 0.01f;
@@ -501,32 +504,42 @@ void Update()
     }
     g_light.x = 1.0f * sinf(g_fDir);
     g_light.z = 1.0f * cosf(g_fDir);
+#endif // DX12
 }
 
 // 描画処理
 void Draw()
 {
-#ifdef _DEBUG
-    //! ImGui New Frame
-    ImGui_ImplDX11_NewFrame();
-    ImGui_ImplWin32_NewFrame();
-    ImGui::NewFrame();
-#endif
+//#ifdef DX12
+//#else
+//#ifdef _DEBUG
+//    //! ImGui New Frame
+//    ImGui_ImplDX11_NewFrame();
+//    ImGui_ImplWin32_NewFrame();
+//    ImGui::NewFrame();
+//#endif
+//#endif // DX12
 
     // 描画開始
     D3D->BeginDraw();
 
-#ifdef _DEBUG
-    using namespace ImGui;
-    SetNextWindowSize(ImVec2(160, 160), ImGuiCond_FirstUseEver);                // ImGuiウィンドウの初期の大きさ
-    SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver, ImVec2(0, 0));   // ImGuiウィンドウの初期の位置
-    //! テスト用
-    Begin(reinterpret_cast<const char*>(u8"test"));
-    Text("FPS : %d", (int)(GetIO().Framerate)); //! FPS
-    Text("Camera Pos (%2.1f, %2.1f, %2.1f)", g_cameraPos.x, g_cameraPos.y, g_cameraPos.z);
-    End();
-#endif //! _DEBUG
+//#ifdef DX12
+//#else
+//#ifdef _DEBUG
+//    using namespace ImGui;
+//    SetNextWindowSize(ImVec2(160, 160), ImGuiCond_FirstUseEver);                // ImGuiウィンドウの初期の大きさ
+//    SetNextWindowPos(ImVec2(100, 100), ImGuiCond_FirstUseEver, ImVec2(0, 0));   // ImGuiウィンドウの初期の位置
+//    //! テスト用
+//    Begin(reinterpret_cast<const char*>(u8"test"));
+//    Text("FPS : %d", (int)(GetIO().Framerate)); //! FPS
+//    Text("Camera Pos (%2.1f, %2.1f, %2.1f)", g_cameraPos.x, g_cameraPos.y, g_cameraPos.z);
+//    End();
+//#endif //! _DEBUG
+//#endif // DX12
 
+#ifdef DX12
+    D3D->TestDraw();
+#else
     // 2D描画----------------
     // 各シェーダーをセット
     g_pVertex2D->Bind();
@@ -540,7 +553,7 @@ void Draw()
     g_pTestTex->SetSamplerPS(0);
     // 三角形描画
     g_pTriangle->Draw();
-
+    
     // 3D描画----------------
     // 各シェーダーをセット
     g_pVertex3D->Bind();
@@ -568,11 +581,11 @@ void Draw()
     // 定数バッファに書き込み
     g_pWVPTransformation->Write(matrix);
     g_pWVPTransformation->BindVS(0);
-
+    
     // ライトの設定
     g_pLight->Write(&g_light);
     g_pLight->BindPS(0);
-
+    
     // テクスチャをセット
     texFlag = true;
     g_pTexFlag->Write(&texFlag);
@@ -582,12 +595,16 @@ void Draw()
     g_pTestTex->SetSamplerPS(0);
     /// 描画
     g_pCube->Draw();
+#endif // DX12
 
-#ifdef _DEBUG
-    //! ImGui Render
-    ImGui::Render();
-    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-#endif //! _DEBUG
+//#ifdef DX12
+//#else
+//#ifdef _DEBUG
+//    //! ImGui Render
+//    ImGui::Render();
+//    ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+//#endif //! _DEBUG
+//#endif // DX12
 
     //! バックバッファとフロントバッファ入れ替え
     D3D->EndDraw();
