@@ -88,7 +88,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -100,7 +100,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
@@ -158,14 +158,23 @@
     <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui_widgets.cpp" />
     <ClCompile Include="..\Library\CoreSystem\Input.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Geometry\Gfx_Geometry.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_D3DManager.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_ConstantBuffer.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_DXBuffer.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_PixelShader.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_Shader.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_Texture.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\DirectX\Gfx_VertexShader.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11Device_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderCommand_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderTarget_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ScissorRect_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11SwapChain_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ViewPort_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DepthStencilView_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12Device_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderCommand_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderTarget_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12SwapChain_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3DManager.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.cpp" />
     <ClCompile Include="..\Source\Win_Main.cpp" />
     <ClCompile Include="..\Source\Win_Window.cpp" />
   </ItemGroup>
@@ -179,14 +188,30 @@
     <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imstb_textedit.h" />
     <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imstb_truetype.h" />
     <ClInclude Include="..\Library\CoreSystem\Input.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Geometry\Gfx_Geometry.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_D3DManager.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_ConstantBuffer.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_DXBuffer.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_PixelShader.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_Shader.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_Texture.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\DirectX\Gfx_VertexShader.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11Device_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderCommand_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderTarget_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ScissorRect_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11SwapChain_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ViewPort_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DepthStencilView_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12Device_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderCommand_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderTarget_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12SwapChain_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3DManager.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_DepthStencilView.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_Device.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_RenderCommand.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_RenderTarget.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ScissorRect.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_SwapChain.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ViewPort.h" />
     <ClInclude Include="..\Source\Win_Main.h" />
     <ClInclude Include="..\Source\Win_Window.h" />
   </ItemGroup>

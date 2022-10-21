@@ -10,15 +10,9 @@
 #include <WinUser.h>
 #include <tchar.h>
 #include <imm.h>
-#include <CoreSystem/Debug/imgui/imgui.h>
-#include <CoreSystem/Debug/imgui/imgui_impl_win32.h>
 
 // ライブラリのリンク
 #pragma comment(lib, "imm32")
-
-// exturn宣言
-//extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
-// HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 // マクロ定義
 #define CLASS_NAME  _T("AppClass")          // ウインドウのクラス名
@@ -52,10 +46,16 @@ WinWindow::~WinWindow()
 //------------------------------------------------------------------------------
 /// 初期化
 /// 
+/// \param[in] hInstance インスタンスハンドル
+/// 
 /// \return 成功時 true
 //------------------------------------------------------------------------------
-bool WinWindow::Init()
+bool WinWindow::Init(
+    /*[in]*/
+    HINSTANCE hInstance)
 {
+    m_hInst = hInstance;
+
     //! ウィンドクラス情報の設定
     WNDCLASSEX wcex;
     ZeroMemory(&wcex, sizeof(wcex)); // ゼロクリア
@@ -83,7 +83,7 @@ bool WinWindow::Init()
     DWORD exStyle = WS_EX_OVERLAPPEDWINDOW;                         // 拡張ウィンドウスタイル
     AdjustWindowRectEx(&rect, style, false, exStyle);
     m_hWnd = CreateWindowEx(exStyle, wcex.lpszClassName, WINDOW_NAME, style, CW_USEDEFAULT, CW_USEDEFAULT,
-    rect.right - rect.left, rect.bottom - rect.top, HWND_DESKTOP, NULL, wcex.hInstance, NULL);
+        rect.right - rect.left, rect.bottom - rect.top, HWND_DESKTOP, NULL, wcex.hInstance, NULL);
 
     if (m_hWnd == NULL)
     {
@@ -136,18 +136,6 @@ bool WinWindow::Run()
 HWND WinWindow::GetWndHandle()
 {
     return m_hWnd;
-}
-
-//------------------------------------------------------------------------------
-/// インスタンスハンドル設定
-/// 
-/// \param[in] hInstance インスタンスハンドル
-/// 
-/// \return void
-//------------------------------------------------------------------------------
-void WinWindow::SetInstance(HINSTANCE hInst)
-{
-    m_hInst = hInst;
 }
 
 //------------------------------------------------------------------------------
@@ -204,7 +192,7 @@ void WinWindow::Fin()
 //------------------------------------------------------------------------------
 LRESULT CALLBACK WinWindow::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    //// imguiプロシージャ
+    // imguiプロシージャ
     //if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
     //  return true;
 
@@ -218,9 +206,9 @@ LRESULT CALLBACK WinWindow::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
     case WM_KEYDOWN:        // キーボードが押された
         switch (wParam)
         {
-            case VK_ESCAPE:                         // [ESC]キーが押された
-                PostMessage(hWnd, WM_CLOSE, 0, 0);  // [x]が押されたように振舞う
-                return 0;
+        case VK_ESCAPE:                         // [ESC]キーが押された
+            PostMessage(hWnd, WM_CLOSE, 0, 0);  // [x]が押されたように振舞う
+            return 0;
         }
         break;
     case WM_MENUCHAR:
@@ -231,7 +219,7 @@ LRESULT CALLBACK WinWindow::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
- 
+
 
 //------------------------------------------------------------------------------
 /// WM_CREATEメッセージハンドラ
@@ -255,7 +243,7 @@ int WinWindow::OnCreate(HWND hWnd)
         sizeWnd.cx = (rcWnd.right - rcWnd.left) - rcClnt.right + SCREEN_WIDTH;
         sizeWnd.cy = (rcWnd.bottom - rcWnd.top) - rcClnt.bottom + SCREEN_HEIGHT;
         SetWindowPos(hWnd, nullptr, 0, 0, sizeWnd.cx, sizeWnd.cy,
-        SWP_NOMOVE | SWP_NOZORDER | SWP_NOOWNERZORDER);
+            SWP_NOMOVE | SWP_NOZORDER | SWP_NOOWNERZORDER);
     }
 
     // IME無効化

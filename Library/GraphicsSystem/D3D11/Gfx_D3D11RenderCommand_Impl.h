@@ -1,102 +1,110 @@
 //==============================================================================
-// Filename: Gfx_Texture.h
-// Description: テクスチャクラス
+// Filename: Gfx_D3D11RenderCommand_Impl.h
+// Description: Direct3D 11の描画命令クラスクラス
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 // インクルードガード
-#ifndef __TEXTURE_H__
-#define __TEXTURE_H__
+#ifndef __D3D11_RENDER_COMMAND_H__
+#define __D3D11_RENDER_COMMAND_H__
 
 // インクルード
-#include  <Win_Main.h>
+#include <GraphicsSystem\Interface\IGfx_RenderCommand.h>
+#include <wrl\client.h>
 #include <d3d11.h>
-#include <DirectXMath.h>
-#include <wrl/client.h>
-#include <dxgi.h>
-#include <d2d1.h>
-#include <d2d1_1.h>
+#include <GraphicsSystem\Interface\Gfx_DeviceFactory.h>
 
 // クラス定義
-class GfxTexture
+class GfxD3D11RenderCommand : public IGfxRenderCommand
 {
+    friend HRESULT DeviceFactory::CreateDeviceAndContext(
+        int apiKind,
+        std::shared_ptr<IGfxDevice>& pDevice,
+        std::shared_ptr<IGfxRenderCommand>& pRenderCommand);
+
 public:
     //------------------------------------------------------------------------------
-    
+
     //------------------------------------------------------------------------------
     /// コンストラクタ
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    GfxTexture();
+    GfxD3D11RenderCommand();
 
     //------------------------------------------------------------------------------
     /// デストラクタ
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    ~GfxTexture();
+    ~GfxD3D11RenderCommand();
 
     //------------------------------------------------------------------------------
-    /// サンプラーの初期化
+    /// バックバッファのクリア
     ///
-    /// \return 初期化の成否
-    //------------------------------------------------------------------------------
-    HRESULT Init();
-
-    //------------------------------------------------------------------------------
-    /// ID3D11Texture11 or 12 からシェーダーリソースビューを作成する
-    ///
-    /// \return 作成の成否
-    //------------------------------------------------------------------------------
-    HRESULT CreateShaderResourceFromTexture2D();
-
-    //------------------------------------------------------------------------------
-    /// シェーダーリソースをピクセルシェーダーに渡す
-    ///
-    /// \param[in] slot スロット
+    /// \param[in] pRenderTagetView レンダーターゲット
+    /// \param[in] clearColor       クリアする色
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    void SetTexturePS(
-    /*[in]*/
-    UINT slot);
+    void ClearRenderTargetView(
+        /*[in]*/
+        IGfxRenderTarget* pRenderTargetView,
+        /*[in]*/
+        const float clearColor[4]) const final;
 
     //------------------------------------------------------------------------------
-    /// シェーダーリソースを頂点シェーダーに渡す
+    /// Zバッファのクリア
     ///
-    /// \param[in] slot スロット
+    /// \param[in] pDepthStencilView    デプスステンシルビュー
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    void SetTextureVS(
-    /*[in]*/
-    UINT slot);
+    void ClearDepthStencilView(
+        /*[in]*/
+        IGfxDepthStencil* DepthStencilView) const final;
 
     //------------------------------------------------------------------------------
-    /// サンプラーをピクセルシェーダーに渡す
-    ///
-    /// \param[in] slot スロット
+    /// レンダーターゲットビューとデプスステンシルビューの指定
+    /// DX12の場合　リソースバリアの設定もここで行っている
     /// 
+    /// \param[in] pRenderTagetView     レンダーターゲットビュー
+    /// \param[in] pDepthStencilView    デプスステンシルビュー
+    ///
     /// \return void
     //------------------------------------------------------------------------------
-    void SetSamplerPS(
-    /*[in]*/
-    UINT slot);
+    void OMSetRenderTargets(
+        /*[in]*/
+        IGfxRenderTarget* pRenderTargetView,
+        /*[in]*/
+        IGfxDepthStencil* pDepthStencilView) final;
+
+    //------------------------------------------------------------------------------
+    /// 描画終了命令（バクバッファとフロントバッファの入れ替え）
+    /// DX12の場合　リソースバリアの設定もここで行っている
+    ///
+    /// \return void
+    //------------------------------------------------------------------------------
+    void EndDraw() final;
+
+    //------------------------------------------------------------------------------
+    /// デバイスコンテキストの取得
+    ///
+    /// \return デバイスコンテキスト
+    //------------------------------------------------------------------------------
+    ID3D11DeviceContext* GetDeviceContext() const
+    {
+        return m_pDeviceContext.Get();
+    }
 
     //------------------------------------------------------------------------------
 
 private:
     //------------------------------------------------------------------------------
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture2D;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView;
-    ID3D11SamplerState* m_pSamplerState;
+    Microsoft::WRL::ComPtr<ID3D11DeviceContext> m_pDeviceContext;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_pTexture2D  テクスチャ
-    /// m_pShaderResourceView シェーダーリソース
-    /// m_pSamplerState サンプラー
+    /// m_pDeviceContext   デバイスコンテキスト
     /// </summary> 
 };
-
-#endif //! __TEXTURE_H__
+#endif // __D3D11_RENDER_COMMAND_H__

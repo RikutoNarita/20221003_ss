@@ -8,9 +8,10 @@
 #ifndef __D3D_MANAGER_H__
 #define __D3D_MANAGER_H__
 
-//#define DX12
+#define DX12
 
 // インクルード
+
 #ifdef DX12
 #include <d3d12.h>
 #include <dxgi1_6.h>
@@ -22,7 +23,7 @@
 #else
 #include <d3d11_1.h>
 #pragma comment(lib,"d3d11.lib")
-#pragma comment (lib, "d3d10_1.lib")
+//#pragma comment (lib, "d3d10_1.lib")
 #pragma comment (lib, "dxgi.lib")
 #endif // DX12
 
@@ -119,7 +120,7 @@ public:
     {
         return m_pDevice.Get();
     }
-
+ 
     //------------------------------------------------------------------------------
     /// スワップチェーンの取得
     ///
@@ -141,7 +142,6 @@ public:
     }
 #endif // DX12
 
-
     //------------------------------------------------------------------------------
     /// 描画の開始(バックバッファ＆Ｚバッファのクリア)
     ///
@@ -156,12 +156,12 @@ public:
     //------------------------------------------------------------------------------
     void EndDraw();
 
-#ifdef DX12
     HRESULT CreateShader();
     HRESULT CreatePipeline();
     void TestDraw();
-#endif // DX12
 
+    void SetVertexShader(ID3DBlob* vs);
+    void SetPixelShader(ID3DBlob* ps);
 
     //------------------------------------------------------------------------------
 
@@ -178,10 +178,9 @@ private:
     
     //------------------------------------------------------------------------------
     
-    //------------------------------------------------------------------------------
 #ifdef DX12
     //------------------------------------------------------------------------------
-    static GfxD3DManager* m_pInstance;
+    static GfxD3DManager*               m_pInstance;
     ComPtr<ID3D12Device>                m_pDevice;
     ComPtr<IDXGIFactory6>               m_pDXGIFactory6;
     ComPtr<IDXGISwapChain4>             m_pSwapChain4;

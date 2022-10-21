@@ -1,84 +1,81 @@
 //==============================================================================
-// Filename: Gfx_VertexShader.h
-// Description: 頂点シェーダーに関するクラス
+// Filename: IGfx_D3D11SwapChain_Impl.h
+// Description: Direct3D 11のスワップチェーンクラス
 // Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 // インクルードガード
-#ifndef __VERTEX_SHADER_H__
-#define __VERTEX_SHADER_H__
+#ifndef __D3D11_SWAP_CHAIN_H__
+#define __D3D11_SWAP_CHAIN_H__
 
 // インクルード
-#include <GraphicsSystem\DirectX\Gfx_Shader.h>
-#include <string>
-#include <map>
+#include <GraphicsSystem\Interface\IGfx_SwapChain.h>
+#include <dxgi1_6.h>
+#include <wrl\client.h>
 
 // クラス定義
-class GfxVertexShader : public GfxShader
+class GfxD3D11SwapChain : public IGfxSwapChain
 {
 public:
     //------------------------------------------------------------------------------
-    
+
     //------------------------------------------------------------------------------
     /// コンストラクタ
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    GfxVertexShader();
+    GfxD3D11SwapChain();
 
     //------------------------------------------------------------------------------
     /// デストラクタ
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    ~GfxVertexShader();
+    ~GfxD3D11SwapChain();
 
     //------------------------------------------------------------------------------
-    /// シェーダーを描画に使用
+    /// スワップチェーンの生成
     ///
-    /// \return void
-    //------------------------------------------------------------------------------
-    void Bind() override;
-
-    //------------------------------------------------------------------------------
-    /// インプットレイアウトの開放
-    ///
-    /// \return void
-    //------------------------------------------------------------------------------
-    static void ReleaseInputLayout();
-
-    //------------------------------------------------------------------------------
-
-protected:
-    //------------------------------------------------------------------------------
-
-    //------------------------------------------------------------------------------
-    /// シェーダーファイルを読み込んだ後、シェーダーの種類別に処理を行う
-    ///
-    /// \param[in] pData シェーダーのデータへのポインタ
-    /// \param[in] size データの大きさ
+    /// \param[in] desc             スワップチェーンの設定項目
+    /// \param[in] pDevice          デバイス
+    /// \param[in] pRenderCommand   デバイスコンテクスト
     /// 
-    /// \return シェーダー作成の成否
+    /// \return 生成できた場合 S_OK
     //------------------------------------------------------------------------------
-    virtual HRESULT MakeShader(
+    HRESULT Create(
     /*[in]*/
-    void* pData,
+    const Description& desc,
     /*[in]*/
-    UINT size) override;
+    IGfxDevice* pDevice,
+    /*[in]*/
+    IGfxRenderCommand* pRenderCommand) final;
+
+    //------------------------------------------------------------------------------
+    /// フロントバッファとバックバッファの入れ替え
+    ///
+    /// \return void
+    //------------------------------------------------------------------------------
+    void Present() const final;
+    
+    //------------------------------------------------------------------------------
+    /// スワップチェーンの取得
+    ///
+    /// \return スワップチェーン
+    //------------------------------------------------------------------------------
+    IDXGISwapChain* GetSwapChain() const
+    {
+        return m_pSwapChain.Get();
+    }
 
     //------------------------------------------------------------------------------
 
 private:
     //------------------------------------------------------------------------------
-    static std::map<std::string, ID3D11InputLayout*> m_inputLayoutList;
-    ID3D11VertexShader* m_pVS;
-    ID3D11InputLayout* m_pInputLayout;
+    Microsoft::WRL::ComPtr<IDXGISwapChain> m_pSwapChain;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_inputLayoutList インプットレイアウトのリスト
-    /// m_pVS 頂点シェーダー
-    /// m_pInputLayout  インプットレイアウト
-    /// </summary> 
-};
+    /// m_pSwapchain    スワップチェーン
+    /// </summary>
 
-#endif // __VERTEX_SHADER_H__
+};
+#endif // __D3D12_SWAP_CHAIN_H__
