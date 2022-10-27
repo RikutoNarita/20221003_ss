@@ -37,7 +37,7 @@ GfxD3D11DepthStencil::~GfxD3D11DepthStencil()
 const HRESULT GfxD3D11DepthStencil::Create(
     const Description& desc, IGfxDevice* pDeviceImpl)
 {
-	HRESULT hr =S_OK;
+    HRESULT hr =S_OK;
 
     ID3D11Device* pDevice = dynamic_cast<GfxD3D11Device*>(pDeviceImpl)->GetDevice();
 
@@ -64,5 +64,5 @@ const HRESULT GfxD3D11DepthStencil::Create(
     hr = pDevice->CreateDepthStencilView(pTexture11.Get(), &dsvd, &m_pDepthStencilView);
     if (FAILED(hr)) { return hr; }
 
-	return S_OK;
+    return S_OK;
 }

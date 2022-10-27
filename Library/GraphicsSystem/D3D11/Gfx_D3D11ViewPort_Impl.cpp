@@ -15,7 +15,7 @@
 //------------------------------------------------------------------------------
 GfxD3D11ViewPort::GfxD3D11ViewPort()
 {
-	m_viewPort = {};
+    m_viewPort = {};
 }
 
 //------------------------------------------------------------------------------
@@ -25,12 +25,12 @@ GfxD3D11ViewPort::GfxD3D11ViewPort()
 //------------------------------------------------------------------------------
 GfxD3D11ViewPort::GfxD3D11ViewPort(const Description& desc)
 {
-	m_viewPort.Width = desc.width;
-	m_viewPort.Height = desc.height;
-	m_viewPort.TopLeftX = desc.TopLeftX;
-	m_viewPort.TopLeftY = desc.TopLeftY;
-	m_viewPort.MaxDepth = desc.MaxDepth;
-	m_viewPort.MinDepth = desc.MinDepth;
+    m_viewPort.Width = desc.width;
+    m_viewPort.Height = desc.height;
+    m_viewPort.TopLeftX = desc.TopLeftX;
+    m_viewPort.TopLeftY = desc.TopLeftY;
+    m_viewPort.MaxDepth = desc.MaxDepth;
+    m_viewPort.MinDepth = desc.MinDepth;
 }
 
 //------------------------------------------------------------------------------
@@ -49,5 +49,5 @@ GfxD3D11ViewPort::~GfxD3D11ViewPort()
 //------------------------------------------------------------------------------
 void GfxD3D11ViewPort::Bind() const
 {
-	GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->RSSetViewports(1, &m_viewPort);
+    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->RSSetViewports(1, &m_viewPort);
 }

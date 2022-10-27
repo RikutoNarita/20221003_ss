@@ -16,14 +16,14 @@ struct VS_IN
 // ピクセルシェーダーに渡すデータの構造体 
 struct VS_OUT
 {
-    float4 pos : SV_POSITION;
-    float2 uv : TEXCOORD0;
-    float3 normal : TEXCOORD1;
-    float4 color : TEXCOORD2;
+    float4 pos      : SV_POSITION;
+    float2 uv       : TEXCOORD0;
+    float3 normal   : TEXCOORD1;
+    float4 color    : TEXCOORD2;
 };
 
 // 変換行列の定数バッファ
-cbuffer global : register(b0) // b0 → バッファーの0番
+cbuffer global : register(b0)
 {
     float4x4 world;
     float4x4 view;

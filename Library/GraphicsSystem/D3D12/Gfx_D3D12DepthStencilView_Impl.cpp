@@ -37,7 +37,7 @@ GfxD3D12DepthStencil::~GfxD3D12DepthStencil()
 const HRESULT GfxD3D12DepthStencil::Create(
     const Description& desc, IGfxDevice* pDeviceImpl)
 {
-	HRESULT hr =S_OK;
+    HRESULT hr =S_OK;
 
     ID3D12Device* pDevice = dynamic_cast<GfxD3D12Device*>(pDeviceImpl)->GetDevice();
 
@@ -86,5 +86,5 @@ const HRESULT GfxD3D12DepthStencil::Create(
         &dsvDesc,
         m_pDSVDescriptorHeap->GetCPUDescriptorHandleForHeapStart());
 
-	return S_OK;
+    return S_OK;
 }

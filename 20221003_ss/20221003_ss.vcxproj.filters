@@ -21,17 +21,41 @@
     <Filter Include="CoreSystem\Debug">
       <UniqueIdentifier>{cfcc7dc9-8a03-414b-b801-032930755f3f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GraphicsSystem\Interface">
-      <UniqueIdentifier>{8170384f-137e-4808-9a48-0481ec2eb016}</UniqueIdentifier>
+    <Filter Include="GraphicsSystem\System">
+      <UniqueIdentifier>{d63b1785-a9a9-42de-a30a-ccf0e337a2c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GraphicsSystem\DX12">
-      <UniqueIdentifier>{7b7362e5-008a-45f1-ae22-f67f5e3290ac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GraphicsSystem\DX11">
+    <Filter Include="GraphicsSystem\System\DX11">
       <UniqueIdentifier>{0ff0511b-f6fe-494c-93bc-70bc961cbb90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GraphicsSystem\manager">
+    <Filter Include="GraphicsSystem\System\DX12">
+      <UniqueIdentifier>{7b7362e5-008a-45f1-ae22-f67f5e3290ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsSystem\System\Interface">
+      <UniqueIdentifier>{8170384f-137e-4808-9a48-0481ec2eb016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsSystem\Resources">
+      <UniqueIdentifier>{26bdc8f9-c6d7-4db2-9b29-6146d2c8eb39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsSystem\Resources\DX11">
+      <UniqueIdentifier>{170c4f38-2fd3-4dbb-9334-6adfd0e6759e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsSystem\Resources\DX12">
+      <UniqueIdentifier>{9537b0e8-bcf7-4bb3-965f-8c0bcd9dbfc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsSystem\Resources\Base">
+      <UniqueIdentifier>{ed3cef7d-39cf-44c6-8ab7-b24e25403ab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsSystem\Resources\manager">
       <UniqueIdentifier>{0e3ea439-4209-495a-aaee-185519e2f8c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicsSystem\System\manager">
+      <UniqueIdentifier>{7d50d500-ed49-4066-bfb2-ecd1fe4bdd02}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSystem">
+      <UniqueIdentifier>{e9aec473-31d1-436b-bf07-f6ab7c4cc407}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameSystem\Scene">
+      <UniqueIdentifier>{02b4a426-8117-4796-a71e-ac9a79cff2dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -46,187 +70,280 @@
     <ClCompile Include="..\Source\Win_Window.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Win_Main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
     <ClCompile Include="..\Library\CoreSystem\Input.cpp">
       <Filter>CoreSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui.cpp">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ConstantBuffer.cpp">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui_draw.cpp">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11GraphiccsBinder.cpp">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui_impl_dx11.cpp">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11MeshBuffer.cpp">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui_impl_win32.cpp">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11PixelShader.cpp">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui_tables.cpp">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11Texture.cpp">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\CoreSystem\Debug\imgui\imgui_widgets.cpp">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ConstantBuffer.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DescriptorHeap.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12GraphiccsBinder.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12MeshBuffer.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12PipelineState.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12PixelShader.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12Texture.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12VertexShader.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_ConstantBuffer.cpp">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphiccsBinder.cpp">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_MeshBuffer.cpp">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Texture.cpp">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResource.cpp">
+      <Filter>GraphicsSystem\Resources\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.cpp">
+      <Filter>GraphicsSystem\Resources\manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.cpp">
-      <Filter>GraphicsSystem\manager</Filter>
+      <Filter>GraphicsSystem\System\manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.cpp">
-      <Filter>GraphicsSystem\manager</Filter>
+      <Filter>GraphicsSystem\System\manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DepthStencilView_Impl.cpp">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Tag.cpp">
+      <Filter>GraphicsSystem\Resources\manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12Device_Impl.cpp">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Shader.cpp">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderCommand_Impl.cpp">
-      <Filter>GraphicsSystem\DX12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderTarget_Impl.cpp">
-      <Filter>GraphicsSystem\DX12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.cpp">
-      <Filter>GraphicsSystem\DX12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12SwapChain_Impl.cpp">
-      <Filter>GraphicsSystem\DX12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.cpp">
-      <Filter>GraphicsSystem\DX12</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3DManager.cpp">
-      <Filter>CoreSystem</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11VertexShader.cpp">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.cpp">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11Device_Impl.cpp">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderCommand_Impl.cpp">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderTarget_Impl.cpp">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ScissorRect_Impl.cpp">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11SwapChain_Impl.cpp">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ViewPort_Impl.cpp">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Win_Main.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DepthStencilView_Impl.cpp">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderCommand_Impl.cpp">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderTarget_Impl.cpp">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.cpp">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12SwapChain_Impl.cpp">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.cpp">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RootSignature.cpp">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GameSystem\Scene\Scene_TestScene.cpp">
+      <Filter>GameSystem\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Win_Window.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Win_Main.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="..\Library\CoreSystem\Input.h">
       <Filter>CoreSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imconfig.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ConstantBuffer.h">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imgui.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11GraphiccsBinder.h">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imgui_impl_dx11.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11MeshBuffer.h">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imgui_impl_win32.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11PixelShader.h">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imgui_internal.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11Texture.h">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imstb_rectpack.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ConstantBuffer.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imstb_textedit.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DescriptorHeap.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\CoreSystem\Debug\imgui\imstb_truetype.h">
-      <Filter>CoreSystem\Debug</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12GraphiccsBinder.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_DepthStencilView.h">
-      <Filter>GraphicsSystem\Interface</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12MeshBuffer.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_Device.h">
-      <Filter>GraphicsSystem\Interface</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12PipelineState.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_RenderCommand.h">
-      <Filter>GraphicsSystem\Interface</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12PixelShader.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_RenderTarget.h">
-      <Filter>GraphicsSystem\Interface</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12Texture.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ScissorRect.h">
-      <Filter>GraphicsSystem\Interface</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12VertexShader.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_SwapChain.h">
-      <Filter>GraphicsSystem\Interface</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_ConstantBuffer.h">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ViewPort.h">
-      <Filter>GraphicsSystem\Interface</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphiccsBinder.h">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_MeshBuffer.h">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_Texture.h">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResource.h">
+      <Filter>GraphicsSystem\Resources\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.h">
+      <Filter>GraphicsSystem\Resources\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GrapicsObjectBase.h">
+      <Filter>GraphicsSystem\Resources\manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.h">
-      <Filter>GraphicsSystem\manager</Filter>
+      <Filter>GraphicsSystem\System\manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.h">
-      <Filter>GraphicsSystem\manager</Filter>
+      <Filter>GraphicsSystem\System\manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DepthStencilView_Impl.h">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_Tag.h">
+      <Filter>GraphicsSystem\Resources\manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12Device_Impl.h">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_Shader.h">
+      <Filter>GraphicsSystem\Resources\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderCommand_Impl.h">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11VertexShader.h">
+      <Filter>GraphicsSystem\Resources\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderTarget_Impl.h">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_DepthStencilView.h">
+      <Filter>GraphicsSystem\System\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.h">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_Device.h">
+      <Filter>GraphicsSystem\System\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12SwapChain_Impl.h">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_RenderCommand.h">
+      <Filter>GraphicsSystem\System\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.h">
-      <Filter>GraphicsSystem\DX12</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_RenderTarget.h">
+      <Filter>GraphicsSystem\System\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3DManager.h">
-      <Filter>CoreSystem</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ScissorRect.h">
+      <Filter>GraphicsSystem\System\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_SwapChain.h">
+      <Filter>GraphicsSystem\System\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ViewPort.h">
+      <Filter>GraphicsSystem\System\Interface</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.h">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11Device_Impl.h">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderCommand_Impl.h">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11RenderTarget_Impl.h">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ScissorRect_Impl.h">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11SwapChain_Impl.h">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ViewPort_Impl.h">
-      <Filter>GraphicsSystem\DX11</Filter>
+      <Filter>GraphicsSystem\System\DX11</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Win_Main.h">
-      <Filter>ソース ファイル</Filter>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12DepthStencilView_Impl.h">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderCommand_Impl.h">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RenderTarget_Impl.h">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.h">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12SwapChain_Impl.h">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.h">
+      <Filter>GraphicsSystem\System\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\D3D12\Gfx_D3D12RootSignature.h">
+      <Filter>GraphicsSystem\Resources\DX12</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GameSystem\Scene\Scene_TestScene.h">
+      <Filter>GameSystem\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -238,10 +355,13 @@
     <FxCompile Include="Shader\PS_2D.hlsl">
       <Filter>hlsl</Filter>
     </FxCompile>
-    <FxCompile Include="Shader\VS_2D.hlsl">
+    <FxCompile Include="Shader\PS_Color.hlsl">
       <Filter>hlsl</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PS_Lambert.hlsl">
+      <Filter>hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\VS_2D.hlsl">
       <Filter>hlsl</Filter>
     </FxCompile>
     <FxCompile Include="Shader\VS_3D.hlsl">

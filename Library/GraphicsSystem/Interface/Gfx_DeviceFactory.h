@@ -21,27 +21,27 @@ class IGfxRenderCommand;
 // クラス定義
 namespace DeviceFactory
 {
-	// デバイスと描画に必要な変数の初期化
-	HRESULT CreateDeviceAndContext(
-	int apiKind,
-	std::shared_ptr<IGfxDevice>& pDevice,
-	std::shared_ptr<IGfxRenderCommand>& pRenderCommand);
+    // デバイスと描画に必要な変数の初期化
+    HRESULT CreateDeviceAndContext(
+    int apiKind,
+    std::shared_ptr<IGfxDevice>& pDevice,
+    std::shared_ptr<IGfxRenderCommand>& pRenderCommand);
 
-	HRESULT CreateSwapChain(
-		int apiKind,
-		// out
-		std::shared_ptr<IGfxSwapChain>& pSwapChain,
-		const IGfxSwapChain::Description& desc,
-		IGfxDevice* pDevice,
-		IGfxRenderCommand* pRenderCommand);
+    HRESULT CreateSwapChain(
+        int apiKind,
+        // out
+        std::shared_ptr<IGfxSwapChain>& pSwapChain,
+        const IGfxSwapChain::Description& desc,
+        IGfxDevice* pDevice,
+        IGfxRenderCommand* pRenderCommand);
 
-	// レンダーターゲットの作成
-	HRESULT CreateRenderTargetView(
-		int apiKind,
-		std::shared_ptr<IGfxRenderTarget>& pRenderTarget,
-		const IGfxRenderTarget::Description& desc,
-		IGfxDevice* pDevice,
-		IGfxSwapChain* pSwapChain);
+    // レンダーターゲットの作成
+    HRESULT CreateRenderTargetView(
+        int apiKind,
+        std::shared_ptr<IGfxRenderTarget>& pRenderTarget,
+        const IGfxRenderTarget::Description& desc,
+        IGfxDevice* pDevice,
+        IGfxSwapChain* pSwapChain);
 }
 
 

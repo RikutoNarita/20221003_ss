@@ -16,6 +16,8 @@
 #include <GraphicsSystem\D3D11\Gfx_D3D11ScissorRect_Impl.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.h>
 
+#include <GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.h>
+
 #include <wrl\client.h>
 
 
@@ -53,6 +55,8 @@ GfxGraphicsManager::~GfxGraphicsManager()
 //------------------------------------------------------------------------------
 HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT height)
 {
+    m_eAPIKind = type;
+
     // デバイス、描画命令機能の生成
     auto hr = DeviceFactory::CreateDeviceAndContext(
         static_cast<int>(type), m_pDevice, m_pRenderCommand);
@@ -138,6 +142,9 @@ HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT heig
         break;
     }
 
+
+    CreateGraphicsResource();
+
     return S_OK;
 }
 
@@ -222,3 +229,12 @@ void GfxGraphicsManager::DeleteInstance()
     }
 }
 
+//------------------------------------------------------------------------------
+/// APIの種類の取得
+///
+/// \return APIの種類
+//------------------------------------------------------------------------------
+GfxGraphicsManager::API_KIND GfxGraphicsManager::GetAPIKind()
+{
+    return m_eAPIKind;
+}

@@ -8,9 +8,9 @@
 #pragma comment(lib, "dxguid.lib")
 
 // グローバル変数
-LPDIRECTINPUT8		 lpDI			= nullptr;	//	DirectInputオブジェクト
-LPDIRECTINPUTDEVICE8 lpKeyboard		= nullptr;	//	キーボードデバイス
-LPDIRECTINPUTDEVICE8 lpMousewDevice = nullptr;	//	マウスデバイス
+LPDIRECTINPUT8       lpDI           = nullptr;  // DirectInputオブジェクト
+LPDIRECTINPUTDEVICE8 lpKeyboard     = nullptr;  // キーボードデバイス
+LPDIRECTINPUTDEVICE8 lpMousewDevice = nullptr;  // マウスデバイス
 
 // 静的メンバ変数
 CInput* CInput::m_pInstance = nullptr;
@@ -60,16 +60,16 @@ CInput* CInput::GetInstance()
 //------------------------------------------------------------------------------
 void CInput::Uninit()
 {
-    //	デバイス制御停止
+    //    デバイス制御停止
     lpKeyboard->Unacquire();
     lpMousewDevice->Unacquire();
 
-    //	開放
+    //    開放
     lpMousewDevice->Release();
     lpKeyboard->Release();
     lpDI->Release();
 
-    //	インスタンス破棄
+    //    インスタンス破棄
     if (m_pInstance)
     {
         delete m_pInstance;
@@ -99,14 +99,14 @@ HRESULT CInput::Init()
         return ret;
     }
 
-    //	キーボード初期化
+    //    キーボード初期化
     ret = InitKeyBoard();
     if (FAILED(ret))
     {
         return ret;
     }
 
-    //	マウス初期化
+    //    マウス初期化
     ret = InitMouse();
     if (FAILED(ret))
     {
@@ -123,10 +123,10 @@ HRESULT CInput::Init()
 //------------------------------------------------------------------------------
 HRESULT CInput::InitKeyBoard()
 {
-    //	IDirectInputDevice8の取得
+    //    IDirectInputDevice8の取得
     HRESULT ret = lpDI->CreateDevice(
-        GUID_SysKeyboard,	//第1引数は入力デバイスのGUID、ここではデフォルトのシステムキーボードということでGUID_SysKeyboardを定義
-        &lpKeyboard,		//第2引数には取得したデバイスオブジェクトが入る変数のポインタ
+        GUID_SysKeyboard,    //第1引数は入力デバイスのGUID、ここではデフォルトのシステムキーボードということでGUID_SysKeyboardを定義
+        &lpKeyboard,        //第2引数には取得したデバイスオブジェクトが入る変数のポインタ
         NULL);
     if (FAILED(ret))
     {
@@ -134,7 +134,7 @@ HRESULT CInput::InitKeyBoard()
         return E_FAIL;
     }
 
-    //	入力データ形式のセット
+    //    入力データ形式のセット
     ret = lpKeyboard->SetDataFormat(&c_dfDIKeyboard);
     if (FAILED(ret)) {
         lpKeyboard->Release();
@@ -142,7 +142,7 @@ HRESULT CInput::InitKeyBoard()
         return E_FAIL;
     }
 
-    //	排他制御のセット
+    //    排他制御のセット
     ret = lpKeyboard->SetCooperativeLevel(WINDOW->GetWndHandle(),
         DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
     if (FAILED(ret)) {
@@ -165,7 +165,7 @@ HRESULT CInput::InitKeyBoard()
 //------------------------------------------------------------------------------
 HRESULT CInput::InitMouse()
 {
-    //	マウス用にデバイスオブジェクトを作成
+    //    マウス用にデバイスオブジェクトを作成
     HRESULT ret = lpDI->CreateDevice(
         GUID_SysMouse, 
         &lpMousewDevice, 
@@ -176,15 +176,15 @@ HRESULT CInput::InitMouse()
         return E_FAIL;
     }
 
-    //	入力データ形式のセット
-    ret = lpMousewDevice->SetDataFormat(&c_dfDIMouse);	// マウス用のデータ・フォーマットを設定
+    //    入力データ形式のセット
+    ret = lpMousewDevice->SetDataFormat(&c_dfDIMouse);    // マウス用のデータ・フォーマットを設定
     if (FAILED(ret))
     {
         // データフォーマットに失敗
         return E_FAIL;
     }
 
-    /*	排他制御のセット
+    /*    排他制御のセット
     * 
     *   DISCL_EXCLUSIVE    他のアプリケーションはその入力デバイスを取得できない
     *   DISCL_NONEXCLUSIVE 他のアプリケーションでもそのまま入力デバイスの取得ができる
@@ -200,13 +200,13 @@ HRESULT CInput::InitMouse()
         return E_FAIL;
     }
 
-    //	デバイスの設定
+    //    デバイスの設定
     DIPROPDWORD diprop;
     diprop.diph.dwSize = sizeof(diprop);
     diprop.diph.dwHeaderSize = sizeof(diprop.diph);
     diprop.diph.dwObj = 0;
     diprop.diph.dwHow = DIPH_DEVICE;
-    diprop.dwData = DIPROPAXISMODE_REL;	// 相対値モードで設定（絶対値はDIPROPAXISMODE_ABS）
+    diprop.dwData = DIPROPAXISMODE_REL;    // 相対値モードで設定（絶対値はDIPROPAXISMODE_ABS）
 
     ret = lpMousewDevice->SetProperty(DIPROP_AXISMODE, &diprop.diph);
     if (FAILED(ret))
@@ -215,7 +215,7 @@ HRESULT CInput::InitMouse()
         return E_FAIL;
     }
 
-    //	動作開始
+    //    動作開始
     lpMousewDevice->Acquire();
 
     return ret;
@@ -228,10 +228,10 @@ HRESULT CInput::InitMouse()
 //------------------------------------------------------------------------------
 void CInput::Update()
 {
-    //	キーボード入力更新
+    //    キーボード入力更新
     UpdateKeyBoard();
 
-    //	マウス更新
+    //    マウス更新
     UpdateMouse();
 }
 
@@ -250,7 +250,7 @@ void CInput::UpdateKeyBoard()
 
     // キー入力情報の取得
     HRESULT ret = lpKeyboard->GetDeviceState(sizeof(m_currentKeyState), m_currentKeyState);
-    if (FAILED(ret))	// 失敗なら再開させてもう一度取得
+    if (FAILED(ret))    // 失敗なら再開させてもう一度取得
     {
         // 動作再開
         lpKeyboard->Acquire();
@@ -271,7 +271,7 @@ void CInput::UpdateMouse()
     m_prevMouseState = m_currentMouseState;
 
     // マウス情報の取得
-    HRESULT	hr = lpMousewDevice->GetDeviceState(sizeof(DIMOUSESTATE), &m_currentMouseState);
+    HRESULT    hr = lpMousewDevice->GetDeviceState(sizeof(DIMOUSESTATE), &m_currentMouseState);
     if (FAILED(hr))
     {
         // 動作再開
@@ -314,7 +314,7 @@ bool CInput::GetKeyPress(unsigned char key)
 //------------------------------------------------------------------------------
 bool CInput::GetKeyTrigger(unsigned char key)
 {
-    //	前フレームに押されていない && 現在押されている
+    //    前フレームに押されていない && 現在押されている
     return (m_currentKeyState[key] & 0x80) &&
             !(m_prevKeyState[key] & 0x80);
 }
@@ -328,7 +328,7 @@ bool CInput::GetKeyTrigger(unsigned char key)
 //------------------------------------------------------------------------------
 bool CInput::GetKeyRelease(unsigned char key)
 {
-    //	前フレームに押されている && 現在押されていない
+    //    前フレームに押されている && 現在押されていない
     return ((m_prevKeyState[key] & 0x80) &&
             !(m_currentKeyState[key] & 0x80));
 }
@@ -354,7 +354,7 @@ bool CInput::GetMouseButton(MOUSE_BUTTON Btn)
 //------------------------------------------------------------------------------
 bool CInput::GetMouseTrigger(MOUSE_BUTTON Btn)
 {
-    //	前フレームにクリックされていない && 現在クリックされている
+    //    前フレームにクリックされていない && 現在クリックされている
     return (!(m_prevMouseState.rgbButtons[static_cast<int>(Btn)] & 0x80) &&
             m_currentMouseState.rgbButtons[static_cast<int>(Btn)] & 0x80);
     
@@ -369,7 +369,7 @@ bool CInput::GetMouseTrigger(MOUSE_BUTTON Btn)
 //------------------------------------------------------------------------------
 bool CInput::GetMouseRelease(MOUSE_BUTTON Btn)
 {
-    //	前フレームにクリックされている && 現在クリックされていない
+    //    前フレームにクリックされている && 現在クリックされていない
     return (m_prevMouseState.rgbButtons[static_cast<int>(Btn)] & 0x80 &&
             !(m_currentMouseState.rgbButtons[static_cast<int>(Btn)] & 0x80));
 }

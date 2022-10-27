@@ -15,7 +15,7 @@
 //------------------------------------------------------------------------------
 GfxD3D11ScissorRect::GfxD3D11ScissorRect()
 {
-	m_scissorRect = {};
+    m_scissorRect = {};
 }
 
 //------------------------------------------------------------------------------
@@ -25,10 +25,10 @@ GfxD3D11ScissorRect::GfxD3D11ScissorRect()
 //------------------------------------------------------------------------------
 GfxD3D11ScissorRect::GfxD3D11ScissorRect(const Description& desc)
 {
-	m_scissorRect.left = desc.left;
-	m_scissorRect.right = desc.right;
-	m_scissorRect.top = desc.top;
-	m_scissorRect.bottom = desc.bottom;
+    m_scissorRect.left = desc.left;
+    m_scissorRect.right = desc.right;
+    m_scissorRect.top = desc.top;
+    m_scissorRect.bottom = desc.bottom;
 }
 
 //------------------------------------------------------------------------------
@@ -47,5 +47,5 @@ GfxD3D11ScissorRect::~GfxD3D11ScissorRect()
 //------------------------------------------------------------------------------
 void GfxD3D11ScissorRect::Bind() const
 {
-	GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->RSSetScissorRects(1, &m_scissorRect);
+    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->RSSetScissorRects(1, &m_scissorRect);
 }

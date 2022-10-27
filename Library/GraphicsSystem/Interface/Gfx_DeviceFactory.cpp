@@ -29,7 +29,7 @@ namespace DeviceFactory
         int apiKind,
         std::shared_ptr<IGfxDevice>& pDevice,
         std::shared_ptr<IGfxRenderCommand>& pRenderCommand)
-	{
+    {
         HRESULT hr = S_OK;
 
         // APIの種類によって初期化方法を分ける
@@ -156,8 +156,8 @@ namespace DeviceFactory
             break;
         }
 
-		return S_OK;
-	}
+        return S_OK;
+    }
 
 
 
