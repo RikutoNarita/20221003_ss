@@ -20,7 +20,8 @@
 #define TEX_DEFAULT     ("tex_white")
 
 #define GEOMETORY_CUBE    ("geometory_cube")
-#define GEOMETORY_SPRITE  ("geometory_cube")
+#define GEOMETORY_SPRITE  ("geometory_sprite")
+#define GEOMETORY_SPHERE  ("geometory_sphere")
 
 #define WVP_MATRIX        ("matrix3")
 #define CB_DEFAULT        ("cb_default")

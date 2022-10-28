@@ -250,7 +250,7 @@ bool SceneTest::Init()
 
     // リソースのバインド
     cube = GfxGraphicsBinder::Create(GfxTag("binder2"));
-    cube->BindMesh(GfxGraphicsResource::Find<GfxMeshBuffer>(GEOMETORY_CUBE));
+    cube->BindMesh(GfxGraphicsResource::Find<GfxMeshBuffer>(GEOMETORY_SPHERE));
     cube->BindPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_COLOR));
     cube->BindVS(GfxGraphicsResource::Find<GfxVertexShader>(VERTEX_3D));
     cube->BindConstantBuffer(GfxGraphicsResource::Find<GfxConstantBuffer>("cb_pos2"), GfxShader::KIND::KIND_VS, 0);

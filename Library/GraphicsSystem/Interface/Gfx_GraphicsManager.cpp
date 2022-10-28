@@ -142,7 +142,7 @@ HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT heig
         break;
     }
 
-
+    // デフォルトのリソースを作成
     CreateGraphicsResource();
 
     return S_OK;

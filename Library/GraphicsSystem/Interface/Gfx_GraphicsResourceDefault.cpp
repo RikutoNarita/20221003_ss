@@ -38,6 +38,7 @@ void CreateDefaultTexture();
 
 void CreateGeometoryCube();
 void CreateGeometorySprite();
+void CreateGeometorySphere();
 
 void CreateCBDefault();
 void CreateCBDefault()
@@ -85,6 +86,7 @@ void CreateGraphicsResource()
     // メッシュの作成
     CreateGeometoryCube();
     CreateGeometorySprite();
+    CreateGeometorySphere();
 }
 
 
@@ -399,4 +401,99 @@ void CreateGeometorySprite()
     meshDesc.isWrite = true;
     meshDesc.tpology = GfxMeshBuffer::TOPOLOGY::TRIANGLE_STRIP;
     GfxMeshBuffer::Create(GfxTag(GEOMETORY_CUBE), meshDesc);
+}
+
+
+
+void CreateGeometorySphere()
+{
+    namespace dx = DirectX;
+
+    // オブジェクトのリソースの中身を作成
+    GfxMeshBuffer::Description meshDesc = {};
+
+    const int longDiv = 5;
+    const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
+    const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
+    const float longitudeAngle = 2.0f * DirectX::XM_PI / longDiv;
+
+    // near center
+    std::vector<Vertex3D> vertices;
+    vertices.emplace_back();
+    vertices.back().pos = { 0.0f,0.0f,-1.0f };
+    const auto iCenterNear = (unsigned short)(vertices.size() - 1);
+    // far center
+    vertices.emplace_back();
+    vertices.back().pos = { 0.0f,0.0f,1.0f };
+    const auto iCenterFar = (unsigned short)(vertices.size() - 1);
+
+    // base vertices
+    for (int iLong = 0; iLong < longDiv; iLong++)
+    {
+        // near base
+        {
+            vertices.emplace_back();
+            auto v = dx::XMVector3Transform(
+                base,
+                dx::XMMatrixRotationZ(longitudeAngle * iLong)
+            );
+            dx::XMStoreFloat3(&vertices.back().pos, v);
+        }
+        // far base
+        {
+            vertices.emplace_back();
+            auto v = dx::XMVector3Transform(
+                base,
+                dx::XMMatrixRotationZ(longitudeAngle * iLong)
+            );
+            v = dx::XMVectorAdd(v, offset);
+            dx::XMStoreFloat3(&vertices.back().pos, v);
+        }
+    }
+
+    // side indices
+    std::vector<unsigned short> indices;
+    for (unsigned short iLong = 0; iLong < longDiv; iLong++)
+    {
+        const auto i = iLong * 2;
+        const auto mod = longDiv * 2;
+        indices.push_back(i + 2);
+        indices.push_back((i + 2) % mod + 2);
+        indices.push_back(i + 1 + 2);
+        indices.push_back((i + 2) % mod + 2);
+        indices.push_back((i + 3) % mod + 2);
+        indices.push_back(i + 1 + 2);
+    }
+
+    // base indices
+    for (unsigned short iLong = 0; iLong < longDiv; iLong++)
+    {
+        const auto i = iLong * 2;
+        const auto mod = longDiv * 2;
+        indices.push_back(i + 2);
+        indices.push_back(iCenterNear);
+        indices.push_back((i + 2) % mod + 2);
+        indices.push_back(iCenterFar);
+        indices.push_back(i + 1 + 2);
+        indices.push_back((i + 3) % mod + 2);
+    }
+
+
+    for (size_t i = 0; i < vertices.size(); i++)
+    {
+        vertices[i].diffuse = {1,1,1,1};
+    }
+
+    //std::move(vertices)
+    //std::move(indices)
+
+    meshDesc.pVertexData = vertices.data();
+    meshDesc.vertexCount = vertices.size();
+    meshDesc.vertexSize = sizeof(Vertex3D);
+    meshDesc.pIndexData = indices.data();
+    meshDesc.indexCount = indices.size();
+    meshDesc.indexSize = sizeof(unsigned short);
+    meshDesc.isWrite = true;
+    meshDesc.tpology = GfxMeshBuffer::TOPOLOGY::TRIANGLE_LIST;
+    GfxMeshBuffer::Create(GfxTag(GEOMETORY_SPHERE), meshDesc);
 }
