@@ -35,14 +35,14 @@ SamplerState g_sampler : register(s0);
 float4 main(PS_IN pin) : SV_TARGET
 {
     float4 color = pin.color;    
-    //// 法線の正規化
-    //float3 nrm = normalize(pin.normal);
-    //// ライトの向きの正規化（計算上向きを逆転させる）
-    //float3 light = normalize(-float3(0.0f, -0.4f, 1.0f));
-    //// 影の度合いを計算
-    //float sahdow = dot(nrm, light);
-    //// 色に反映
-    //color *= sahdow;
+    // 法線の正規化
+    float3 nrm = normalize(pin.normal);
+    // ライトの向きの正規化（計算上向きを逆転させる）
+    float3 light = normalize(-float3(0.0f, -0.4f, 1.0f));
+    // 影の度合いを計算
+    float sahdow = dot(nrm, light);
+    // 色に反映
+    color *= sahdow;
     
     //if (false)
     //{

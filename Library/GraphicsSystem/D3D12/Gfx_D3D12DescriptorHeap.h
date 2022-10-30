@@ -36,48 +36,101 @@ public:
     //------------------------------------------------------------------------------
     ~GfxD3D12DescriptorHeap();
 
+    //------------------------------------------------------------------------------
+    /// ディスクリプタヒープの作成
+    ///
+    /// \return void
+    //------------------------------------------------------------------------------
+    void Create();
 
-    void BindSRV(UINT slot, ID3D12Resource* data, GfxShader::KIND visible);
-    void BindCBV(UINT slot, ID3D12Resource* data, GfxShader::KIND visible);
-
-    void Start();
-
-    void SetDescriptorHeap();
-
-    void SetRootDescriptorTable();
+    //------------------------------------------------------------------------------
+    /// ディスクリプタヒープのバインド
+    /// 
+    /// \param[in] slot レジスタ番号
+    ///
+    /// \return void
+    //------------------------------------------------------------------------------
+    void Bind(
+        /*[in]*/
+        unsigned int slot = 0) const final;
     
+    //------------------------------------------------------------------------------
+    /// テクスチャのセット
+    ///
+    /// \pramga[in] res     テクスチャリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindSRV(
+        /*[in]*/
+        ID3D12Resource* data,
+        /*[in]*/
+        GfxShader::KIND visible,
+        /*[in]*/
+        UINT slot);
+    
+    //------------------------------------------------------------------------------
+    /// 定数バッファのセット
+    ///
+    /// \pramga[in] res     定数バッファリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindCBV(
+        /*[in]*/
+        ID3D12Resource* data,
+        /*[in]*/
+        GfxShader::KIND visible,
+        /*[in]*/
+        UINT slot);
+
+    //------------------------------------------------------------------------------
+    /// ディスクリプタヒープの取得
+    ///
+    /// \return ディスクリプタヒープ
+    //------------------------------------------------------------------------------
     inline const ID3D12DescriptorHeap* Get() const
     {
         m_pSRVandCSBheap.Get();
     }
 
-    void Bind(unsigned int slot = 0) const final;
-
     //------------------------------------------------------------------------------
 
 private:
     //------------------------------------------------------------------------------
-    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_pSRVandCSBheap;
-
     static const UINT MAX_ROOT_PARAM = 2;
-    D3D12_ROOT_PARAMETER m_rootParameters[MAX_ROOT_PARAM];
     static const UINT MAX_DHISCTIPTOR = MAX_ROOT_PARAM * 2; // rootparamer * シェーダーの種類(ps, vs)
-    D3D12_DESCRIPTOR_RANGE m_descriptorTableRange[MAX_DHISCTIPTOR];
-
     static const UINT MAX_TEXTURE = 1;
+    static const UINT MAX_CONSTANTBUFFER = 4;
+
+    Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> m_pSRVandCSBheap;
+    D3D12_ROOT_PARAMETER m_rootParameters[MAX_ROOT_PARAM];
+    D3D12_DESCRIPTOR_RANGE m_descriptorTableRange[MAX_DHISCTIPTOR];
     ID3D12Resource* m_pixelResourceSRV[MAX_TEXTURE];
     ID3D12Resource* m_vertexResourceSRV[MAX_TEXTURE];
-    static const UINT MAX_CONSTANTBUFFER = 4;
     ID3D12Resource* m_pixelResourceCBV[MAX_CONSTANTBUFFER];
     ID3D12Resource* m_vertexResourceCBV[MAX_CONSTANTBUFFER];
-
     UINT m_descriptorHandleIncrementSize;
     int m_nNumPixelHeap;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_pSRVandCSBheap    シェーダーリソースビューと定数バッファのディスクリプタヒープ
-    /// m_rootParameters    ルートパラメーター
-    /// m_rootParameters    ディスクリプタレンジ
+    /// MAX_ROOT_PARAM                  ルートパラメーターの数
+    /// MAX_DHISCTIPTOR                 ディスクリプタレンジの数
+    /// MAX_TEXTURE                     テクスチャの最大数
+    /// MAX_CONSTANTBUFFER              定数バッファの最大数
+    /// m_pSRVandCSBheap                ディスクリプタヒープ
+    /// m_rootParameters                ルートパラメータ
+    /// m_descriptorTableRange          ディスクリプタレンジ
+    /// m_pixelResourceSRV              ピクセルシェーダーに送るシェーダーリソースビュー
+    /// m_vertexResourceSRV             頂点シェーダーに送るシェーダーリソースビュー
+    /// m_pixelResourceCBV              ピクセルシェーダーに送る定数バッファビュー
+    /// m_vertexResourceCBV             頂点シェーダーに送る定数バッファビュー
+    /// m_descriptorHandleIncrementSize SRV,CBVのインクリメントサイズ格納用
+    /// m_nNumPixelHeap                 ピクセルシェーダーに送るリソースの数
     /// </summary> 
 };
-#endif // __D3D_MANAGER_H__
+#endif // __D3D12_DISCRIPTOR_HEAP_H__

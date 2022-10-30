@@ -47,13 +47,15 @@ public:
         /*[in]*/
         GfxGraphicsObjectBase::Ptr pResource);
 
+    //------------------------------------------------------------------------------
+    /// リソースの検索
+    ///
+    /// \param[in] tag
+    /// 
+    /// \return リソースのポインタ
+    //------------------------------------------------------------------------------
     template <class T>
     static T* Find(
-        /*[in]*/
-        GfxTag tag);
-
-    template <class T>
-    static std::shared_ptr<T> Get(
         /*[in]*/
         GfxTag tag);
 
@@ -80,24 +82,5 @@ T* GfxGraphicsResource::Find(GfxTag tag)
         return reinterpret_cast<T*>(itr->second.get());
     }
 }
-
-
-//template <class T>
-//std::shared_ptr<T> GfxGraphicsResource::Get(GfxTag tag)
-//{
-//    auto itr = m_resources.find(tag);
-//    std::shared_ptr<T> ret;
-//
-//    if (itr == m_resources.end())
-//    {
-//        return nullptr;
-//    }
-//    else
-//    {
-//        ret = itr->second;
-//        //return reinterpret_cast<T*>(itr->second.get());
-//        return ret;
-//    }
-//}
 
 #endif // __GRAPHICS_RESOURCE_H__

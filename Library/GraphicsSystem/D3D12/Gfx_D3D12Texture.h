@@ -26,7 +26,9 @@ public:
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    GfxD3D12Texture(Description desc);
+    GfxD3D12Texture(
+        /*[in]*/
+        Description desc);
 
     //------------------------------------------------------------------------------
     /// デストラクタ
@@ -35,31 +37,24 @@ public:
     //------------------------------------------------------------------------------
     virtual ~GfxD3D12Texture();
 
-
+    //------------------------------------------------------------------------------
+    /// テクスチャバッファの取得
+    ///
+    /// \return テクスチャバッファのポインタ
+    //------------------------------------------------------------------------------
     inline ID3D12Resource* Get() const
     {
         return m_pTextureBuffer.Get();
     }
 
-    void Bind(unsigned slot = 0) const final
-    {
+    void Bind(unsigned slot = 0) const final;
 
-    }
-
-    void BindVS(unsigned slot) const final
-    {
-    }
-    void BindPS(unsigned slot) const final
-    {
-    }
-
-
-protected:
+private:
     //------------------------------------------------------------------------------
     Microsoft::WRL::ComPtr<ID3D12Resource> m_pTextureBuffer;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_desc      テクスチャの設定項目
+    /// m_pTextureBuffer    テクスチャバッファ
     /// </summary> 
 };
 #endif // __TEXTURE_H__

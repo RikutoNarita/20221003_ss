@@ -38,6 +38,7 @@ public:
     bool operator==(const GfxTag& tag) const;
     bool operator!=(const GfxTag& tag) const;
     bool operator<(const GfxTag& tag) const;
+
     //------------------------------------------------------------------------------
 
 private:

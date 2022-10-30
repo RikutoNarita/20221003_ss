@@ -8,25 +8,30 @@
 #ifndef __GRAPHICS_RESOURCE_DEFAULT_H__
 #define __GRAPHICS_RESOURCE_DEFAULT_H__
     
-
+//--- マクロ定義
+// pixel shader
 #define PS_COLOR    ("ps_color")    
-#define PIXEL_2D    ("PS2D")
+#define PS_TEX    ("PS2D")
 #define LAMBERT     ("lambert")
-
+// vertex shader
 #define VERTEX_2D    ("VS2D")
 #define VERTEX_3D    ("VS3D")
-
+// texture
 #define CHECKER         ("tex_cheker")
 #define TEX_DEFAULT     ("tex_white")
-
+// mesh
 #define GEOMETORY_CUBE    ("geometory_cube")
 #define GEOMETORY_SPRITE  ("geometory_sprite")
 #define GEOMETORY_SPHERE  ("geometory_sphere")
-
+// constant buffer
 #define WVP_MATRIX        ("matrix3")
 #define CB_DEFAULT        ("cb_default")
 
-// プロトタイプ宣言
+//-----------------------------------------------------------------------------
+/// デフォルトリソースの作成し
+///
+/// \return void
+//-----------------------------------------------------------------------------
 void CreateGraphicsResource();
 
 #endif // __GRAPHICS_RESOURCE_H__

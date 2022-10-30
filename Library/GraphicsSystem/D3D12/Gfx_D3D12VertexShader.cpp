@@ -7,16 +7,19 @@
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12VertexShader.h>
 
-
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
+/// \param[in] fileName 頂点シェーダーファイルのパス
 /// 
 /// \return void
 //------------------------------------------------------------------------------
 GfxD3D12VertexShader::GfxD3D12VertexShader(const wchar_t* fileName)
-: GfxVertexShader(KIND::KIND_VS)
+    : GfxVertexShader(KIND::KIND_VS)
+    , m_pInputDesc(nullptr)
 {
+    m_desc = {};
+
     // エラー対応
     Microsoft::WRL::ComPtr<ID3DBlob> pErrorBlob;
     HRESULT hr = S_OK;
@@ -38,53 +41,6 @@ GfxD3D12VertexShader::GfxD3D12VertexShader(const wchar_t* fileName)
         _ASSERT_EXPR(false, L"NO_SHADER");
     }
 
-    //// 頂点レイアウトの作成
-    //m_inputLayout.push_back(
-    //    {// 座標
-    //        "POSITION",                                 // セマンティクス名
-    //        0,                                          // セマンティクスインデックス
-    //        DXGI_FORMAT_R32G32B32_FLOAT,                // フォーマット
-    //        0,                                          // 入力スロットインデックス
-    //        D3D12_APPEND_ALIGNED_ELEMENT,               // データのオフセット位置（データが連続していることを示す）
-    //        D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, // 入力スロットクラス
-    //        0                                           // 1度に描画するインスタンスの数（インスタンシングを利用しないので0）
-    //    });
-    //m_inputLayout.push_back(
-    //    {// 法線
-    //        "NORMAL",                                       // セマンティクス名
-    //            0,                                          // セマンティクスインデックス
-    //            DXGI_FORMAT_R32G32B32_FLOAT,                // フォーマット
-    //            0,                                          // 入力スロットインデックス
-    //            D3D12_APPEND_ALIGNED_ELEMENT,               // データのオフセット位置（データが連続していることを示す）
-    //            D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, // 入力スロットクラス
-    //            0                                           // 1度に描画するインスタンスの数（インスタンシングを利用しないので0）
-    //    });
-    //m_inputLayout.push_back(
-    //    {
-    //        // テクスチャ座標
-    //        "TEXCOORD",                                 // セマンティクス名
-    //        0,                                          // セマンティクスインデックス
-    //        DXGI_FORMAT_R32G32_FLOAT,                   // フォーマット
-    //        0,                                          // 入力スロットインデックス
-    //        D3D12_APPEND_ALIGNED_ELEMENT,               // データのオフセット位置（データが連続していることを示す）
-    //        D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, // 入力スロットクラス
-    //        0                                           // 1度に描画するインスタンスの数（インスタンシングを利用しないので0）
-    //    });
-    //m_inputLayout.push_back(
-    //    {
-    //        // 色
-    //        "COLOR",                                    // セマンティクス名
-    //        0,                                          // セマンティクスインデックス
-    //        DXGI_FORMAT_R32G32B32A32_FLOAT,             // フォーマット
-    //        0,                                          // 入力スロットインデックス
-    //        D3D12_APPEND_ALIGNED_ELEMENT,               // データのオフセット位置（データが連続していることを示す）
-    //        D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, // 入力スロットクラス
-    //        0                                           // 1度に描画するインスタンスの数（インスタンシングを利用しないので0）
-    //    });
-    //
-    //m_desc.pInputElementDescs = m_inputLayout.data();
-    //m_desc.NumElements = (UINT)m_inputLayout.size();
-
     /*
     シェーダ作成時にシェーダリフレクションを通してインプットレイアウトを取得
     セマンティクスの配置などから識別子を作成
@@ -93,7 +49,6 @@ GfxD3D12VertexShader::GfxD3D12VertexShader(const wchar_t* fileName)
     */
     ID3D12ShaderReflection* pReflection;
     D3D12_SHADER_DESC shaderDesc;
-    //D3D12_INPUT_ELEMENT_DESC* pInputDesc;
     D3D12_SIGNATURE_PARAMETER_DESC sigDesc;
     std::string key = "";
 
@@ -121,12 +76,12 @@ GfxD3D12VertexShader::GfxD3D12VertexShader(const wchar_t* fileName)
     if (FAILED(hr)) { return; }
 
     pReflection->GetDesc(&shaderDesc);
-    pInputDesc = new D3D12_INPUT_ELEMENT_DESC[shaderDesc.InputParameters];
+    m_pInputDesc = new D3D12_INPUT_ELEMENT_DESC[shaderDesc.InputParameters];
     for (UINT i = 0; i < shaderDesc.InputParameters; ++i)
     {
         pReflection->GetInputParameterDesc(i, &sigDesc);
-        pInputDesc[i].SemanticName = sigDesc.SemanticName;
-        pInputDesc[i].SemanticIndex = sigDesc.SemanticIndex;
+        m_pInputDesc[i].SemanticName = sigDesc.SemanticName;
+        m_pInputDesc[i].SemanticIndex = sigDesc.SemanticIndex;
 
         // http://marupeke296.com/TIPS_No17_Bit.html
         BYTE elementCount = sigDesc.Mask;
@@ -136,24 +91,24 @@ GfxD3D12VertexShader::GfxD3D12VertexShader(const wchar_t* fileName)
         switch (sigDesc.ComponentType)
         {
         case D3D_REGISTER_COMPONENT_UINT32:
-            pInputDesc[i].Format = formats[0][elementCount - 1];
+            m_pInputDesc[i].Format = *&formats[0][elementCount - 1];
             break;
         case D3D_REGISTER_COMPONENT_SINT32:
-            pInputDesc[i].Format = formats[1][elementCount - 1];
+            m_pInputDesc[i].Format = *&formats[1][elementCount - 1];
             break;
         case D3D_REGISTER_COMPONENT_FLOAT32:
-            pInputDesc[i].Format = formats[2][elementCount - 1];
+            m_pInputDesc[i].Format = *&formats[2][elementCount - 1];
             break;
         }
-        pInputDesc[i].InputSlot = 0;
-        pInputDesc[i].AlignedByteOffset = i == 0 ? 0 : D3D12_APPEND_ALIGNED_ELEMENT;
-        pInputDesc[i].InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
-        pInputDesc[i].InstanceDataStepRate = 0;
+        m_pInputDesc[i].InputSlot = 0;
+        m_pInputDesc[i].AlignedByteOffset = i == 0 ? 0 : D3D12_APPEND_ALIGNED_ELEMENT;
+        m_pInputDesc[i].InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+        m_pInputDesc[i].InstanceDataStepRate = 0;
 
         key += sigDesc.SemanticName;
-        key += sigDesc.SemanticIndex;
+        key += (unsigned char)sigDesc.SemanticIndex;
     }
-    m_desc.pInputElementDescs = pInputDesc;
+    m_desc.pInputElementDescs = m_pInputDesc;
     m_desc.NumElements = shaderDesc.InputParameters;
 }
 
@@ -164,16 +119,18 @@ GfxD3D12VertexShader::GfxD3D12VertexShader(const wchar_t* fileName)
 //------------------------------------------------------------------------------
 GfxD3D12VertexShader::~GfxD3D12VertexShader()
 {
-    delete[] pInputDesc;
+    delete[] m_pInputDesc;
 }
 
 //------------------------------------------------------------------------------
-/// 頂点シェーダーの指定
+/// 頂点シェーダーのバインド
+/// 
+/// \param[in] slot レジスタ番号
 ///
 /// \return void
 //------------------------------------------------------------------------------
 void GfxD3D12VertexShader::Bind(unsigned int slot) const
 {
-
+    UNREFERENCED_PARAMETER(slot);
 }
 

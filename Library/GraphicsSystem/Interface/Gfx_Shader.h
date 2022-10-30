@@ -11,7 +11,6 @@
 // インクルード
 #include <GraphicsSystem\Interface\Gfx_GrapicsObjectBase.h>
 #include <GraphicsSystem\Interface\Gfx_Tag.h>
-#include <Windows.h>
 #include <wrl\client.h>
 #include <d3dcompiler.h>
 
@@ -47,24 +46,56 @@ public:
     //------------------------------------------------------------------------------
     virtual ~GfxShader();
 
-    static GfxShader::Ptr Compile(const GfxTag& tag, const KIND& kind, const wchar_t* fileName);
+    //------------------------------------------------------------------------------
+    /// シェーダーのコンパイル
+    /// 
+    /// \param[in] tag      リソースに紐づけるタグ
+    /// \param[in] kind     シェーダーの種類
+    /// \param[in] filename 読み込むシェーダーのパス
+    ///
+    /// \return このクラスのポインタ
+    //------------------------------------------------------------------------------
+    static GfxShader::Ptr Compile(
+    /*[in]*/
+    const GfxTag& tag,
+    /*[in]*/
+    const KIND& kind,
+    /*[in]*/
+    const wchar_t* fileName);
 
-    void SetBuffer(GfxConstantBuffer* pConstantBuffer, unsigned int slot)
-    {
-        if (0 <= slot && slot < MAX_BUFFER)
-        {
-            m_buffers[slot] = pConstantBuffer;
-        }
-    }
+    //------------------------------------------------------------------------------
+    /// シェーダーに定数バッファをセットする
+    /// 
+    /// \param[in] pConstantBuffer  定数バッファ
+    /// \param[in] slot             レジスタ番号
+    ///
+    /// \return void
+    //------------------------------------------------------------------------------
+    void SetBuffer(
+    /*[in]*/
+    GfxConstantBuffer* pConstantBuffer,
+    /*[in]*/
+    unsigned int slot);
 
-    void SetTexture(GfxTexture* pTex, unsigned int slot)
-    {
-        if (0 <= slot && slot < MAX_BUFFER)
-        {
-            m_textures[slot] = pTex;
-        }
-    }
+    //------------------------------------------------------------------------------
+    /// シェーダーにテクスチャをセットする
+    /// 
+    /// \param[in] pTex テクスチャ
+    /// \param[in] slot レジスタ番号
+    ///
+    /// \return void
+    //------------------------------------------------------------------------------
+    void SetTexture(
+    /*[in]*/
+    GfxTexture* pTex,
+    /*[in]*/
+    unsigned int slot);
 
+    //------------------------------------------------------------------------------
+    /// シェーダーのポインタの取得
+    /// 
+    /// \return シェーダーのポインタ
+    //------------------------------------------------------------------------------
     ID3DBlob* GetBlob() const
     {
         return m_pBlob.Get();
@@ -75,13 +106,17 @@ public:
 protected:
     //------------------------------------------------------------------------------
     static const int MAX_BUFFER = 4;
+    KIND m_kind;
     GfxConstantBuffer* m_buffers[MAX_BUFFER];
     GfxTexture* m_textures[MAX_BUFFER];
-    KIND m_kind;
     Microsoft::WRL::ComPtr<ID3DBlob> m_pBlob;
     //------------------------------------------------------------------------------
     /// <summary>
+    /// MAX_BUFFER  定数バッファ、テクスチャの最大セット数
     /// m_kind      シェーダーの種類
+    /// m_buffers   定数バッファ
+    /// m_textures  テクスチャ
+    /// m_pBlob     シェーダーのポインタ
     /// </summary> 
 };
 
@@ -93,21 +128,18 @@ public:
     //------------------------------------------------------------------------------
     /// コンストラクタ
     ///
-    /// \param[in] shader
+    /// \param[in] shader シェーダーの種類
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    GfxVertexShader(KIND kind)
-        : GfxShader(kind)
-    {
-    }
+    GfxVertexShader(KIND kind);
 
     //------------------------------------------------------------------------------
     /// デストラクタ
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    virtual ~GfxVertexShader() {}
+    virtual ~GfxVertexShader();
 
     //------------------------------------------------------------------------------
 };
@@ -120,21 +152,18 @@ public:
     //------------------------------------------------------------------------------
     /// コンストラクタ
     ///
-    /// \param[in] shader
+    /// \param[in] shader シェーダーの種類
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    GfxPixelShader(KIND kind)
-        : GfxShader(kind)
-    {
-    }
+    GfxPixelShader(KIND kind);
 
     //------------------------------------------------------------------------------
     /// デストラクタ
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    virtual ~GfxPixelShader() {}
+    virtual ~GfxPixelShader();
 
     //------------------------------------------------------------------------------
 };

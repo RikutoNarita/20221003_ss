@@ -12,27 +12,21 @@
 #include <GraphicsSystem\Interface\Gfx_GrapicsObjectBase.h>
 #include <GraphicsSystem\Interface\Gfx_Tag.h>
 #include <GraphicsSystem\Interface\Gfx_Shader.h>
-#include <Windows.h>
 
 // クラス定義
 class GfxConstantBuffer : public GfxGraphicsObject<GfxConstantBuffer>
 {
 public:
     //------------------------------------------------------------------------------
-    enum class Shader
-    {
-        BIND_VERTEX,
-        BIND_PIXEL,
-    };
-
     struct Description
     {
-       size_t size;
+       unsigned int size;
        void* pData;
     };
     //------------------------------------------------------------------------------
     /// <summary>
-    /// Description
+    /// size    定数バッファのデータサイズ
+    /// pData   定数バッファのデータ
     /// </summary> 
 
 public:
@@ -45,7 +39,9 @@ public:
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    GfxConstantBuffer(Description desc);
+    GfxConstantBuffer(
+        /*[in]*/
+        Description desc);
 
     //------------------------------------------------------------------------------
     /// デストラクタ
@@ -54,8 +50,38 @@ public:
     //------------------------------------------------------------------------------
     virtual ~GfxConstantBuffer();
 
+    //------------------------------------------------------------------------------
+    /// 定数バッファの更新
+    ///
+    /// \param[in] pData 定数バッファのデータ
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void Write(
+        /*[in]*/
+        void* pData) = 0;
 
-    virtual void Write(void* pData) = 0;
+    //------------------------------------------------------------------------------
+    /// 定数バッファを頂点シェーダーにセットする
+    ///
+    /// \param[in] slot レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void BindVS(
+    /*[in]*/
+    unsigned slot) = 0;
+
+    //------------------------------------------------------------------------------
+    /// 定数バッファをピクセルシェーダーにセットする
+    ///
+    /// \param[in] slot レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void BindPS(
+        /*[in]*/
+        unsigned slot) = 0;
 
     //------------------------------------------------------------------------------
     /// 定数バッファの作成
@@ -65,28 +91,17 @@ public:
     ///
     /// \return このクラスのポインタ
     //------------------------------------------------------------------------------
-    static GfxConstantBuffer::Ptr Create(const GfxTag& tag, Description desc);
-
-    virtual void BindVS(unsigned slot) = 0;
-    virtual void BindPS(unsigned slot) = 0;
-
-
-    //void SetShaderKind(Shader bindShader)
-    //{
-    //    m_eBind = bindShader;
-    //}
-    //
-    //void SetSlot(unsigned slot)
-    //{
-    //    m_nSlot = slot;
-    //}
+    static GfxConstantBuffer::Ptr Create(
+        /*[in]*/
+        const GfxTag& tag,
+        /*[in]*/
+        Description desc);
+    
     //------------------------------------------------------------------------------
 
 protected:
     //------------------------------------------------------------------------------
     Description m_desc;
-    unsigned m_nSlot;
-    Shader m_eBind;
     //------------------------------------------------------------------------------
     /// <summary>
     /// m_desc      定数バッファの設定項目

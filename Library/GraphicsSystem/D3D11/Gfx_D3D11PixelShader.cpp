@@ -1,8 +1,15 @@
-﻿#include <GraphicsSystem\D3D11\Gfx_D3D11PixelShader.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
-#include <GraphicsSystem\Interface\Gfx_ConstantBuffer.h>
-#include <GraphicsSystem\Interface\Gfx_Texture.h>
+﻿//==============================================================================
+// Filename: Gfx_Shader.h
+// Description: Direct3D 11ピクセルシェーダー
+// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
 
+// インクルード
+#include <GraphicsSystem\D3D11\Gfx_D3D11PixelShader.h>
+#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+
+#include <GraphicsSystem\Interface\Gfx_ConstantBuffer.h>
+#include <GraphicsSystem\D3D11\Gfx_D3D11Texture.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -42,7 +49,7 @@ GfxD3D11PixelShader::GfxD3D11PixelShader(const wchar_t* fileName)
         m_pBlob->GetBufferSize(), nullptr, &m_pPS);
     if (FAILED(hr))
     {
-        _ASSERT_EXPR(false, L"NO_SHADER");
+        _ASSERT_EXPR(false, L"NO_PIXEL_SHADER");
     }
 }
 
@@ -55,9 +62,17 @@ GfxD3D11PixelShader::~GfxD3D11PixelShader()
 {
 }
 
-
+//------------------------------------------------------------------------------
+/// ピクセルシェーダーのバインド
+/// 
+/// \param[in] slot レジスタ番号
+///
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D11PixelShader::Bind(unsigned int slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
+
     // 定数バッファのバインド
     for (int i = 0; i < MAX_BUFFER; ++i)
     {
@@ -72,11 +87,10 @@ void GfxD3D11PixelShader::Bind(unsigned int slot) const
     {
         if (m_textures[i])
         {
-            m_textures[i]->BindPS(i);
+            dynamic_cast<GfxD3D11Texture*>(m_textures[i])->BindPS(i);
         }
     }
 
     ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
     pContext->PSSetShader(m_pPS.Get(), nullptr, 0);
 }
-

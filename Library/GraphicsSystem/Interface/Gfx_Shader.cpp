@@ -1,17 +1,12 @@
 ﻿// インクルード
 #include <GraphicsSystem\Interface\Gfx_Shader.h>
-#include <wrl\client.h>
-#include <dxgi.h>
-#include <d3d12.h>
-#include <vector>
+#include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
+#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
 
 #include <GraphicsSystem\D3D11\Gfx_D3D11VertexShader.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12VertexShader.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11PixelShader.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12PixelShader.h>
-
-#include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -34,7 +29,17 @@ GfxShader::~GfxShader()
 {
 }
 
-GfxShader::Ptr GfxShader::Compile(const GfxTag& tag, const KIND& kind, const wchar_t* fileName)
+//------------------------------------------------------------------------------
+/// シェーダーのコンパイル
+/// 
+/// \param[in] tag      リソースに紐づけるタグ
+/// \param[in] kind     シェーダーの種類
+/// \param[in] filename 読み込むシェーダーのパス
+///
+/// \return このクラスのポインタ
+//------------------------------------------------------------------------------
+GfxShader::Ptr GfxShader::Compile(
+    const GfxTag& tag, const KIND& kind, const wchar_t* fileName)
 {
     GfxShader::Ptr pShader;
 
@@ -90,3 +95,78 @@ GfxShader::Ptr GfxShader::Compile(const GfxTag& tag, const KIND& kind, const wch
 
     return pShader;
 }
+
+//------------------------------------------------------------------------------
+/// シェーダーに定数バッファをセットする
+/// 
+/// \param[in] pConstantBuffer  定数バッファ
+/// \param[in] slot             レジスタ番号
+///
+/// \return void
+//------------------------------------------------------------------------------
+void GfxShader::SetBuffer(GfxConstantBuffer* pConstantBuffer, unsigned int slot)
+{
+    if (0 <= slot && slot < MAX_BUFFER)
+    {
+        m_buffers[slot] = pConstantBuffer;
+    }
+}
+
+//------------------------------------------------------------------------------
+/// シェーダーにテクスチャをセットする
+/// 
+/// \param[in] pTex テクスチャ
+/// \param[in] slot レジスタ番号
+///
+/// \return void
+//------------------------------------------------------------------------------
+void GfxShader::SetTexture(GfxTexture* pTex, unsigned int slot)
+{
+    if (0 <= slot && slot < MAX_BUFFER)
+    {
+        m_textures[slot] = pTex;
+    }
+}
+
+
+//------------------------------------------------------------------------------
+/// コンストラクタ
+///
+/// \param[in] shader シェーダーの種類
+/// 
+/// \return void
+//------------------------------------------------------------------------------
+GfxVertexShader::GfxVertexShader(KIND kind)
+    : GfxShader(kind)
+{
+}
+
+//------------------------------------------------------------------------------
+/// デストラクタ
+///
+/// \return void
+//------------------------------------------------------------------------------
+GfxVertexShader::~GfxVertexShader()
+{
+}
+
+//------------------------------------------------------------------------------
+/// コンストラクタ
+///
+/// \param[in] shader シェーダーの種類
+/// 
+/// \return void
+//------------------------------------------------------------------------------
+GfxPixelShader::GfxPixelShader(KIND kind)
+    : GfxShader(kind)
+{
+}
+
+//------------------------------------------------------------------------------
+/// デストラクタ
+///
+/// \return void
+//------------------------------------------------------------------------------
+ GfxPixelShader::~GfxPixelShader()
+ {
+ }

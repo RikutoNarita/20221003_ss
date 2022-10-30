@@ -352,7 +352,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\PS_2D.hlsl">
+    <FxCompile Include="Shader\PS_Texture.hlsl">
       <Filter>hlsl</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PS_Color.hlsl">

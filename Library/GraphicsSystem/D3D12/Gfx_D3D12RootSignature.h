@@ -12,10 +12,9 @@
 #include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
 #include <d3d12.h>
 #include <wrl/client.h>
-#include <vector>
-#include <GraphicsSystem\D3D12\Gfx_D3D12DescriptorHeap.h>
 
-
+// 前方宣言
+class GfxD3D12DescriptorHeap;
 
 // クラス定義
 class GfxD3D12RootSignature : GfxGraphicsObject<GfxD3D12RootSignature>
@@ -37,11 +36,32 @@ public:
     //------------------------------------------------------------------------------
     ~GfxD3D12RootSignature();
 
-    void Bind(unsigned slot = 0) const final;
+    //------------------------------------------------------------------------------
+    /// ルートシグネチャの作成
+    ///
+    /// \param[in] pDescriptorHeap ディスクリプタヒープ
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void Create(
+        /*[in]*/
+        GfxD3D12DescriptorHeap* pDescriptorHeap);
 
-    void Create(GfxD3D12DescriptorHeap* pDescriptorHeap);
+    //------------------------------------------------------------------------------
+    /// ルートシグネチャのバインド
+    ///
+    /// \return ルートシグネチャのポインタ
+    //------------------------------------------------------------------------------
+    void Bind(
+        /*[in]*/
+        unsigned slot = 0) const final;
 
-    ID3D12RootSignature* Get()
+    //------------------------------------------------------------------------------
+    /// ルートシグネチャの取得
+    ///
+    /// \return ルートシグネチャのポインタ
+    //------------------------------------------------------------------------------
+    inline ID3D12RootSignature* Get() const
     {
         return m_pRootSignature.Get();
     }
@@ -54,7 +74,8 @@ private:
     Microsoft::WRL::ComPtr<ID3D12RootSignature> m_pRootSignature;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_pRootSignature       ルートシグネチャ
+    /// m_pBlob             ルートシグネチャデータ
+    /// m_pRootSignature    ルートシグネチャ
     /// </summary> 
 };
 #endif // __D3D_MANAGER_H__

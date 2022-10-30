@@ -14,8 +14,6 @@
 #include <GraphicsSystem\Interface\Gfx_Shader.h>
 #include <GraphicsSystem\Interface\Gfx_Texture.h>
 #include <GraphicsSystem\Interface\Gfx_ConstantBuffer.h>
-#include <vector>
-#include <memory>
 
 // クラス定義
 class GfxGraphicsBinder : public GfxGraphicsObject<GfxGraphicsBinder>
@@ -28,16 +26,14 @@ public:
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    GfxGraphicsBinder() {}
+    GfxGraphicsBinder();
 
     //------------------------------------------------------------------------------
     /// デストラクタ
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    virtual ~GfxGraphicsBinder() {}
-
-    
+    virtual ~GfxGraphicsBinder();
 
     //------------------------------------------------------------------------------
     /// パイプラインの構築
@@ -46,26 +42,96 @@ public:
     //------------------------------------------------------------------------------
     virtual void Start() const = 0;
 
+    //------------------------------------------------------------------------------
+    /// メッシュバッファのセット
+    ///
+    /// \pramga[in] res メッシュバッファリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void BindMesh(
+        /*[in]*/
+        GfxMeshBuffer* res) = 0;
 
-    virtual void BindMesh(GfxMeshBuffer* res) = 0;
-    virtual void BindPS(GfxPixelShader* res) = 0;
-    virtual void BindVS(GfxVertexShader* res) = 0;
-    virtual void BindTexture(GfxTexture* res, GfxShader::KIND shader, unsigned slot = 0) = 0;
-    virtual void BindConstantBuffer(GfxConstantBuffer* res, GfxShader::KIND shader, unsigned slot = 0) = 0;
+    //------------------------------------------------------------------------------
+    /// ピクセルシェーダーのセット
+    ///
+    /// \pramga[in] res ピクセルシェーダーのリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void BindPS(
+        /*[in]*/
+        GfxPixelShader* res) = 0;
 
+    //------------------------------------------------------------------------------
+    /// 頂点シェーダーのセット
+    ///
+    /// \pramga[in] res 頂点シェーダーのリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void BindVS(
+        /*[in]*/
+        GfxVertexShader* res) = 0;
 
-    static GfxGraphicsBinder::Ptr Create(const GfxTag& tag);
+    //------------------------------------------------------------------------------
+    /// テクスチャのセット
+    ///
+    /// \pramga[in] res     テクスチャリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void BindTexture(
+        /*[in]*/
+        GfxTexture* res,
+        /*[in]*/
+        GfxShader::KIND shader,
+        /*[in]*/
+        unsigned slot = 0) = 0;
+
+    //------------------------------------------------------------------------------
+    /// 定数バッファのセット
+    ///
+    /// \pramga[in] res     定数バッファリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    virtual void BindConstantBuffer(
+        /*[in]*/
+        GfxConstantBuffer* res,
+        /*[in]*/
+        GfxShader::KIND shader,
+        /*[in]*/
+        unsigned slot = 0) = 0;
+
+    //------------------------------------------------------------------------------
+    /// リソースバインダーの作成
+    ///
+    /// \pramga[in] tag リソース紐づけるタグ
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    static GfxGraphicsBinder::Ptr Create(
+        /*[in]*/
+        const GfxTag& tag);
+
     //------------------------------------------------------------------------------
 
 protected:
     //------------------------------------------------------------------------------
-    GfxMeshBuffer* m_pMesh;
+    GfxMeshBuffer* m_pMeshBuffer;
     GfxVertexShader* m_pVS;
     GfxPixelShader* m_pPS;
     //------------------------------------------------------------------------------
-
+    /// <summary>
+    /// m_pMesh メッシュバッファー
+    /// m_pVS   頂点シェーダー
+    /// m_pPS   ピクセルシェーダー
+    /// </summary> 
 };
-
-
-
 #endif // __GRAPHICS_RESOURCE_H__

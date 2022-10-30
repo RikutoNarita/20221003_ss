@@ -12,12 +12,13 @@
 #include <vector>
 #include <map>
 
+// 静的メンバ変数
 GfxD3D11VertexShader::ILList GfxD3D11VertexShader::m_ILList;
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
-/// \param[in] shader
+/// \param[in] fileName シェーダーファイルのパス
 /// 
 /// \return void
 //------------------------------------------------------------------------------
@@ -63,7 +64,7 @@ GfxD3D11VertexShader::GfxD3D11VertexShader(const wchar_t* fileName)
     D3D11_SIGNATURE_PARAMETER_DESC sigDesc;
     std::string key = "";
 
-    DXGI_FORMAT formats[][4] =
+    DXGI_FORMAT formats[3][4] =
     {
         {
             DXGI_FORMAT_R32_UINT,
@@ -99,6 +100,11 @@ GfxD3D11VertexShader::GfxD3D11VertexShader(const wchar_t* fileName)
         elementCount = (elementCount & 0x05) + ((elementCount >> 1) & 0x05);
         elementCount = (elementCount & 0x03) + ((elementCount >> 2) & 0x03);
 
+        if (elementCount > 4)
+        {
+            continue;
+        }
+
         switch (sigDesc.ComponentType)
         {
         case D3D_REGISTER_COMPONENT_UINT32:
@@ -117,7 +123,7 @@ GfxD3D11VertexShader::GfxD3D11VertexShader(const wchar_t* fileName)
         pInputDesc[i].InstanceDataStepRate = 0;
 
         key += sigDesc.SemanticName;
-        key += sigDesc.SemanticIndex;
+        key += (unsigned char)sigDesc.SemanticIndex;
     }
 
     std::map<std::string, ID3D11InputLayout*>::iterator it = m_ILList.begin();
@@ -153,10 +159,10 @@ GfxD3D11VertexShader::~GfxD3D11VertexShader()
 {
 }
 
-
 // 頂点シェーダーのバインド
 void GfxD3D11VertexShader::Bind(unsigned int slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
     // 定数バッファのバインド
     for (int i = 0; i < MAX_BUFFER; ++i)
     {
@@ -171,7 +177,7 @@ void GfxD3D11VertexShader::Bind(unsigned int slot) const
     {
         if (m_textures[i])
         {
-            m_textures[i]->BindVS(i);
+            dynamic_cast<GfxD3D11Texture*>(m_textures[i])->BindVS(i);
         }
     }
 

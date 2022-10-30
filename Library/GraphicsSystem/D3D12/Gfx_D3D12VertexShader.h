@@ -22,10 +22,13 @@ public:
     //------------------------------------------------------------------------------
     /// コンストラクタ
     ///
+    /// \param[in] fileName シェーダーファイルのパス
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    GfxD3D12VertexShader(const wchar_t* fileName);
+    GfxD3D12VertexShader(
+        /*[in]*/
+        const wchar_t* fileName);
 
     //------------------------------------------------------------------------------
     /// デストラクタ
@@ -35,34 +38,46 @@ public:
     virtual ~GfxD3D12VertexShader();
 
     //------------------------------------------------------------------------------
-    /// 頂点シェーダーの指定
+    /// 頂点シェーダーのバインド
+    /// 
+    /// \param[in] slot レジスタ番号
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    void Bind(unsigned int slot) const override;
+    void Bind(
+        /*[in]*/
+        unsigned int slot) const final;
 
-    //HRESULT Compile(const GfxTag& tag, const wchar_t* fileName);
-
-    UINT GetElementCount()
-    {
-        return m_desc.NumElements;
-    }
-
-    const D3D12_INPUT_ELEMENT_DESC* GetElement()
+    //------------------------------------------------------------------------------
+    /// 頂点レイアウトの取得
+    /// 
+    /// \return 頂点レイアウト
+    //------------------------------------------------------------------------------
+    inline const D3D12_INPUT_ELEMENT_DESC* GetElement() const
     {
         return m_desc.pInputElementDescs;
+    }
+
+    //------------------------------------------------------------------------------
+    /// インプットエレメントの数の取得
+    /// 
+    /// \return インプットエレメントの数
+    //------------------------------------------------------------------------------
+    inline const UINT GetElementCount() const
+    {
+        return m_desc.NumElements;
     }
 
     //------------------------------------------------------------------------------
 
 private:
     //------------------------------------------------------------------------------
-    
-    D3D12_INPUT_ELEMENT_DESC* pInputDesc;
+    D3D12_INPUT_ELEMENT_DESC* m_pInputDesc;
     D3D12_INPUT_LAYOUT_DESC m_desc;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_inputLayout   頂点レイアウト
+    /// m_pInputDesc    インプットエレメント
+    /// m_desc          インプットレイアウトの設定項目
     /// </summary> 
 };
 #endif // __D3D12_VERTEX_SHADER_H__

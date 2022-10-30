@@ -26,7 +26,9 @@ public:
     /// 
     /// \return void
     //------------------------------------------------------------------------------
-    GfxD3D11Texture(Description desc);
+    GfxD3D11Texture(
+        /*[in]*/
+        Description desc);
 
     //------------------------------------------------------------------------------
     /// デストラクタ
@@ -35,18 +37,36 @@ public:
     //------------------------------------------------------------------------------
     virtual ~GfxD3D11Texture();
 
-    void BindVS(unsigned slot) const final;
-    void BindPS(unsigned slot) const final;
+    //------------------------------------------------------------------------------
+    /// テクスチャを頂点シェーダーにセットする
+    ///
+    /// \param[in] slot レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindVS(unsigned slot = 0) const;
+
+    //------------------------------------------------------------------------------
+    /// テクスチャをピクセルシェーダーにセットする
+    ///
+    /// \param[in] slot レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindPS(unsigned slot = 0) const;
+
     void Bind(unsigned slot = 0) const final;
 
-protected:
+private:
     //------------------------------------------------------------------------------
     Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture2D;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView;
     Microsoft::WRL::ComPtr<ID3D11SamplerState> m_pSamplerState;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_desc      テクスチャの設定項目
+    /// m_pTexture2D            テクスチャ2D
+    /// m_pShaderResourceView   テクスチャリソースビュー
+    /// m_pSamplerState         サンプラー
     /// </summary> 
 };
 #endif // __TEXTURE_H__

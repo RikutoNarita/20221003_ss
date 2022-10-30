@@ -19,7 +19,7 @@
 GfxD3D12DescriptorHeap::GfxD3D12DescriptorHeap()
     : m_vertexResourceSRV{nullptr}, m_vertexResourceCBV{nullptr}
     , m_pixelResourceSRV{nullptr}, m_pixelResourceCBV{nullptr}
-    , m_descriptorHandleIncrementSize(-1)
+    , m_descriptorHandleIncrementSize(0)
 {
     GfxTexture* pTex = GfxGraphicsResource::Find<GfxTexture>(TEX_DEFAULT);
     // 定数バッファとテクスチャバッファにゴミデータを入れておく
@@ -44,41 +44,14 @@ GfxD3D12DescriptorHeap::GfxD3D12DescriptorHeap()
 //------------------------------------------------------------------------------
 GfxD3D12DescriptorHeap::~GfxD3D12DescriptorHeap()
 {
-
 }
 
-// シェーダーリソースビュー
-void GfxD3D12DescriptorHeap::BindSRV(UINT slot, ID3D12Resource* data, GfxShader::KIND visible)
-{
-    if(slot < 0 || MAX_TEXTURE < slot) return;
-
-    if (visible == GfxShader::KIND::KIND_VS)
-    {
-        m_vertexResourceSRV[slot] = data;
-    }
-    else if (visible == GfxShader::KIND::KIND_PS)
-    {
-        m_pixelResourceSRV[slot] = data;
-    }
-}
-
-// 定数バッファ
-void GfxD3D12DescriptorHeap::BindCBV(UINT slot, ID3D12Resource* data, GfxShader::KIND visible)
-{
-    if (slot < 0 || MAX_CONSTANTBUFFER < slot) return;
-
-    if (visible == GfxShader::KIND::KIND_VS)
-    {
-        m_vertexResourceCBV[slot] = data;
-    }
-    else if (visible == GfxShader::KIND::KIND_PS)
-    {
-        m_pixelResourceCBV[slot] = data;
-    }
-}
-
-// ディスクリプタヒープの構築
-void GfxD3D12DescriptorHeap::Start()
+//------------------------------------------------------------------------------
+/// ディスクリプタヒープの作成
+///
+/// \return void
+//------------------------------------------------------------------------------
+void GfxD3D12DescriptorHeap::Create()
 {
     // デバイスの取得
     ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
@@ -91,86 +64,6 @@ void GfxD3D12DescriptorHeap::Start()
     basicDescHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;                // デスクリプタヒープのタイプ(定数バッファ、シェーダーリソース)
     auto hr = pDevice->CreateDescriptorHeap(&basicDescHeapDesc, IID_PPV_ARGS(&m_pSRVandCSBheap));
     if (FAILED(hr)) _ASSERT_EXPR(false, L"NO_DESCRIPTOR");
-
-    ////--- ディスクリプタヒープにSRVを入れる
-    //for (size_t i = 0; i < m_SRVResource.size(); i++)
-    //{
-    //    // シェーダーリソースビューの作成
-    //    D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
-    //    srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;                                // RGBA(0.0f～1.0fに正規化)
-    //    srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;                      // 2Dテクスチャを指定
-    //    srvDesc.Texture2D.MipLevels = 1;                                            // ミップマップは使用しないので０
-    //    srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING; // 指定されたフォーマットにデータ通りの順序で割り当てる
-    //    auto handle = m_pSRVandCSBheap->GetCPUDescriptorHandleForHeapStart();
-    //    handle.ptr += i * pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    //    // シェーダーリソースの生成
-    //    pDevice->CreateShaderResourceView(m_SRVResource[i].pBuffer, &srvDesc, handle);
-    //}
-    ////--- ディスクリプタヒープにCBVを入れる
-    //for (size_t i = 0; i < m_CBVResource.size(); i++)
-    //{
-    //    // 定数バッファビューの設定
-    //    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc = {};
-    //    cbvDesc.BufferLocation = m_CBVResource[i].pBuffer->GetGPUVirtualAddress();
-    //    cbvDesc.SizeInBytes = (UINT)m_CBVResource[i].pBuffer->GetDesc().Width;
-    //
-    //    auto handle = m_pSRVandCSBheap->GetCPUDescriptorHandleForHeapStart();
-    //    handle.ptr += (m_SRVResource.size() + i) * pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    //    // 定数バッファの作成
-    //    pDevice->CreateConstantBufferView(&cbvDesc, handle);
-    //}
-    //
-    ////--- ルートパラメーターの作成
-    //// ルートパラメーターのサイズをリソースの数に合わせる
-    //m_rootParameters.resize(m_SRVResource.size() + m_CBVResource.size());
-    //m_descriptorTableRange.resize(m_SRVResource.size() + m_CBVResource.size());
-    //
-    ////--- テクスチャのルートパラメーターの作成
-    //for (size_t i = 0; i < m_SRVResource.size(); i++)
-    //{
-    //    // SRVのレジスタ０番にSRVの数だけヒープを割り当てる
-    //    m_descriptorTableRange[i].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;   // 種別はテクスチャ
-    //    m_descriptorTableRange[i].BaseShaderRegister = i;                        // 0スロットから
-    //    m_descriptorTableRange[i].NumDescriptors = 1;                             // ディスクリプタの数
-    //    m_descriptorTableRange[i].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;// 連続したディスクリプタレンジが前のディスクリプタレンジの直後に来る
-    //    m_descriptorTableRange[i].RegisterSpace = 0;
-    //
-    //    m_rootParameters[i].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // ルートパラメータタイプ
-    //    m_rootParameters[i].DescriptorTable.NumDescriptorRanges = 1;                    // ディスクリプタレンジ数
-    //    m_rootParameters[i].DescriptorTable.pDescriptorRanges = &m_descriptorTableRange[i];
-    //    if (m_SRVResource[i].visible == GfxShader::KIND::KIND_PS)
-    //    {
-    //        m_rootParameters[i].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;    // ピクセルシェーダーから見えるようにする
-    //    }
-    //    else if (m_SRVResource[i].visible == GfxShader::KIND::KIND_VS)
-    //    {
-    //        m_rootParameters[i].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;    // 頂点シェーダーから見えるようにする
-    //    }
-    //}
-    //
-    ////--- 定数バッファのルートパラメーターの作成
-    //for (size_t i = m_SRVResource.size(); i < m_SRVResource.size() + m_CBVResource.size(); i++)
-    //{
-    //    // CBVのレジスタ0番に1つのディスクリプタを割り当てる
-    //    m_descriptorTableRange[i].NumDescriptors = 1;                            // ディスクリプタの数
-    //    m_descriptorTableRange[i].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;   // 種別は定数バッファ
-    //    m_descriptorTableRange[i].BaseShaderRegister = static_cast<UINT>(i - m_SRVResource.size());            // 0スロットから
-    //    m_descriptorTableRange[i].OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND; // 連続したディスクリプタレンジが前のディスクリプタレンジの直後に来る
-    //    m_descriptorTableRange[i].RegisterSpace = 0;
-    //
-    //    m_rootParameters[i].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // ルートパラメータタイプ
-    //    m_rootParameters[i].DescriptorTable.NumDescriptorRanges = 1;                    // ディスクリプタレンジ数
-    //    m_rootParameters[i].DescriptorTable.pDescriptorRanges = &m_descriptorTableRange[i];
-    //    m_rootParameters[i].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;          // 頂点シェーダーから見えるようにする
-    //    if (m_CBVResource[static_cast<UINT>(i - m_SRVResource.size())].visible == GfxShader::KIND::KIND_PS)
-    //    {
-    //        m_rootParameters[i].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;    // ピクセルシェーダーから見えるようにする
-    //    }
-    //    else if(m_CBVResource[static_cast<UINT>(i - m_SRVResource.size())].visible == GfxShader::KIND::KIND_VS)
-    //    {
-    //        m_rootParameters[i].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;    // 頂点シェーダーから見えるようにする
-    //    }
-    //}
 
     /*
     * ルートパラメーターの数 = 2
@@ -190,7 +83,6 @@ void GfxD3D12DescriptorHeap::Start()
     *                    → table4 → CBV(view num, first slot)
     */
 
-    
     // ヒープの先頭アドレス
     auto handle = m_pSRVandCSBheap->GetCPUDescriptorHandleForHeapStart();
     // インクリメントサイズの保存
@@ -283,39 +175,18 @@ void GfxD3D12DescriptorHeap::Start()
 
 }
 
-// ディスクリプタヒープとルートパラメーターの紐づけ
-void GfxD3D12DescriptorHeap::SetDescriptorHeap()
-{
-    ID3D12GraphicsCommandList* pCmdList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
-
-    pCmdList->SetDescriptorHeaps(1, m_pSRVandCSBheap.GetAddressOf());
-}
-
-
-void GfxD3D12DescriptorHeap::SetRootDescriptorTable()
-{
-    ID3D12GraphicsCommandList* pCmdList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
-
-    auto handle = m_pSRVandCSBheap->GetGPUDescriptorHandleForHeapStart();
-    // GPUにピクセルシェーダーに送るルートパラメーター(要素0)のアドレスを教える
-    pCmdList->SetGraphicsRootDescriptorTable(0, handle);
-
-    // 次のルートパラメータのアドレスへ
-    handle.ptr += (MAX_TEXTURE + MAX_CONSTANTBUFFER) * m_descriptorHandleIncrementSize;
-
-    // GPUに頂点シェーダーに送るルートパラメーター(要素1)のアドレスを教える
-    pCmdList->SetGraphicsRootDescriptorTable(1, handle);
-
-    //for (size_t i = 0; i < m_rootParameters.size(); i++)
-    //{
-    //    // ルートパラメーターi番とディスクリプタヒープの関連付け
-    //
-    //    handle.ptr = handle.ptr + pDevice->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-    //}
-}
-
+//------------------------------------------------------------------------------
+/// ディスクリプタヒープのバインド
+/// 
+/// \param[in] slot レジスタ番号
+///
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D12DescriptorHeap::Bind(unsigned int slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
+
+    // コマンドリストの取得
     ID3D12GraphicsCommandList* pCmdList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
 
     // ディスクリプタヒープをセット
@@ -326,8 +197,59 @@ void GfxD3D12DescriptorHeap::Bind(unsigned int slot) const
     pCmdList->SetGraphicsRootDescriptorTable(0, handle);
 
     // 次のルートパラメータのアドレスへ
-    handle.ptr += (MAX_TEXTURE + MAX_CONSTANTBUFFER) * m_descriptorHandleIncrementSize;
+    handle.ptr += (MAX_TEXTURE + MAX_CONSTANTBUFFER) * static_cast<UINT64>(m_descriptorHandleIncrementSize);
 
     // GPUに頂点シェーダーに送るルートパラメーター(要素1)のアドレスを教える
     pCmdList->SetGraphicsRootDescriptorTable(1, handle);
+}
+
+//------------------------------------------------------------------------------
+/// テクスチャのセット
+///
+/// \pramga[in] res     テクスチャリソース
+/// \pramga[in] shader  シェーダーの種類
+/// \pramga[in] slot    レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
+void GfxD3D12DescriptorHeap::BindSRV(
+    ID3D12Resource* data, GfxShader::KIND visible, UINT slot)
+{
+    if (slot < 0 || MAX_TEXTURE < slot) return;
+
+    if (visible == GfxShader::KIND::KIND_VS)
+    {
+        //※ 警告の対処のため *& をつけています
+        *&m_vertexResourceSRV[slot] = data;
+    }
+    else if (visible == GfxShader::KIND::KIND_PS)
+    {
+        *&m_pixelResourceSRV[slot] = data;
+    }
+}
+
+//------------------------------------------------------------------------------
+/// 定数バッファのセット
+///
+/// \pramga[in] res     定数バッファリソース
+/// \pramga[in] shader  シェーダーの種類
+/// \pramga[in] slot    レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
+void GfxD3D12DescriptorHeap::BindCBV(
+    ID3D12Resource* data, GfxShader::KIND visible, UINT slot)
+{
+    if (slot < 0 || MAX_CONSTANTBUFFER < slot) return;
+
+    if (visible == GfxShader::KIND::KIND_VS)
+    {
+        //※ 警告の対処のため *& をつけています
+        *&m_vertexResourceCBV[slot] = data;
+    }
+    else if (visible == GfxShader::KIND::KIND_PS)
+    {
+        //※ 警告の対処のため *& をつけています
+        *&m_pixelResourceCBV[slot] = data;
+    }
 }

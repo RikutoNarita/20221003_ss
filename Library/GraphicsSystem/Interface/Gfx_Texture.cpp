@@ -67,7 +67,7 @@ GfxTexture::Ptr GfxTexture::Create(const GfxTag& tag, Description desc)
     default: break;
     }
 
-    // リソースに登録
+    // リソースリストに登録
     GfxGraphicsResource::Resister(GfxTag(tag), pTexture);
 
     return pTexture;

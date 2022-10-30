@@ -36,49 +36,56 @@ public:
     //------------------------------------------------------------------------------
     virtual ~GfxD3D12MeshBuffer();
 
+    //------------------------------------------------------------------------------
+    /// 頂点バッファの作成
+    ///
+    /// \return 作成できた場合 S_OK
+    //------------------------------------------------------------------------------
     HRESULT CreateVertexBuffer() final;
 
+    //------------------------------------------------------------------------------
+    /// インデックスバッファの生成
+    ///
+    /// \return 作成できた場合 S_OK
+    //------------------------------------------------------------------------------
     HRESULT CreateIndexBuffer() final;
 
-    void Write(void* pData) final;
+    //------------------------------------------------------------------------------
+    /// 頂点情報の更新
+    ///
+    /// \param[in] pData 頂点バッファのデータ
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void Write(
+        /*[in]*/
+        void* pData) final;
 
-    void Bind(unsigned int slot) const final;
-
-    /*void BindPS(GfxShader* pPS) final;
-                                
-    void BindVS(GfxShader* pVS) final;
-
-
-    void Draw(int indexCount = 0) final;
-
-    HRESULT Start() const final;
-
-
-    void BindConstantBuffer(
-    GfxConstantBuffer* pConstantBuffer,
-    GfxConstantBuffer::Shader shader,
-    unsigned slot) final;
-
-    void BindTexture(GfxTexture* pTex, GfxShader::KIND shader, unsigned slot = 0) override;*/
+    //------------------------------------------------------------------------------
+    /// メッシュバッファの固定
+    ///
+    /// \param[in] slot レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void Bind(
+        /*[in]*/
+        unsigned int slot = 0) const final;
 
     //------------------------------------------------------------------------------
 
 private:
     //------------------------------------------------------------------------------
-    
-
-    D3D12_VERTEX_BUFFER_VIEW                    m_vertexBufferView;
-    D3D12_INDEX_BUFFER_VIEW                     m_indexBufferView;
     Microsoft::WRL::ComPtr<ID3D12Resource>      m_pVertexBuffer;
     Microsoft::WRL::ComPtr<ID3D12Resource>      m_pIndexBuffer;
+    D3D12_VERTEX_BUFFER_VIEW                    m_vertexBufferView;
+    D3D12_INDEX_BUFFER_VIEW                     m_indexBufferView;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// m_pPipelineState    パイプラインステート
-    /// m_pRootSignature    ルートシグネチャ
-    /// m_vertexBufferView  頂点バッファビュー
-    /// m_indexBufferView   インデックスバッファビュー
     /// m_pVertexBuffer     頂点バッファ
     /// m_pIndexBuffer      インデックスバッファ
+    /// m_vertexBufferView  頂点バッファビュー
+    /// m_indexBufferView   インデックスバッファビュー
     /// </summary> 
 };
 #endif // __D3D12_MESH_BUFFER_H__

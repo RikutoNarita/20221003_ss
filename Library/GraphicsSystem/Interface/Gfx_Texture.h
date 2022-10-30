@@ -36,18 +36,19 @@ public:
     };
     struct Description
     {
-        UINT width;
-        UINT height;
+        unsigned int width;
+        unsigned int height;
+        unsigned int byteSize;
         void* pData;
         COLOR_FORMAT format;
         KIND kind;
-        UINT byteSize;
     };
     //------------------------------------------------------------------------------
     /// <summary>
     /// Description
     /// width       テクスチャの幅
     /// height      テクスチャの高さ
+    /// byteSize    テクスチャデータのサイズ
     /// pData       テクスチャデータ
     /// format      テクスチャのカラーフォーマット
     /// kind        テクスチャの用途
@@ -80,11 +81,11 @@ public:
     ///
     /// \return このクラスのポインタ
     //------------------------------------------------------------------------------
-    static GfxTexture::Ptr Create(const GfxTag& tag, Description desc);
-
-
-    virtual void BindVS(unsigned slot) const = 0;
-    virtual void BindPS(unsigned slot) const = 0;
+    static GfxTexture::Ptr Create(
+    /*[in]*/
+    const GfxTag& tag,
+    /*[in]*/
+    Description desc);
 
     //------------------------------------------------------------------------------
 

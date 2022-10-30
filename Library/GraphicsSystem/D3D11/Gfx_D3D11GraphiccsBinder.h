@@ -15,11 +15,6 @@
 class GfxD3D11GraphicsBinder : public GfxGraphicsBinder
 {
 public:
-    //struct ResourceData
-    //{
-    //    GfxGraphicsObjectBase* pbuff;
-    //};
-public:
     //------------------------------------------------------------------------------
 
     //------------------------------------------------------------------------------
@@ -37,11 +32,13 @@ public:
     virtual ~GfxD3D11GraphicsBinder();
 
     //------------------------------------------------------------------------------
-    /// リソースをGPUにバインドする
+    /// リソースをバインドする
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    virtual void Bind(unsigned slot = 0) const final;
+    virtual void Bind(
+    /*[in]*/
+    unsigned slot = 0) const final;
 
     //------------------------------------------------------------------------------
     /// パイプラインの構築
@@ -50,28 +47,91 @@ public:
     //------------------------------------------------------------------------------
     void Start() const final;
 
-    void BindMesh(GfxMeshBuffer* res) final;
-    void BindPS(GfxPixelShader* res) final;
-    void BindVS(GfxVertexShader* res) final;
-    void BindTexture(GfxTexture* res, GfxShader::KIND shader, unsigned slot = 0) final;
-    void BindConstantBuffer(GfxConstantBuffer* res, GfxShader::KIND shader, unsigned slot = 0) final;
+    //------------------------------------------------------------------------------
+    /// メッシュバッファのセット
+    ///
+    /// \pramga[in] res メッシュバッファリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindMesh(
+        /*[in]*/
+        GfxMeshBuffer* res) final;
+
+    //------------------------------------------------------------------------------
+    /// ピクセルシェーダーのセット
+    ///
+    /// \pramga[in] res ピクセルシェーダーのリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindPS(
+        /*[in]*/
+        GfxPixelShader* res) final;
+
+    //------------------------------------------------------------------------------
+    /// 頂点シェーダーのセット
+    ///
+    /// \pramga[in] res 頂点シェーダーのリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindVS(
+        /*[in]*/
+        GfxVertexShader* res) final;
+
+    //------------------------------------------------------------------------------
+    /// テクスチャのセット
+    ///
+    /// \pramga[in] res     テクスチャリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindTexture(
+        /*[in]*/
+        GfxTexture* res,
+        /*[in]*/
+        GfxShader::KIND shader,
+        /*[in]*/
+        unsigned slot = 0) final;
+
+    //------------------------------------------------------------------------------
+    /// 定数バッファのセット
+    ///
+    /// \pramga[in] res     定数バッファリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindConstantBuffer(
+        /*[in]*/
+        GfxConstantBuffer* res,
+        /*[in]*/
+        GfxShader::KIND shader,
+        /*[in]*/
+        unsigned slot = 0) final;
 
     //------------------------------------------------------------------------------
 
 private:
     //------------------------------------------------------------------------------
     static const UINT MAX_TEXTURE = 1;
-    GfxTexture* m_pixelResourceSRV[MAX_TEXTURE];
-    GfxTexture* m_vertexResourceSRV[MAX_TEXTURE];
     static const UINT MAX_CONSTANTBUFFER = 4;
-    GfxConstantBuffer* m_pixelResourceCB[MAX_CONSTANTBUFFER];
+    GfxTexture* m_vertexResourceSRV[MAX_TEXTURE];
+    GfxTexture* m_pixelResourceSRV[MAX_TEXTURE];
     GfxConstantBuffer* m_vertexResourceCB[MAX_CONSTANTBUFFER];
+    GfxConstantBuffer* m_pixelResourceCB[MAX_CONSTANTBUFFER];
     //------------------------------------------------------------------------------
     /// <summary>
-    /// 
+    /// MAX_TEXTURE         テクスチャの上限
+    /// MAX_CONSTANTBUFFER  定数バッファの上限
+    /// m_pixelResourceSRV  ピクセルシェーダーに送るシェーダーリソース
+    /// m_vertexResourceSRV 頂点シェーダーに送るシェーダーリソース
+    /// m_pixelResourceCB   ピクセルシェーダーに送る定数バッファ
+    /// m_vertexResourceCB  頂点シェーダーに送る定数バッファ
     /// </summary> 
 };
-
-
-
 #endif // __GRAPHICS_RESOURCE_H__

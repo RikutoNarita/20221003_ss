@@ -46,6 +46,13 @@ GfxD3D11ConstantBuffer::~GfxD3D11ConstantBuffer()
 {
 }
 
+//------------------------------------------------------------------------------
+/// 定数バッファの更新
+///
+/// \param[in] pData 定数バッファのデータ
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D11ConstantBuffer::Write(void* pData)
 {
     // 定数バッファへの書き込み
@@ -53,16 +60,33 @@ void GfxD3D11ConstantBuffer::Write(void* pData)
     pContext->UpdateSubresource(m_pBuffer.Get(), 0, nullptr, pData, 0, 0);
 }
 
-
+//------------------------------------------------------------------------------
+/// ピクセルシェーダーに定数バッファをセット
+///
+/// \param[in] slot レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D11ConstantBuffer::BindPS(unsigned slot)
 {
-    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->PSSetConstantBuffers(slot, 1, m_pBuffer.GetAddressOf());
+    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->PSSetConstantBuffers(
+        slot, 1, m_pBuffer.GetAddressOf());
 }
+
+//------------------------------------------------------------------------------
+/// 頂点シェーダーに定数バッファをセット
+///
+/// \param[in] slot レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D11ConstantBuffer::BindVS(unsigned slot)
 {
-    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->VSSetConstantBuffers(slot, 1, m_pBuffer.GetAddressOf());
+    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->VSSetConstantBuffers(
+        slot, 1, m_pBuffer.GetAddressOf());
 }
 
 void GfxD3D11ConstantBuffer::Bind(unsigned slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
 }

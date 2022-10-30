@@ -72,3 +72,8 @@ GfxD3D12Texture::GfxD3D12Texture(Description desc)
 GfxD3D12Texture::~GfxD3D12Texture()
 {
 }
+
+void GfxD3D12Texture::Bind(unsigned slot) const
+{
+    UNREFERENCED_PARAMETER(slot);
+}

@@ -16,7 +16,7 @@
 /// \return void
 //------------------------------------------------------------------------------
 GfxD3D12ConstantBuffer::GfxD3D12ConstantBuffer(Description desc)
-: GfxConstantBuffer(desc)
+    : GfxConstantBuffer(desc)
 {
     ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
 
@@ -67,6 +67,13 @@ GfxD3D12ConstantBuffer::~GfxD3D12ConstantBuffer()
 {
 }
 
+//------------------------------------------------------------------------------
+/// 定数バッファの更新
+///
+/// \param[in] pData 定数バッファのデータ
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D12ConstantBuffer::Write(void* pData)
 {
     void* CBVdata;
@@ -74,7 +81,7 @@ void GfxD3D12ConstantBuffer::Write(void* pData)
     if (SUCCEEDED(hr))
     {
         rsize_t size = m_desc.size;
-        memcpy_s(CBVdata, size, m_desc.pData, size);
+        memcpy_s(CBVdata, size, pData, size);
         m_pConstantBuffer->Unmap(0, nullptr);
     }
 }
@@ -82,11 +89,13 @@ void GfxD3D12ConstantBuffer::Write(void* pData)
 
 void GfxD3D12ConstantBuffer::BindPS(unsigned slot)
 {
+    UNREFERENCED_PARAMETER(slot);
 }
 void GfxD3D12ConstantBuffer::BindVS(unsigned slot)
 {
+    UNREFERENCED_PARAMETER(slot);
 }
-
 void GfxD3D12ConstantBuffer::Bind(unsigned slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
 }

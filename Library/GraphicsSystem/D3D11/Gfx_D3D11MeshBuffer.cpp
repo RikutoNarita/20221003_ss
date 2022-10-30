@@ -1,4 +1,10 @@
-﻿// インクルード
+﻿//==============================================================================
+// Filename: Gfx_D3D11MeshBuffer.h
+// Description: Direct3D 11メッシュバッファー
+// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
+// インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11MeshBuffer.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
 
@@ -108,9 +114,11 @@ HRESULT GfxD3D11MeshBuffer::CreateIndexBuffer()
 }
 
 //------------------------------------------------------------------------------
-/// バッファの更新
+/// 頂点情報の更新
 ///
-/// \return 生成できた場合 S_OK
+/// \param[in] pData 頂点バッファのデータ
+/// 
+/// \return void
 //------------------------------------------------------------------------------
 void GfxD3D11MeshBuffer::Write(void* pData)
 {
@@ -123,7 +131,7 @@ void GfxD3D11MeshBuffer::Write(void* pData)
 
     if (SUCCEEDED(hr))
     {
-        rsize_t size = (rsize_t)(m_desc.vertexSize * m_desc.vertexCount);
+        rsize_t size = static_cast<rsize_t>(m_desc.vertexSize) * m_desc.vertexCount;
         memcpy_s(mapResource.pData, size, pData, size);
         pContext->Unmap(m_pVertexBuffer.Get(), 0);
     }
@@ -134,9 +142,11 @@ void GfxD3D11MeshBuffer::Write(void* pData)
 }
 
 //------------------------------------------------------------------------------
-/// バッファの描画
+/// メッシュバッファの固定
 ///
-/// \return 生成できた場合 S_OK
+/// \param[in] slot レジスタ番号
+/// 
+/// \return void
 //------------------------------------------------------------------------------
 void GfxD3D11MeshBuffer::Bind(unsigned int indexCount) const
 {

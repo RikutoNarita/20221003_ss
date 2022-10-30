@@ -11,8 +11,6 @@
 #include <GraphicsSystem\D3D12\Gfx_D3D12VertexShader.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12RootSignature.h>
 
-#include <Win_Main.h>
-
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
@@ -20,7 +18,6 @@
 //------------------------------------------------------------------------------
 GfxPipelineState::GfxPipelineState()
 {
-    HRESULT hr = S_OK;
     Microsoft::WRL::ComPtr<ID3DBlob> pErrorBlob; 
 
     m_pipelineDesc = {};
@@ -66,12 +63,20 @@ GfxPipelineState::~GfxPipelineState()
 {
 }
 
-// パイプライン作成
-void GfxPipelineState::Create(GfxD3D12RootSignature* root)
+//------------------------------------------------------------------------------
+/// パイプラインの作成
+///
+/// \param[in] pRootParameter ルートパラメーター
+/// 
+/// \return void
+//------------------------------------------------------------------------------
+void GfxPipelineState::Create(GfxD3D12RootSignature* pRootParameter)
 {
+    // デバイスの取得
     ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
 
-    m_pipelineDesc.pRootSignature = root->Get();
+    // ルートシグネチャをセット
+    m_pipelineDesc.pRootSignature = pRootParameter->Get();
 
     // パイプラインの生成
     auto hr = pDevice->CreateGraphicsPipelineState(
@@ -84,13 +89,26 @@ void GfxPipelineState::Create(GfxD3D12RootSignature* root)
     }
 }
 
-// ピクセルシェーダーのバインド
+//------------------------------------------------------------------------------
+/// パイプラインにピクセルシェーダーをバインドする
+///
+/// \param[in] ps ピクセルシェーダー
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxPipelineState::BindPS(GfxD3D12PixelShader* ps)
 {
     m_pipelineDesc.PS.pShaderBytecode = ps->GetBlob()->GetBufferPointer();
     m_pipelineDesc.PS.BytecodeLength = (UINT)ps->GetBlob()->GetBufferSize();
 }
-// 頂点シェーダーのバインド
+
+//------------------------------------------------------------------------------
+/// パイプラインに頂点シェーダーをバインドする
+///
+/// \param[in] vs 頂点シェーダー
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxPipelineState::BindVS(GfxD3D12VertexShader* vs)
 {
     m_pipelineDesc.VS.pShaderBytecode = vs->GetBlob()->GetBufferPointer();
@@ -100,10 +118,16 @@ void GfxPipelineState::BindVS(GfxD3D12VertexShader* vs)
     m_pipelineDesc.InputLayout.NumElements = vs->GetElementCount();
 }
 
-
-
+//------------------------------------------------------------------------------
+/// パイプラインのバインド
+///
+/// \param[in] slot レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxPipelineState::Bind(unsigned int slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
     auto pCommandList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
     pCommandList->SetPipelineState(m_pPipeLineState.Get());
 }

@@ -42,7 +42,7 @@ GfxD3D11Texture::GfxD3D11Texture(Description desc)
     // テクスチャ書き替え
     D3D11_MAPPED_SUBRESOURCE msr;
     pContext->Map(m_pTexture2D.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-    rsize_t size = (rsize_t)(m_desc.width * m_desc.height * 4);
+    rsize_t size = static_cast<rsize_t>(m_desc.width) * static_cast<rsize_t>(m_desc.height) * 4;
     memcpy_s(msr.pData, size, m_desc.pData, size);
     pContext->Unmap(m_pTexture2D.Get(), 0);
 
@@ -79,11 +79,27 @@ GfxD3D11Texture::~GfxD3D11Texture()
 {
 }
 
+//------------------------------------------------------------------------------
+/// テクスチャを頂点シェーダーにセットする
+///
+/// \param[in] slot レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
+
 void GfxD3D11Texture::BindVS(unsigned slot) const
 {
     ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
     pContext->PSSetShaderResources(slot, 1, m_pShaderResourceView.GetAddressOf());
 }
+
+//------------------------------------------------------------------------------
+/// テクスチャをピクセルシェーダーにセットする
+///
+/// \param[in] slot レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D11Texture::BindPS(unsigned slot) const
 {
     ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
@@ -93,4 +109,5 @@ void GfxD3D11Texture::BindPS(unsigned slot) const
 
 void GfxD3D11Texture::Bind(unsigned slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
 }

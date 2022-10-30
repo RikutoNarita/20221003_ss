@@ -6,10 +6,11 @@
 
 // インクルード
 #include <GraphicsSystem\Interface\Gfx_MeshBuffer.h>
-#include <GraphicsSystem\D3D11\Gfx_D3D11MeshBuffer.h>
-#include <GraphicsSystem\D3D12\Gfx_D3D12MeshBuffer.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
+
+#include <GraphicsSystem\D3D11\Gfx_D3D11MeshBuffer.h>
+#include <GraphicsSystem\D3D12\Gfx_D3D12MeshBuffer.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -42,6 +43,7 @@ GfxMeshBuffer::Ptr GfxMeshBuffer::Create(const GfxTag& tag, Description desc)
 {
     GfxMeshBuffer::Ptr pMeshBuffer;
 
+    // APIごとに生成方法を変える
     switch (GRAPHICS->GetAPIKind())
     {
     case GfxGraphicsManager::API_KIND::DIRECT3D_11: // Direct3D 11

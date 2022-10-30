@@ -42,163 +42,12 @@ SceneTest::~SceneTest()
 //------------------------------------------------------------------------------
 bool SceneTest::Init()
 {
-    // エラー対処
-    HRESULT hr = S_OK;
-
-    //// テクスチャの読込(今回はコードから生成)
-    //const UINT pixelSize = 32;
-    //GfxTexture::Description texDesc = {};
-    //texDesc.byteSize = sizeof(unsigned char) * 4;
-    //texDesc.width = pixelSize;
-    //texDesc.height = pixelSize;
-    //bool even = true; // 偶数か奇数か
-    //byte srcData[pixelSize * pixelSize * 4] = { 0 }; // ビットマップを黒で初期化
-    //for (int y = 0; y < texDesc.height; y++)
-    //{
-    //    for (int x = 0; x < texDesc.width * 4; x += 4)
-    //    {
-    //        if (((y * texDesc.width * 4) + x) % (texDesc.width * 4) == 0)
-    //        {
-    //            even = !even;
-    //        }
-    //
-    //        srcData[(y * texDesc.width * 4) + x] = 0;      // Red
-    //        srcData[(y * texDesc.width * 4) + x + 1] = 0;  // Blue
-    //        srcData[(y * texDesc.width * 4) + x + 2] = 0;  // Green
-    //
-    //        if (even)
-    //        {
-    //            // 一番左
-    //            if (x <= texDesc.width / 3 * 4)
-    //            {
-    //                // 上側
-    //                if (y < texDesc.height / 2)
-    //                {
-    //
-    //                    if (x % 8 == 0)
-    //                        srcData[(y * texDesc.width * 4) + x + 2] = 456;
-    //                }
-    //                // 下側
-    //                else
-    //                {
-    //                    if (x % 8 == 0)
-    //                    {
-    //                        srcData[(y * texDesc.width * 4) + x] = 456;
-    //                        srcData[(y * texDesc.width * 4) + x + 1] = 456;
-    //                    }
-    //                }
-    //            }
-    //            // 真ん中
-    //            else if (texDesc.width * 1 / 3 * 4 <= x && x < texDesc.width * 2 / 3 * 4)
-    //            {
-    //                // 上側
-    //                if (y < texDesc.height / 2)
-    //                {
-    //                    if (x % 8 == 0)
-    //                        srcData[(y * texDesc.width * 4) + x + 1] = 456;
-    //                }
-    //                // 下側
-    //                else
-    //                {
-    //                    if (x % 8 == 0)
-    //                    {
-    //                        srcData[(y * texDesc.width * 4) + x + 1] = 456;
-    //                        srcData[(y * texDesc.width * 4) + x + 2] = 456;
-    //                    }
-    //                }
-    //            }
-    //            // 一番右
-    //            else
-    //            {
-    //                // 上側
-    //                if (y < texDesc.height / 2)
-    //                {
-    //                    if (x % 8 == 0)
-    //                        srcData[(y * texDesc.width * 4) + x] = 456;
-    //                }
-    //                // 下側
-    //                else
-    //                {
-    //                    if (x % 8 == 0)
-    //                    {
-    //                        srcData[(y * texDesc.width * 4) + x + 2] = 456;
-    //                        srcData[(y * texDesc.width * 4) + x] = 456;
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            // 一番左
-    //            if (x <= texDesc.width / 3 * 4)
-    //            {
-    //                // 上側
-    //                if (y < texDesc.height / 2)
-    //                {
-    //
-    //                    if ((x + 4) % 8 == 0)
-    //                        srcData[(y * texDesc.width * 4) + x + 2] = 456;
-    //                }
-    //                // 下側
-    //                else
-    //                {
-    //                    if ((x + 4) % 8 == 0)
-    //                    {
-    //                        srcData[(y * texDesc.width * 4) + x] = 456;
-    //                        srcData[(y * texDesc.width * 4) + x + 1] = 456;
-    //                    }
-    //                }
-    //            }
-    //            // 真ん中
-    //            else if (texDesc.width * 1 / 3 * 4 <= x && x < texDesc.width * 2 / 3 * 4)
-    //            {
-    //                // 上側
-    //                if (y < texDesc.height / 2)
-    //                {
-    //                    if ((x + 4) % 8 == 0)
-    //                        srcData[(y * texDesc.width * 4) + x + 1] = 456;
-    //                }
-    //                // 下側
-    //                else
-    //                {
-    //                    if ((x + 4) % 8 == 0)
-    //                    {
-    //                        srcData[(y * texDesc.width * 4) + x + 1] = 456;
-    //                        srcData[(y * texDesc.width * 4) + x + 2] = 456;
-    //                    }
-    //                }
-    //            }
-    //            // 一番右
-    //            else
-    //            {
-    //                // 上側
-    //                if (y < texDesc.height / 2)
-    //                {
-    //                    if ((x + 4) % 8 == 0)
-    //                        srcData[(y * texDesc.width * 4) + x] = 456;
-    //                }
-    //                // 下側
-    //                else
-    //                {
-    //                    if ((x + 4) % 8 == 0)
-    //                    {
-    //                        srcData[(y * texDesc.width * 4) + x + 2] = 456;
-    //                        srcData[(y * texDesc.width * 4) + x] = 456;
-    //                    }
-    //                }
-    //            }
-    //        }
-    //
-    //    }
-    //}
-    //texDesc.pData = srcData;
-    //GfxTexture::Create(GfxTag(CHECKER), texDesc);
-
     DirectX::XMMATRIX mat2[3];
     DirectX::XMFLOAT4X4 fmat2[3];
     mat2[0] = DirectX::XMMatrixIdentity();   // world
-    mat2[0] = DirectX::XMMatrixMultiply(mat2[0], DirectX::XMMatrixTranslation(5.1f, 0.0f, 0.0f));
-    //mat2[0] = DirectX::XMMatrixTranslation(1.1f, 0.0f, 0.0f);
+    mat2[0] = DirectX::XMMatrixMultiply(
+        mat2[0],
+        DirectX::XMMatrixTranslation(5.1f, 0.0f, 0.0f));
     mat2[1] = DirectX::XMMatrixLookAtLH(     // view
         DirectX::XMVectorSet(8, 4, 5, 0),  // カメラ座標
         DirectX::XMVectorSet(0, 0, 0, 0),   // 注視点
@@ -242,7 +91,7 @@ bool SceneTest::Init()
     // リソースのバインド
     obj = GfxGraphicsBinder::Create(GfxTag("asdf"));
     obj->BindMesh(GfxGraphicsResource::Find<GfxMeshBuffer>(GEOMETORY_CUBE));
-    obj->BindPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_COLOR));
+    obj->BindPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_TEX));
     obj->BindVS(GfxGraphicsResource::Find<GfxVertexShader>(VERTEX_3D));
     obj->BindConstantBuffer(GfxGraphicsResource::Find<GfxConstantBuffer>(WVP_MATRIX), GfxShader::KIND::KIND_VS, 0);
     obj->BindTexture(GfxGraphicsResource::Find<GfxTexture>(CHECKER), GfxShader::KIND::KIND_PS);
@@ -250,8 +99,8 @@ bool SceneTest::Init()
 
     // リソースのバインド
     cube = GfxGraphicsBinder::Create(GfxTag("binder2"));
-    cube->BindMesh(GfxGraphicsResource::Find<GfxMeshBuffer>(GEOMETORY_SPHERE));
-    cube->BindPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_COLOR));
+    cube->BindMesh(GfxGraphicsResource::Find<GfxMeshBuffer>(GEOMETORY_CUBE));
+    cube->BindPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_TEX));
     cube->BindVS(GfxGraphicsResource::Find<GfxVertexShader>(VERTEX_3D));
     cube->BindConstantBuffer(GfxGraphicsResource::Find<GfxConstantBuffer>("cb_pos2"), GfxShader::KIND::KIND_VS, 0);
     cube->BindTexture(GfxGraphicsResource::Find<GfxTexture>(CHECKER), GfxShader::KIND::KIND_PS);

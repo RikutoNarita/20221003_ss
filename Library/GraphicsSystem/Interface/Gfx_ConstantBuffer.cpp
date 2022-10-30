@@ -45,6 +45,7 @@ GfxConstantBuffer::Ptr GfxConstantBuffer::Create(const GfxTag& tag, Description 
 {
     GfxConstantBuffer::Ptr pConstantBuff;
 
+    // APIごとに生成方法を変える
     switch (GRAPHICS->GetAPIKind())
     {
     case GfxGraphicsManager::API_KIND::DIRECT3D_11: // DX11で生成

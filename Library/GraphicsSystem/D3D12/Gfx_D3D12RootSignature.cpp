@@ -7,6 +7,7 @@
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12RootSignature.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\D3D12\Gfx_D3D12DescriptorHeap.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -27,40 +28,18 @@ GfxD3D12RootSignature::~GfxD3D12RootSignature()
 {
 }
 
+//------------------------------------------------------------------------------
+/// ルートシグネチャの作成
+///
+/// \param[in] pDescriptorHeap ディスクリプタヒープ
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D12RootSignature::Create(GfxD3D12DescriptorHeap* pDescriptorHeap)
 {
     ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
     HRESULT hr = S_OK;
     Microsoft::WRL::ComPtr<ID3DBlob> pErrorBlob;
-
-    // ルートシグネチャにテクスチャのレジスタ種別、レジスタ番号の関連を記述
-    // ディスクリプタレンジの設定
-    //D3D12_DESCRIPTOR_RANGE descriptorTableRange[2] = {};
-    //// テクスチャ用レジスタ
-    //descriptorTableRange[0].NumDescriptors = 1;                             // ディスクリプタの数
-    //descriptorTableRange[0].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;    // 種別はテクスチャ
-    //descriptorTableRange[0].BaseShaderRegister = 0;                         // 0スロットから
-    //descriptorTableRange[0].OffsetInDescriptorsFromTableStart =
-    //    D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;                               // 連続したディスクリプタレンジが前のディスクリプタレンジの直後に来る
-    //descriptorTableRange[0].RegisterSpace = 0;
-    //// 定数バッファ用レジスタ
-    //descriptorTableRange[1].NumDescriptors = 1;                             // ディスクリプタの数
-    //descriptorTableRange[1].RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_CBV;    // 種別は定数バッファ
-    //descriptorTableRange[1].BaseShaderRegister = 0;                         // 0スロットから
-    //descriptorTableRange[1].OffsetInDescriptorsFromTableStart =
-    //    D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;                               // 連続したディスクリプタレンジが前のディスクリプタレンジの直後に来る
-    //descriptorTableRange[1].RegisterSpace = 0;
-    //
-    //// ルートパラメータの作成
-    //m_rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // ルートパラメータタイプ
-    //m_rootParameters[0].DescriptorTable.NumDescriptorRanges = 1;                    // ディスクリプタレンジ数
-    //m_rootParameters[0].DescriptorTable.pDescriptorRanges = &descriptorTableRange[0];
-    //m_rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;           // ピクセルシェーダーから見えるようにする
-    //
-    //m_rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE; // ルートパラメータタイプ
-    //m_rootParameters[1].DescriptorTable.NumDescriptorRanges = 1;                    // ディスクリプタレンジ数
-    //m_rootParameters[1].DescriptorTable.pDescriptorRanges = &descriptorTableRange[1];
-    //m_rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;          // 頂点シェーダーから見えるようにする
 
     D3D12_STATIC_SAMPLER_DESC sampler = {};
     sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;       // 横方向の繰り返し
@@ -106,9 +85,14 @@ void GfxD3D12RootSignature::Create(GfxD3D12DescriptorHeap* pDescriptorHeap)
     }
 }
 
-// ルートシグネチャのバインド
+//------------------------------------------------------------------------------
+/// ルートシグネチャのバインド
+///
+/// \return ルートシグネチャのポインタ
+//------------------------------------------------------------------------------
 void GfxD3D12RootSignature::Bind(unsigned slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
     auto pCommandList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
     pCommandList->SetGraphicsRootSignature(m_pRootSignature.Get());
 }

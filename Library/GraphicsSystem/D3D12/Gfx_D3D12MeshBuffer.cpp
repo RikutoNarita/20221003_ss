@@ -1,4 +1,11 @@
-﻿#include <GraphicsSystem\D3D12\Gfx_D3D12MeshBuffer.h>
+﻿//==============================================================================
+// Filename: Gfx_D3D12MeshBuffer.h
+// Description: Direct3D 12メッシュバッファー
+// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
+
+// インクルード
+#include <GraphicsSystem\D3D12\Gfx_D3D12MeshBuffer.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
 
@@ -43,7 +50,11 @@ GfxD3D12MeshBuffer::~GfxD3D12MeshBuffer()
 {
 }
 
-// 頂点バッファの生成
+//------------------------------------------------------------------------------
+/// 頂点バッファの作成
+///
+/// \return 作成できた場合 S_OK
+//------------------------------------------------------------------------------
 HRESULT GfxD3D12MeshBuffer::CreateVertexBuffer()
 {
     HRESULT hr = S_OK;
@@ -58,7 +69,8 @@ HRESULT GfxD3D12MeshBuffer::CreateVertexBuffer()
     // リソースの設定
     D3D12_RESOURCE_DESC resourceDesc = {};
     resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;   // リソースのタイプ
-    resourceDesc.Width = m_desc.vertexCount * m_desc.vertexSize;// 頂点情報のサイズ
+    resourceDesc.Width =
+        static_cast<UINT64>(m_desc.vertexCount) * m_desc.vertexSize;// 頂点情報のサイズ
     resourceDesc.Height = 1;                                    // 頂点情報のサイズ(Widthに格納済み)
     resourceDesc.DepthOrArraySize = 1;                          // リソースの配列のサイズ
     resourceDesc.MipLevels = 1;
@@ -79,18 +91,22 @@ HRESULT GfxD3D12MeshBuffer::CreateVertexBuffer()
     hr = m_pVertexBuffer->Map(0, nullptr, (void**)&vertMap);
     if (SUCCEEDED(hr))
     {
-        rsize_t size = (rsize_t)(m_desc.vertexCount * m_desc.vertexSize);
+        rsize_t size = static_cast<rsize_t>(m_desc.vertexCount) * m_desc.vertexSize;
         memcpy_s(vertMap, size, m_desc.pVertexData, size);
         m_pVertexBuffer->Unmap(0, nullptr);
         // 頂点バッファービューの生成
         m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
-        m_vertexBufferView.SizeInBytes = size;        // 全バイト数
+        m_vertexBufferView.SizeInBytes = (UINT)size;        // 全バイト数
         m_vertexBufferView.StrideInBytes = m_desc.vertexSize;   // １頂点あたりのバイト数
     }
     return S_OK;
 }
 
-// インデックスバッファの生成
+//------------------------------------------------------------------------------
+/// インデックスバッファの生成
+///
+/// \return 作成できた場合 S_OK
+//------------------------------------------------------------------------------
 HRESULT GfxD3D12MeshBuffer::CreateIndexBuffer()
 {
     HRESULT hr = S_OK;
@@ -104,7 +120,8 @@ HRESULT GfxD3D12MeshBuffer::CreateIndexBuffer()
     // インデックスバッファーの生成
     D3D12_RESOURCE_DESC indexResourceDesc = {};
     indexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;      // リソースのタイプ
-    indexResourceDesc.Width = m_desc.indexCount * m_desc.indexSize;     // 頂点情報のサイズ
+    indexResourceDesc.Width =
+        static_cast<UINT64>(m_desc.indexCount) * m_desc.indexSize;     // 頂点情報のサイズ
     indexResourceDesc.Height = 1;                                       // 頂点情報のサイズ(Widthに格納済み)
     indexResourceDesc.DepthOrArraySize = 1;                             // リソースの配列のサイズ
     indexResourceDesc.MipLevels = 1;
@@ -128,27 +145,53 @@ HRESULT GfxD3D12MeshBuffer::CreateIndexBuffer()
     if (SUCCEEDED(hr))
     {
         // インデックスバッファービューの生成
-        rsize_t size = (rsize_t)(m_desc.indexCount * m_desc.indexSize);
+        rsize_t size = static_cast<rsize_t>(m_desc.indexCount) * m_desc.indexSize;
         memcpy_s(indexMap, size, m_desc.pIndexData, size);
-        //std::copy(std::begin(m_desc.pIndexData), std::end(m_desc.pIndexData), indexMap);
         m_pIndexBuffer->Unmap(0, nullptr);
         m_indexBufferView.BufferLocation = m_pIndexBuffer->GetGPUVirtualAddress();
         m_indexBufferView.Format = DXGI_FORMAT_R16_UINT;    // フォーマット
-        m_indexBufferView.SizeInBytes = size;       // 全バイト数
+        m_indexBufferView.SizeInBytes = (UINT)size;       // 全バイト数
     }
     
 
     return hr;
 }
 
-// マップ
+//------------------------------------------------------------------------------
+/// 頂点バッファの更新
+///
+/// \param[in] pData 頂点バッファのデータ
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D12MeshBuffer::Write(void* pData)
 {
-    // TODO:マップ
+    void* vertMap = nullptr;
+    auto hr = m_pVertexBuffer->Map(0, nullptr, (void**)&vertMap);
+    if (SUCCEEDED(hr))
+    {
+        rsize_t size = static_cast<rsize_t>(m_desc.vertexCount) * m_desc.vertexSize;
+        memcpy_s(vertMap, size, pData, size);
+        m_pVertexBuffer->Unmap(0, nullptr);
+        // 頂点バッファービューの生成
+        m_vertexBufferView.BufferLocation = m_pVertexBuffer->GetGPUVirtualAddress();
+        m_vertexBufferView.SizeInBytes = (UINT)size;        // 全バイト数
+        m_vertexBufferView.StrideInBytes = m_desc.vertexSize;   // １頂点あたりのバイト数
+    }
 }
 
+//------------------------------------------------------------------------------
+/// メッシュバッファの固定
+///
+/// \param[in] slot レジスタ番号
+/// 
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D12MeshBuffer::Bind(unsigned int slot) const
 {
+    UNREFERENCED_PARAMETER(slot);
+
+    // コマンドリストの取得
     auto pCommandList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
 
     // 頂点バッファーの設定
@@ -177,65 +220,3 @@ void GfxD3D12MeshBuffer::Bind(unsigned int slot) const
         pCommandList->DrawInstanced(m_desc.vertexCount, 1, 0, 0);
     }
 }
-
-
-
-
-//// パイプラインの組み立て
-//HRESULT GfxD3D12MeshBuffer::Start() const
-//{
-//    // ディスクリプタヒープの生成
-//    m_pDescriptorHeap->Start();
-//
-//    // ルートシグネチャの作成
-//    m_pRootSignature->Create(m_pDescriptorHeap.get());
-//    m_pPipelineState->Create(m_pRootSignature.get());
-//
-//    return S_OK;
-//}
-//
-//// 描画
-//void GfxD3D12MeshBuffer::Draw(int indexCount)
-//{
-//    auto pCommandList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
-//    auto pDevice = GRAPHICS->GetDevice<ID3D12Device>();
-//
-//    // パイプラインをセット
-//    m_pPipelineState->Bind();
-//
-//
-//    // ルートシグネチャをセット
-//    m_pRootSignature->Bind();
-//    
-//    // ディスクリプタヒープをセット
-//    m_pDescriptorHeap->SetDescriptorHeap();
-//    // ルートパラメーターとディスクリプタヒープの関連付け
-//    m_pDescriptorHeap->SetRootDescriptorTable();
-//
-//    // 頂点バッファーの設定
-//    pCommandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);
-//
-//    // プリミティブの設定
-//    D3D12_PRIMITIVE_TOPOLOGY topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-//    switch (m_desc.tpology)
-//    {
-//    case TOPOLOGY::LINE_LIST:       topology = D3D_PRIMITIVE_TOPOLOGY_LINELIST;     break;
-//    case TOPOLOGY::TRIANGLE_LIST:   topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST; break;
-//    case TOPOLOGY::TRIANGLE_STRIP:  topology = D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP; break;
-//    default: break;
-//    }
-//    pCommandList->IASetPrimitiveTopology(topology);
-//
-//    // 描画命令
-//    if (m_desc.indexCount > 0)
-//    {
-//        // インデックスバッファーの設定
-//        pCommandList->IASetIndexBuffer(&m_indexBufferView);
-//        pCommandList->DrawIndexedInstanced(m_desc.indexCount, 1, 0, 0, 0);
-//    }
-//    else
-//    {
-//        pCommandList->DrawInstanced(m_desc.vertexCount, 1, 0, 0);
-//    }
-//
-//}

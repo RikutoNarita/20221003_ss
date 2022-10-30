@@ -37,11 +37,13 @@ public:
     virtual ~GfxD3D12GraphicsBinder();
 
     //------------------------------------------------------------------------------
-    /// リソースをGPUにバインドする
+    /// リソースをバインドする
     ///
     /// \return void
     //------------------------------------------------------------------------------
-    virtual void Bind(unsigned slot = 0) const final;
+    virtual void Bind(
+        /*[in]*/
+        unsigned slot = 0) const final;
 
     //------------------------------------------------------------------------------
     /// パイプラインの構築
@@ -50,12 +52,73 @@ public:
     //------------------------------------------------------------------------------
     void Start() const final;
 
-    void BindMesh(GfxMeshBuffer* res) final;
-    void BindPS(GfxPixelShader* res) final;
-    void BindVS(GfxVertexShader* res) final;
-    void BindTexture(GfxTexture* res, GfxShader::KIND shader, unsigned slot = 0) final;
+    //------------------------------------------------------------------------------
+    /// メッシュバッファのセット
+    ///
+    /// \pramga[in] res メッシュバッファリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindMesh(
+        /*[in]*/
+        GfxMeshBuffer* res) final;
 
-    void BindConstantBuffer(GfxConstantBuffer*, GfxShader::KIND shader, unsigned slot = 0) final;
+    //------------------------------------------------------------------------------
+    /// ピクセルシェーダーのセット
+    ///
+    /// \pramga[in] res ピクセルシェーダーのリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindPS(
+        /*[in]*/
+        GfxPixelShader* res) final;
+
+    //------------------------------------------------------------------------------
+    /// 頂点シェーダーのセット
+    ///
+    /// \pramga[in] res 頂点シェーダーのリソース
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindVS(
+        /*[in]*/
+        GfxVertexShader* res) final;
+
+    //------------------------------------------------------------------------------
+    /// テクスチャのセット
+    ///
+    /// \pramga[in] res     テクスチャリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindTexture(
+        /*[in]*/
+        GfxTexture* res,
+        /*[in]*/
+        GfxShader::KIND shader,
+        /*[in]*/
+        unsigned slot = 0) final;
+
+    //------------------------------------------------------------------------------
+    /// 定数バッファのセット
+    ///
+    /// \pramga[in] res     定数バッファリソース
+    /// \pramga[in] shader  シェーダーの種類
+    /// \pramga[in] slot    レジスタ番号
+    /// 
+    /// \return void
+    //------------------------------------------------------------------------------
+    void BindConstantBuffer(
+        /*[in]*/
+        GfxConstantBuffer* res,
+        /*[in]*/
+        GfxShader::KIND shader,
+        /*[in]*/
+        unsigned slot = 0) final;
+    
     //------------------------------------------------------------------------------
 
 private:
@@ -65,10 +128,9 @@ private:
     std::shared_ptr<GfxD3D12DescriptorHeap>     m_pDescriptorHeap;
     //------------------------------------------------------------------------------
     /// <summary>
-    /// 
+    /// m_pPipelineState    パイプラインステート
+    /// m_pRootSignature    ルートシグネチャ
+    /// m_pDescriptorHeap   ディスクリプタヒープ
     /// </summary> 
 };
-
-
-
 #endif // __GRAPHICS_RESOURCE_H__

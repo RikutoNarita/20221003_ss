@@ -22,9 +22,8 @@ SamplerState g_sampler : register(s0);
 float4 main(PS_IN pin) : SV_TARGET
 {
     float4 color = pin.color;    
-    
     // テクスチャ反映
-    color *= g_texture.Sample(g_sampler, pin.uv);
+    //color *= g_texture.Sample(g_sampler, pin.uv);
     
     return color;
 }

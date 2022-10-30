@@ -1,10 +1,15 @@
-﻿#include <GraphicsSystem\D3D12\Gfx_D3D12PixelShader.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
+﻿//==============================================================================
+// Filename: Gfx_Shader.h
+// Description: Direct3D 12ピクセルシェーダー
+// Copyright (C) Silicon Studio Co., Ltd. All rights reserved.
+//==============================================================================
 
+// インクルード
+#include <GraphicsSystem\D3D12\Gfx_D3D12PixelShader.h>
+#include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
-///
 /// 
 /// \return void
 //------------------------------------------------------------------------------
@@ -42,8 +47,12 @@ GfxD3D12PixelShader::~GfxD3D12PixelShader()
 {
 }
 
-
+//------------------------------------------------------------------------------
+/// ピクセルシェーダーのバインド
+///
+/// \return void
+//------------------------------------------------------------------------------
 void GfxD3D12PixelShader::Bind(unsigned int slot) const
 {
-    //TODO パイプラインステートにセットする?
+    UNREFERENCED_PARAMETER(slot);
 }
