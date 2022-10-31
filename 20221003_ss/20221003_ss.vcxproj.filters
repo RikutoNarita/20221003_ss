@@ -57,6 +57,9 @@
     <Filter Include="GameSystem\Scene">
       <UniqueIdentifier>{02b4a426-8117-4796-a71e-ac9a79cff2dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameSystem\gameObjct">
+      <UniqueIdentifier>{899ea2af-e4c6-40b0-b6cf-aa2022d28616}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -192,6 +195,18 @@
     </ClCompile>
     <ClCompile Include="..\Library\GameSystem\Scene\Scene_TestScene.cpp">
       <Filter>GameSystem\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjCube.cpp">
+      <Filter>GameSystem\gameObjct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjectBase.cpp">
+      <Filter>GameSystem\gameObjct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjSprite.cpp">
+      <Filter>GameSystem\gameObjct</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjSphere.cpp">
+      <Filter>GameSystem\gameObjct</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -345,6 +360,18 @@
     <ClInclude Include="..\Library\GameSystem\Scene\Scene_TestScene.h">
       <Filter>GameSystem\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjCube.h">
+      <Filter>GameSystem\gameObjct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjectBase.h">
+      <Filter>GameSystem\gameObjct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjSprite.h">
+      <Filter>GameSystem\gameObjct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjSphere.h">
+      <Filter>GameSystem\gameObjct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="memo.txt">
@@ -352,13 +379,13 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shader\PS_Texture.hlsl">
-      <Filter>hlsl</Filter>
-    </FxCompile>
     <FxCompile Include="Shader\PS_Color.hlsl">
       <Filter>hlsl</Filter>
     </FxCompile>
     <FxCompile Include="Shader\PS_Lambert.hlsl">
+      <Filter>hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="Shader\PS_Texture.hlsl">
       <Filter>hlsl</Filter>
     </FxCompile>
     <FxCompile Include="Shader\VS_2D.hlsl">

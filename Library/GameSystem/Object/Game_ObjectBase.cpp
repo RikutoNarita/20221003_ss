@@ -5,14 +5,15 @@
 //==============================================================================
 
 // インクルード
-#include <GameSystem\Object\Obj_ObjectBase.h>
+#include <GameSystem\Object\Game_ObjectBase.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
 /// \return void
 //------------------------------------------------------------------------------
-ObjObjectBase::ObjObjectBase()
+GameObjectBase::GameObjectBase()
+    : m_fPos{0.0f}
 {
 }
 
@@ -22,7 +23,7 @@ ObjObjectBase::ObjObjectBase()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-ObjObjectBase::~ObjObjectBase()
+GameObjectBase::~GameObjectBase()
 {
 }
 
@@ -31,10 +32,9 @@ ObjObjectBase::~ObjObjectBase()
 ///
 /// \return 初期化処理の成否
 //------------------------------------------------------------------------------
-bool ObjObjectBase::Init()
+void GameObjectBase::Init()
 {
 
-    return true;
 }
 
 //------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ bool ObjObjectBase::Init()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-void ObjObjectBase::Uninit()
+void GameObjectBase::Uninit()
 {
 }
 
@@ -51,7 +51,7 @@ void ObjObjectBase::Uninit()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-void ObjObjectBase::Update()
+void GameObjectBase::Update()
 {
 }
 
@@ -60,6 +60,48 @@ void ObjObjectBase::Update()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-void ObjObjectBase::Draw()
+void GameObjectBase::Draw()
 {
+}
+
+//------------------------------------------------------------------------------
+/// 座標の設定
+///
+/// \return void
+//------------------------------------------------------------------------------
+void GameObjectBase::SetPos(float x, float y, float z)
+{
+    m_fPos[0] = x;
+    m_fPos[1] = y;
+    m_fPos[2] = z;
+}
+
+//------------------------------------------------------------------------------
+/// テクスチャの設定
+///
+/// \return void
+//------------------------------------------------------------------------------
+void GameObjectBase::SetTexture(GfxTexture* pTex)
+{
+    m_pGraphics->BindTexture(pTex, GfxShader::KIND::KIND_PS);
+}
+
+//------------------------------------------------------------------------------
+/// ピクセルシェーダーの設定
+///
+/// \return void
+//------------------------------------------------------------------------------
+void GameObjectBase::SetPS(GfxPixelShader* pPS)
+{
+    m_pGraphics->BindPS(pPS);
+}
+
+//------------------------------------------------------------------------------
+/// 頂点シェーダーの設定
+///
+/// \return void
+//------------------------------------------------------------------------------
+void GameObjectBase::SetVS(GfxVertexShader* pVS)
+{
+    m_pGraphics->BindVS(pVS);
 }

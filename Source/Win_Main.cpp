@@ -122,7 +122,7 @@ HRESULT Init(HWND hWnd)
     GfxGraphicsManager::CreateInstance();
     // グラフィックスAPIの初期化
     GRAPHICS->Init(
-        GfxGraphicsManager::API_KIND::DIRECT3D_11,
+        GfxGraphicsManager::API_KIND::DIRECT3D_12,
         hWnd,
         (UINT)SCREEN_WIDTH,
         (UINT)SCREEN_HEIGHT);

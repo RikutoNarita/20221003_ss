@@ -14,16 +14,16 @@ struct PS_IN
 };
 
 // ライトの情報
-cbuffer lightInfo : register(b0)
+cbuffer lightInfo : register(b1)
 {
     float4 lightDir; // ライトの向き
 }
 
-// テクスチャフラグの定数バッファ
-cbuffer textureFlag : register(b1)
-{
-    int texFlag; // テクスチャの有無(0の場合はテクスチャなし)
-}
+//// テクスチャフラグの定数バッファ
+//cbuffer textureFlag : register(b1)
+//{
+//    int texFlag; // テクスチャの有無(0の場合はテクスチャなし)
+//}
 
 // シェーダーリソース
 Texture2D g_texture : register(t0);
@@ -38,7 +38,7 @@ float4 main(PS_IN pin) : SV_TARGET
     // 法線の正規化
     float3 nrm = normalize(pin.normal);
     // ライトの向きの正規化（計算上向きを逆転させる）
-    float3 light = normalize(-float3(0.0f, -0.4f, 1.0f));
+    float3 light = normalize(-float3(lightDir.x, lightDir.y, lightDir.z));
     // 影の度合いを計算
     float sahdow = dot(nrm, light);
     // 色に反映
@@ -47,7 +47,7 @@ float4 main(PS_IN pin) : SV_TARGET
     //if (false)
     //{
     // テクスチャ反映
-    color *= g_texture.Sample(g_sampler, pin.uv);
+    //color *= g_texture.Sample(g_sampler, pin.uv);
     //}
     return color;
 }

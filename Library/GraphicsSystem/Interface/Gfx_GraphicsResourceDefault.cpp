@@ -51,7 +51,7 @@ void CreateCBDefault();
 //void CreateCBWorld();
 //void CreateCBViewProj();
 //void CreateCBColor();
-//void CreateCBLight();
+void CreateCBLight();
 //void CreateGeometoryPlane();
 //void CreateGeometorySpehre();
 
@@ -63,6 +63,7 @@ void CreateCBDefault();
 void CreateGraphicsResource()
 {
     // 定数バッファの作成
+    CreateCBLight();
     CreateCBDefault();
 
     // 頂点シェーダーの作成
@@ -85,6 +86,14 @@ void CreateGraphicsResource()
 }
 
 // 定数バッファ
+void CreateCBLight()
+{
+    DirectX::XMFLOAT4 light(-1.0f, -1.0f, -0.5f, 0.0f);
+    GfxConstantBuffer::Description CBVdesc = {};
+    CBVdesc.pData = &light;
+    CBVdesc.size = sizeof(DirectX::XMFLOAT4);
+    GfxConstantBuffer::Create(GfxTag(CB_LIGHT), CBVdesc);
+}
 void CreateCBDefault()
 {
     unsigned char pData[256];
@@ -118,7 +127,7 @@ void CreatePSColor()
 }
 void CreatePSLambert()
 {
-    GfxShader::Compile(GfxTag(LAMBERT), GfxShader::KIND::KIND_PS, L"Shader/PS_Lambert.hlsl");
+    GfxShader::Compile(GfxTag(PS_LAMBERT), GfxShader::KIND::KIND_PS, L"Shader/PS_Lambert.hlsl");
 }
 
 //--- テクスチャ
@@ -272,7 +281,7 @@ void CreateChekerTexture()
         }
     }
     texDesc.pData = srcData;
-    GfxTexture::Create(GfxTag(CHECKER), texDesc);
+    GfxTexture::Create(GfxTag(TEX_CHECKER), texDesc);
 }
 // デフォルトテクスチャ(白)
 void CreateDefaultTexture()
@@ -398,7 +407,6 @@ void CreateGeometoryCube()
 void CreateGeometorySprite()
 {
     // オブジェクトのリソースの中身を作成
-    GfxMeshBuffer::Description meshDesc = {};
     Vertex2D vertices[] =
     {
         {{ -0.5f,  0.5f, 0.0f}, {0.0f, 0.0f}, },
@@ -412,6 +420,7 @@ void CreateGeometorySprite()
     {
         0,1,2,3,4,5
     };
+    GfxMeshBuffer::Description meshDesc = {};
     meshDesc.pVertexData = vertices;
     meshDesc.vertexCount = _countof(vertices);
     meshDesc.vertexSize = sizeof(Vertex2D);
@@ -420,11 +429,59 @@ void CreateGeometorySprite()
     meshDesc.indexSize = sizeof(unsigned short);
     meshDesc.isWrite = true;
     meshDesc.tpology = GfxMeshBuffer::TOPOLOGY::TRIANGLE_STRIP;
-    GfxMeshBuffer::Create(GfxTag(GEOMETORY_CUBE), meshDesc);
+    GfxMeshBuffer::Create(GfxTag(GEOMETORY_SPRITE), meshDesc);
 }
 
 // 球体
 void CreateGeometorySphere()
+{
+    constexpr int split = 16; // 必ず偶数
+    constexpr float angle = DirectX::XMConvertToRadians(360.0f / split);
+    std::vector<Vertex3D> vtx;
+    for (int j = 0; j < split / 2 + 1; ++j)
+    {
+        float radY = angle * j;
+        for (int i = 0; i <= split; ++i)
+        {
+            float radXZ = angle * i;
+            float nx = sinf(radY) * cosf(radXZ);
+            float ny = cosf(radY);
+            float nz = sinf(radY) * sinf(radXZ);
+            vtx.push_back(Vertex3D{
+                { nx * 0.5f, ny * 0.5f, nz * 0.5f },
+                { nx, ny, nz },
+                { static_cast<float>(i) / split, static_cast<float>(j) / (split / 2) },
+                {1,1,1,1}
+                });
+        }
+    }
+    std::vector<WORD> idx;
+    for (int j = 0; j < split / 2; ++j)
+    {
+        for (int i = 0; i < split; ++i)
+        {
+            idx.push_back(((unsigned short)j + 1) * ((unsigned short)split + 1) + (unsigned short)i);
+            idx.push_back((unsigned short)j       * ((unsigned short)split + 1) + (unsigned short)i);
+            idx.push_back((unsigned short)j       * ((unsigned short)split + 1) + (unsigned short)i + 1);
+            idx.push_back((unsigned short)j       * ((unsigned short)split + 1) + (unsigned short)i + 1);
+            idx.push_back((unsigned short)(j + 1) * ((unsigned short)split + 1) + (unsigned short)i + 1);
+            idx.push_back(((unsigned short)j + 1) * ((unsigned short)split + 1) + (unsigned short)i);
+        }
+    }
+
+    GfxMeshBuffer::Description meshDesc = {};
+    meshDesc.pVertexData = vtx.data();
+    meshDesc.vertexCount = (UINT)vtx.size();
+    meshDesc.vertexSize = sizeof(Vertex3D);
+    meshDesc.pIndexData = idx.data();
+    meshDesc.indexCount = (UINT)idx.size();
+    meshDesc.indexSize = sizeof(unsigned short);
+    meshDesc.isWrite = true;
+    meshDesc.tpology = GfxMeshBuffer::TOPOLOGY::TRIANGLE_LIST;
+    GfxMeshBuffer::Create(GfxTag(GEOMETORY_SPHERE), meshDesc);
+}
+
+void CreateGeometoryPrism()
 {
     //namespace dx = DirectX;
 
