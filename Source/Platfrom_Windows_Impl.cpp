@@ -1,11 +1,11 @@
 ﻿//==============================================================================
-// Filename: WinWindow.cpp
+// Filename: Platform_Windows_Impl.cpp
 // Description: ウィンドウ表示クラス
 // Copyright (C) 2013 Silicon Studio Co., Ltd. All rights reserved.
 //==============================================================================
 
 // インクルード
-#include <Win_Window.h>
+#include <Platfrom_Windows_Impl.h>
 #include <wingdi.h>
 #include <WinUser.h>
 #include <tchar.h>
@@ -13,22 +13,23 @@
 
 // ライブラリのリンク
 #pragma comment(lib, "imm32")
+// ライブラリのリンク
+#pragma comment(lib, "winmm")
 
 // マクロ定義
 #define CLASS_NAME  _T("AppClass")          // ウインドウのクラス名
-#define WINDOW_NAME  _T("abstract layer")   // ウインドウのキャプション名
-
-// 静的メンバ変数宣言
-WinWindow* WinWindow::m_pWindow = nullptr;
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
 /// \return void
 //------------------------------------------------------------------------------
-WinWindow::WinWindow()
+PlatformWindows::PlatformWindows()
     : m_hWnd(nullptr), m_hInst(nullptr)
 {
+    timeBeginPeriod(1);  // 分解能を設定
+    dwExecLastTime = dwFPSLastTime = timeGetTime();
+    dwCurrentTime = dwFrameCount = 0;
 }
 
 //------------------------------------------------------------------------------
@@ -36,8 +37,11 @@ WinWindow::WinWindow()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-WinWindow::~WinWindow()
+PlatformWindows::~PlatformWindows()
 {
+    // タイマ設定を元に戻す
+    timeEndPeriod(1);
+
     // ウィンドウクラスの登録を解除
     UnregisterClass(CLASS_NAME, GetModuleHandle(NULL));
     m_hWnd = nullptr;
@@ -46,16 +50,12 @@ WinWindow::~WinWindow()
 //------------------------------------------------------------------------------
 /// 初期化
 /// 
-/// \param[in] hInstance インスタンスハンドル
+/// \param[in] desc ウィンドウの設定項目
 /// 
 /// \return 成功時 true
 //------------------------------------------------------------------------------
-bool WinWindow::Init(
-    /*[in]*/
-    HINSTANCE hInstance)
+bool PlatformWindows::Init(Description desc)
 {
-    m_hInst = hInstance;
-
     //! ウィンドクラス情報の設定
     WNDCLASSEX wcex;
     ZeroMemory(&wcex, sizeof(wcex)); // ゼロクリア
@@ -78,12 +78,15 @@ bool WinWindow::Init(
     }
 
     // ウィンドウの作成
-    RECT rect = { 0, 0, (long)SCREEN_WIDTH, (long)SCREEN_HEIGHT };  // ウィンドウの大きさ
-    DWORD style = WS_CAPTION | WS_SYSMENU;                          // ウィンドウスタイル
-    DWORD exStyle = WS_EX_OVERLAPPEDWINDOW;                         // 拡張ウィンドウスタイル
+    RECT rect = { 0, 0, (long)desc.width, (long)desc.height };  // ウィンドウの大きさ
+    DWORD style = WS_CAPTION | WS_SYSMENU;                      // ウィンドウスタイル
+    DWORD exStyle = WS_EX_OVERLAPPEDWINDOW;                     // 拡張ウィンドウスタイル
     AdjustWindowRectEx(&rect, style, false, exStyle);
-    m_hWnd = CreateWindowEx(exStyle, wcex.lpszClassName, WINDOW_NAME, style, CW_USEDEFAULT, CW_USEDEFAULT,
-        rect.right - rect.left, rect.bottom - rect.top, HWND_DESKTOP, NULL, wcex.hInstance, NULL);
+    m_hWnd = CreateWindowEx(exStyle, wcex.lpszClassName,
+        (LPCWSTR)desc.tileName,
+        style, CW_USEDEFAULT, CW_USEDEFAULT,
+        rect.right - rect.left, rect.bottom - rect.top,
+        HWND_DESKTOP, NULL, wcex.hInstance, NULL);
 
     if (m_hWnd == NULL)
     {
@@ -103,7 +106,7 @@ bool WinWindow::Init(
 /// 
 /// \return 
 //------------------------------------------------------------------------------
-bool WinWindow::Run()
+bool PlatformWindows::Run()
 {
     MSG msg;
     while (1)
@@ -122,7 +125,14 @@ bool WinWindow::Run()
         }
         else
         {
-            return true;
+            // FPS制御
+            dwCurrentTime = timeGetTime();
+            if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
+            {
+                dwExecLastTime = dwCurrentTime;
+                return true;
+            }
+            dwFrameCount++;
         }
     }
     return false;
@@ -133,51 +143,9 @@ bool WinWindow::Run()
 /// 
 /// \return ウィンドウハンドル
 //------------------------------------------------------------------------------
-HWND WinWindow::GetWndHandle()
+HWND PlatformWindows::GetWndHandle()
 {
     return m_hWnd;
-}
-
-//------------------------------------------------------------------------------
-/// インスタンスハンドルの取得
-/// 
-/// \return ウィンドウハンドル
-//------------------------------------------------------------------------------
-HINSTANCE WinWindow::GetInstance()
-{
-    return m_hInst;
-}
-
-//------------------------------------------------------------------------------
-/// クラスのインスタンス取得
-///
-/// \return クラスのインスタンス
-//------------------------------------------------------------------------------
-WinWindow* WinWindow::Get()
-{
-    // インスタンスがなかったら
-    if (!m_pWindow)
-    {
-        // インスタンス生成
-        m_pWindow = new WinWindow();
-    }
-    return m_pWindow;
-}
-
-//------------------------------------------------------------------------------
-/// 終了処理
-///
-/// \return void
-//------------------------------------------------------------------------------
-void WinWindow::Fin()
-{
-    // インスタンスがあったら
-    if (m_pWindow)
-    {
-        // 解放
-        delete m_pWindow;
-        m_pWindow = nullptr;
-    }
 }
 
 //------------------------------------------------------------------------------
@@ -190,7 +158,8 @@ void WinWindow::Fin()
 /// 
 /// \return コールバック関数やウィンドウプロシージャから返される32ビットの値
 //------------------------------------------------------------------------------
-LRESULT CALLBACK WinWindow::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK PlatformWindows::WndProc(
+    HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     // imguiプロシージャ
     //if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
@@ -228,20 +197,21 @@ LRESULT CALLBACK WinWindow::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 /// 
 /// \return 成功時 0
 //------------------------------------------------------------------------------
-int WinWindow::OnCreate(HWND hWnd)
+int PlatformWindows::OnCreate(HWND hWnd)
 {
     // クライアント領域サイズをSCREEN_WIDTH×SCREEN_HEIGHTに再設定.
     RECT rcClnt;
     GetClientRect(hWnd, &rcClnt);
     rcClnt.right -= rcClnt.left;
     rcClnt.bottom -= rcClnt.top;
-    if (rcClnt.right != SCREEN_WIDTH || rcClnt.bottom != SCREEN_HEIGHT)
+    if (rcClnt.right != static_cast<signed>(m_desc.width) ||
+        rcClnt.bottom != static_cast<signed>(m_desc.height))
     {
         RECT rcWnd;
         GetWindowRect(hWnd, &rcWnd);
         SIZE sizeWnd;
-        sizeWnd.cx = (rcWnd.right - rcWnd.left) - rcClnt.right + SCREEN_WIDTH;
-        sizeWnd.cy = (rcWnd.bottom - rcWnd.top) - rcClnt.bottom + SCREEN_HEIGHT;
+        sizeWnd.cx = (rcWnd.right - rcWnd.left) - rcClnt.right + m_desc.width;
+        sizeWnd.cy = (rcWnd.bottom - rcWnd.top) - rcClnt.bottom + m_desc.height;
         SetWindowPos(hWnd, nullptr, 0, 0, sizeWnd.cx, sizeWnd.cy,
             SWP_NOMOVE | SWP_NOZORDER | SWP_NOOWNERZORDER);
     }

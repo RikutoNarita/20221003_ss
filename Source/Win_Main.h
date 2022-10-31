@@ -7,7 +7,7 @@
 
 // インクルード
 #include <tchar.h>
-#include <Win_Window.h>
+#include <Platfrom_Windows_Impl.h>
 #include <DirectXMath.h>
 #include <debugapi.h>
 

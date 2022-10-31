@@ -6,7 +6,7 @@
 
 
 // インクルード
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\Interface\Gfx_DeviceFactory.h>
 #include <GraphicsSystem\Interface\IGfx_ViewPort.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.h>
@@ -17,21 +17,21 @@
 #include <GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.h>
 
 #include <GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.h>
+#include <Platfrom_Windows_Impl.h>
 
 #include <wrl\client.h>
 
 
 // 静的変数
-GfxGraphicsManager* GfxGraphicsManager::m_pInstance = nullptr;
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
 ///
 /// \return void
 //------------------------------------------------------------------------------
-GfxGraphicsManager::GfxGraphicsManager()
+GfxDXManager::GfxDXManager()
 {
-    m_eAPIKind = API_KIND::DIRECT3D_11;
+    //m_eAPIKind = API_KIND::DIRECT3D_11;
 }
 
 //------------------------------------------------------------------------------
@@ -39,7 +39,7 @@ GfxGraphicsManager::GfxGraphicsManager()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-GfxGraphicsManager::~GfxGraphicsManager()
+GfxDXManager::~GfxDXManager()
 {
 }
 
@@ -53,21 +53,26 @@ GfxGraphicsManager::~GfxGraphicsManager()
 ///
 /// \return 初期化処理の成否
 //------------------------------------------------------------------------------
-HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT height)
+void GfxDXManager::Init(int width, int height)
 {
-    m_eAPIKind = type;
+    // DX11 or DX12でなければ警告を出す
+    API_KIND type = GRAPHICS->GetAPIKind();
+    if (type != API_KIND::DIRECT3D_11 && type != API_KIND::DIRECT3D_12)
+    {
+        _ASSERT_EXPR(false, L"NO_GRAPHICS");
+    }
 
     // デバイス、描画命令機能の生成
     auto hr = DeviceFactory::CreateDeviceAndContext(
         static_cast<int>(type), m_pDevice, m_pRenderCommand);
     if (FAILED(hr))
     {
-        return hr;
+        _ASSERT_EXPR(false, L"NO_DX");
     }
 
     // スワップチェーンの生成
     IGfxSwapChain::Description swapChainDesc = {};
-    swapChainDesc.hWnd = hWnd;
+    swapChainDesc.hWnd = WINDOW->GetWndHandle();
     swapChainDesc.width = width;
     swapChainDesc.width = height;
     swapChainDesc.fromat = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -83,7 +88,7 @@ HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT heig
         m_pRenderCommand.get());
     if (FAILED(hr))
     {
-        return hr;
+        _ASSERT_EXPR(false, L"NO_DX");
     }
 
     // レンダーターゲットビューの生成
@@ -99,16 +104,16 @@ HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT heig
     dsvDesc.height = height;
     switch (type)
     {
-    case GfxGraphicsManager::API_KIND::DIRECT3D_11:
+    case API_KIND::DIRECT3D_11:
         m_DepthStencil = std::make_shared<GfxD3D11DepthStencil>();
         m_DepthStencil->Create(dsvDesc, m_pDevice.get());
         break;
-    case GfxGraphicsManager::API_KIND::DIRECT3D_12:
+    case API_KIND::DIRECT3D_12:
         m_DepthStencil = std::make_shared<GfxD3D12DepthStencil>();
         m_DepthStencil->Create(dsvDesc, m_pDevice.get());
         break;
-    case GfxGraphicsManager::API_KIND::OPEN_GL:
-    case GfxGraphicsManager::API_KIND::VULKAN:
+    case API_KIND::OPEN_GL:
+    case API_KIND::VULKAN:
     default:
         break;
     }
@@ -128,24 +133,22 @@ HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT heig
     scissorDesc.bottom = scissorDesc.top + (LONG)viewPortDesc.height;   // 切り抜き下座標
     switch (type)
     {
-    case GfxGraphicsManager::API_KIND::DIRECT3D_11:
+    case API_KIND::DIRECT3D_11:
         m_viewPort = std::make_shared<GfxD3D11ViewPort>(viewPortDesc);
         m_scissorRect = std::make_shared<GfxD3D11ScissorRect>(scissorDesc);
         break;
-    case GfxGraphicsManager::API_KIND::DIRECT3D_12:
+    case API_KIND::DIRECT3D_12:
         m_viewPort = std::make_shared<GfxD3D12ViewPort>(viewPortDesc);
         m_scissorRect = std::make_shared<GfxD3D12ScissorRect>(scissorDesc);
         break;
-    case GfxGraphicsManager::API_KIND::OPEN_GL:
-    case GfxGraphicsManager::API_KIND::VULKAN:
+    case API_KIND::OPEN_GL:
+    case API_KIND::VULKAN:
     default:
         break;
     }
 
     // デフォルトのリソースを作成
     CreateGraphicsResource();
-
-    return S_OK;
 }
 
 
@@ -154,7 +157,7 @@ HRESULT GfxGraphicsManager::Init(API_KIND type, HWND hWnd, UINT width, UINT heig
 ///
 /// \return void
 //------------------------------------------------------------------------------
-void GfxGraphicsManager::Uninit()
+void GfxDXManager::Uninit()
 {
     m_pDevice.reset();
     m_pRenderCommand.reset();
@@ -165,7 +168,7 @@ void GfxGraphicsManager::Uninit()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-void GfxGraphicsManager::BeginDraw()
+void GfxDXManager::BeginDraw()
 {
     // レンダーターゲットビューとデプスステンシルビューをセット, リソースバリアの設定(DX12)
     m_pRenderCommand->OMSetRenderTargets(m_pRenderTarget.get(), m_DepthStencil.get());
@@ -187,54 +190,54 @@ void GfxGraphicsManager::BeginDraw()
 ///
 /// \return void
 //------------------------------------------------------------------------------
-void GfxGraphicsManager::EndDraw()
+void GfxDXManager::EndDraw()
 {
     // バックバッファとフロントバッファの入れ替え, リソースバリアの設定＆命令実行（DX12）
     m_pRenderCommand->EndDraw();
 }
 
-//------------------------------------------------------------------------------
-/// インスタンス作成
-///
-/// \return void
-//------------------------------------------------------------------------------
-void GfxGraphicsManager::CreateInstance()
-{
-    if (!m_pInstance)
-    {
-        m_pInstance = new GfxGraphicsManager();
-    }
-}
-
-//------------------------------------------------------------------------------
-/// インスタンス取得
-///
-/// \return クラスのインスタンス
-//------------------------------------------------------------------------------
-GfxGraphicsManager* GfxGraphicsManager::GetInstance()
-{
-    return m_pInstance;
-}
-
-//------------------------------------------------------------------------------
-/// インスタンス削除
-///
-/// \return void
-//------------------------------------------------------------------------------
-void GfxGraphicsManager::DeleteInstance()
-{
-    if (m_pInstance)
-    {
-        delete m_pInstance;
-    }
-}
-
-//------------------------------------------------------------------------------
-/// APIの種類の取得
-///
-/// \return APIの種類
-//------------------------------------------------------------------------------
-GfxGraphicsManager::API_KIND GfxGraphicsManager::GetAPIKind()
-{
-    return m_eAPIKind;
-}
+////------------------------------------------------------------------------------
+///// インスタンス作成
+/////
+///// \return void
+////------------------------------------------------------------------------------
+//void GfxDXManager::CreateInstance()
+//{
+//    if (!m_pInstance)
+//    {
+//        m_pInstance = new GfxDXManager();
+//    }
+//}
+//
+////------------------------------------------------------------------------------
+///// インスタンス取得
+/////
+///// \return クラスのインスタンス
+////------------------------------------------------------------------------------
+//GfxDXManager* GfxDXManager::GetInstance()
+//{
+//    return m_pInstance;
+//}
+//
+////------------------------------------------------------------------------------
+///// インスタンス削除
+/////
+///// \return void
+////------------------------------------------------------------------------------
+//void GfxDXManager::DeleteInstance()
+//{
+//    if (m_pInstance)
+//    {
+//        delete m_pInstance;
+//    }
+//}
+//
+////------------------------------------------------------------------------------
+///// APIの種類の取得
+/////
+///// \return APIの種類
+////------------------------------------------------------------------------------
+//API_KIND GfxDXManager::GetAPIKind()
+//{
+//    return m_eAPIKind;
+//}

@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11VertexShader.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11ConstantBuffer.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11Texture.h>
 #include <vector>
@@ -26,7 +26,7 @@ GfxD3D11VertexShader::GfxD3D11VertexShader(const wchar_t* fileName)
 : GfxVertexShader(KIND::KIND_VS)
 , m_pVS(nullptr), m_pInputLayout(nullptr)
 {
-    ID3D11Device* pDevice = GRAPHICS->GetDevice<ID3D11Device>();
+    ID3D11Device* pDevice = DX->GetDevice<ID3D11Device>();
 
     // エラー対応
     Microsoft::WRL::ComPtr<ID3DBlob> pErrorBlob;
@@ -181,7 +181,7 @@ void GfxD3D11VertexShader::Bind(unsigned int slot) const
         }
     }
 
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     pContext->VSSetShader(m_pVS.Get(), nullptr, 0);
     pContext->IASetInputLayout(m_pInputLayout.Get());
 }

@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12DescriptorHeap.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12Texture.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12ConstantBuffer.h>
@@ -54,7 +54,7 @@ GfxD3D12DescriptorHeap::~GfxD3D12DescriptorHeap()
 void GfxD3D12DescriptorHeap::Create()
 {
     // デバイスの取得
-    ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
+    ID3D12Device* pDevice = DX->GetDevice<ID3D12Device>();
 
     //--- ディスクリプタヒープの作成
     D3D12_DESCRIPTOR_HEAP_DESC basicDescHeapDesc = {};
@@ -187,7 +187,7 @@ void GfxD3D12DescriptorHeap::Bind(unsigned int slot) const
     UNREFERENCED_PARAMETER(slot);
 
     // コマンドリストの取得
-    ID3D12GraphicsCommandList* pCmdList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
+    ID3D12GraphicsCommandList* pCmdList = DX->GetRenderCommand<ID3D12GraphicsCommandList>();
 
     // ディスクリプタヒープをセット
     pCmdList->SetDescriptorHeaps(1, m_pSRVandCSBheap.GetAddressOf());

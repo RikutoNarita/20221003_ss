@@ -8,7 +8,7 @@
 #include <GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12Device_Impl.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11Device_Impl.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -51,5 +51,5 @@ GfxD3D12ViewPort::~GfxD3D12ViewPort()
 //------------------------------------------------------------------------------
 void GfxD3D12ViewPort::Bind() const
 {
-    GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>()->RSSetViewports(1, &m_viewPort);
+    DX->GetRenderCommand<ID3D12GraphicsCommandList>()->RSSetViewports(1, &m_viewPort);
 }

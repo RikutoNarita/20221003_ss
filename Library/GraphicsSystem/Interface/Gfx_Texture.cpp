@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\Interface\Gfx_Texture.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11Texture.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12Texture.h>
@@ -46,21 +46,21 @@ GfxTexture::Ptr GfxTexture::Create(const GfxTag& tag, Description desc)
 
     switch (GRAPHICS->GetAPIKind())
     {
-    case GfxGraphicsManager::API_KIND::DIRECT3D_11: // DX11で生成
+    case API_KIND::DIRECT3D_11: // DX11で生成
     {
         pTexture = std::make_shared<GfxD3D11Texture>(desc);
         break;
     }
-    case GfxGraphicsManager::API_KIND::DIRECT3D_12: // DX12で生成
+    case API_KIND::DIRECT3D_12: // DX12で生成
     {
         pTexture = std::make_shared<GfxD3D12Texture>(desc);
         break;
     }
-    case GfxGraphicsManager::API_KIND::OPEN_GL:    // OpenGLで生成
+    case API_KIND::OPEN_GL:    // OpenGLで生成
     {
         break;
     }
-    case GfxGraphicsManager::API_KIND::VULKAN:     // Vulkanで生成
+    case API_KIND::VULKAN:     // Vulkanで生成
     {
         break;
     }

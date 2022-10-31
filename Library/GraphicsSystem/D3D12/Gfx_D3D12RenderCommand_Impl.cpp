@@ -10,7 +10,7 @@
 #include <GraphicsSystem\D3D12\Gfx_D3D12ViewPort_Impl.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12ScissorRect_Impl.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12DepthStencilView_Impl.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -47,10 +47,10 @@ void GfxD3D12RenderCommand::ClearRenderTargetView(
     auto renderTarget = dynamic_cast<GfxD3D12RenderTarget*>(pRenderTargetView);
 
     //現在のバックバッファーのインデックス
-    auto bbIdx = GRAPHICS->GetSwapChain<IDXGISwapChain4>()->GetCurrentBackBufferIndex();
+    auto bbIdx = DX->GetSwapChain<IDXGISwapChain4>()->GetCurrentBackBufferIndex();
     auto rtvHeap = renderTarget->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
     rtvHeap.ptr += bbIdx * static_cast<unsigned long long>(
-        GRAPHICS->GetDevice<ID3D12Device>()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+        DX->GetDevice<ID3D12Device>()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
     m_pCommandList->ClearRenderTargetView(rtvHeap, clearColor, 0, nullptr);
 }
 
@@ -84,7 +84,7 @@ void GfxD3D12RenderCommand::OMSetRenderTargets(
     auto renderTarget = dynamic_cast<GfxD3D12RenderTarget*>(pRenderTargetView);
 
     //現在のバックバッファーのインデックス
-    auto bbIdx = GRAPHICS->GetSwapChain<IDXGISwapChain4>()->GetCurrentBackBufferIndex();
+    auto bbIdx = DX->GetSwapChain<IDXGISwapChain4>()->GetCurrentBackBufferIndex();
 
     // リソースバリアの設定
     m_barrierDesc.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;  // 遷移
@@ -99,7 +99,7 @@ void GfxD3D12RenderCommand::OMSetRenderTargets(
 
     auto rtvHeap = renderTarget->GetDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
     rtvHeap.ptr += bbIdx * static_cast<unsigned long long>(
-        GRAPHICS->GetDevice<ID3D12Device>()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
+        DX->GetDevice<ID3D12Device>()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV));
     auto depthstencil = dynamic_cast<GfxD3D12DepthStencil*>(pDepthStencilView);
     auto dsvHeap = depthstencil->GetDescHeap()->GetCPUDescriptorHandleForHeapStart();
     // レンダーターゲットをバックバッファにセット
@@ -128,7 +128,7 @@ void GfxD3D12RenderCommand::EndDraw()
     m_pCommandQueue->ExecuteCommandLists(1, commandLists);
 
     // スワップ
-    GRAPHICS->GetSwapChain<IDXGISwapChain4>()->Present(1, 0);
+    DX->GetSwapChain<IDXGISwapChain4>()->Present(1, 0);
 
     // 命令がすべて実行されたか
     m_pCommandQueue->Signal(m_pFence.Get(), ++m_fenceValue);

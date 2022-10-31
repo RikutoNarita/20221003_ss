@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\Interface\Gfx_DeviceFactory.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\Interface\IGfx_Device.h>
 #include <GraphicsSystem\Interface\IGfx_RenderCommand.h>
 
@@ -35,7 +35,7 @@ namespace DeviceFactory
         // APIの種類によって初期化方法を分ける
         switch (apiKind)
         {
-        case (int)GfxGraphicsManager::API_KIND::DIRECT3D_11: // Direct3D 11の初期化
+        case (int)API_KIND::DIRECT3D_11: // Direct3D 11の初期化
         {
             
             Microsoft::WRL::ComPtr<ID3D11Device> pDevice11;
@@ -68,7 +68,7 @@ namespace DeviceFactory
 
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::DIRECT3D_12: // Direct3D 12の初期化
+        case (int)API_KIND::DIRECT3D_12: // Direct3D 12の初期化
         {
             Microsoft::WRL::ComPtr<ID3D12Device> pDevice12;
             Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList> pCommandList;
@@ -144,11 +144,11 @@ namespace DeviceFactory
 
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::OPEN_GL:    // OpenGLの初期化
+        case (int)API_KIND::OPEN_GL:    // OpenGLの初期化
         {
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::VULKAN:     // Vulkanの初期化
+        case (int)API_KIND::VULKAN:     // Vulkanの初期化
         {
             break;
         }
@@ -175,7 +175,7 @@ namespace DeviceFactory
         // APIの種類によって初期化方法を分ける
         switch (apiKind)
         {
-        case (int)GfxGraphicsManager::API_KIND::DIRECT3D_11: // Direct3D 11の初期化
+        case (int)API_KIND::DIRECT3D_11: // Direct3D 11の初期化
         {
             // メモリの確保
             pSwapChain = std::make_shared<GfxD3D11SwapChain>();
@@ -222,7 +222,7 @@ namespace DeviceFactory
             
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::DIRECT3D_12: // Direct3D 12の初期化
+        case (int)API_KIND::DIRECT3D_12: // Direct3D 12の初期化
         {
             // メモリの確保
             pSwapChain = std::make_shared<GfxD3D12SwapChain>();
@@ -276,11 +276,11 @@ namespace DeviceFactory
 
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::OPEN_GL:    // OpenGLの初期化
+        case (int)API_KIND::OPEN_GL:    // OpenGLの初期化
         {
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::VULKAN:     // Vulkanの初期化
+        case (int)API_KIND::VULKAN:     // Vulkanの初期化
         {
             break;
         }
@@ -305,7 +305,7 @@ namespace DeviceFactory
         // APIの種類によって初期化方法を分ける
         switch (apiKind)
         {
-        case (int)GfxGraphicsManager::API_KIND::DIRECT3D_11: // Direct3D 11の初期化
+        case (int)API_KIND::DIRECT3D_11: // Direct3D 11の初期化
         {
             // メモリの確保
             pRenderTarget = std::make_shared<GfxD3D11RenderTarget>();
@@ -317,7 +317,7 @@ namespace DeviceFactory
 
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::DIRECT3D_12: // Direct3D 12の初期化
+        case (int)API_KIND::DIRECT3D_12: // Direct3D 12の初期化
         {
             // メモリの確保
             pRenderTarget = std::make_shared<GfxD3D12RenderTarget>();
@@ -329,11 +329,11 @@ namespace DeviceFactory
            
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::OPEN_GL:    // OpenGLの初期化
+        case (int)API_KIND::OPEN_GL:    // OpenGLの初期化
         {
             break;
         }
-        case (int)GfxGraphicsManager::API_KIND::VULKAN:     // Vulkanの初期化
+        case (int)API_KIND::VULKAN:     // Vulkanの初期化
         {
             break;
         }

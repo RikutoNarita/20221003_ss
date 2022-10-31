@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12PipelineState.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12PixelShader.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12VertexShader.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12RootSignature.h>
@@ -73,7 +73,7 @@ GfxPipelineState::~GfxPipelineState()
 void GfxPipelineState::Create(GfxD3D12RootSignature* pRootParameter)
 {
     // デバイスの取得
-    ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
+    ID3D12Device* pDevice = DX->GetDevice<ID3D12Device>();
 
     // ルートシグネチャをセット
     m_pipelineDesc.pRootSignature = pRootParameter->Get();
@@ -128,6 +128,6 @@ void GfxPipelineState::BindVS(GfxD3D12VertexShader* vs)
 void GfxPipelineState::Bind(unsigned int slot) const
 {
     UNREFERENCED_PARAMETER(slot);
-    auto pCommandList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
+    auto pCommandList = DX->GetRenderCommand<ID3D12GraphicsCommandList>();
     pCommandList->SetPipelineState(m_pPipeLineState.Get());
 }

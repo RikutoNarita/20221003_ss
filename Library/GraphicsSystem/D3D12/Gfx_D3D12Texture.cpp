@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12Texture.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -19,7 +19,7 @@ GfxD3D12Texture::GfxD3D12Texture(Description desc)
 : GfxTexture(desc)
 {
     HRESULT hr = S_OK;
-    ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
+    ID3D12Device* pDevice = DX->GetDevice<ID3D12Device>();
 
     // WriteToSubResourceで転送するためのヒープ設定
     D3D12_HEAP_PROPERTIES heapProp = {};

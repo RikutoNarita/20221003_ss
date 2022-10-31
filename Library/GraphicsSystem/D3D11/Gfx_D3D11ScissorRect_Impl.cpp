@@ -6,7 +6,7 @@
 
 /// インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11ScissorRect_Impl.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -47,5 +47,5 @@ GfxD3D11ScissorRect::~GfxD3D11ScissorRect()
 //------------------------------------------------------------------------------
 void GfxD3D11ScissorRect::Bind() const
 {
-    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->RSSetScissorRects(1, &m_scissorRect);
+    DX->GetRenderCommand<ID3D11DeviceContext>()->RSSetScissorRects(1, &m_scissorRect);
 }

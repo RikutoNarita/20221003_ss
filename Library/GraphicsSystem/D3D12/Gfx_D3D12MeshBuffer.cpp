@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12MeshBuffer.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
 
 #include <GraphicsSystem\D3D12\Gfx_D3D12PixelShader.h>
@@ -58,7 +58,7 @@ GfxD3D12MeshBuffer::~GfxD3D12MeshBuffer()
 HRESULT GfxD3D12MeshBuffer::CreateVertexBuffer()
 {
     HRESULT hr = S_OK;
-    ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
+    ID3D12Device* pDevice = DX->GetDevice<ID3D12Device>();
 
     // ヒープの設定
     D3D12_HEAP_PROPERTIES heapprop = {};
@@ -110,7 +110,7 @@ HRESULT GfxD3D12MeshBuffer::CreateVertexBuffer()
 HRESULT GfxD3D12MeshBuffer::CreateIndexBuffer()
 {
     HRESULT hr = S_OK;
-    ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
+    ID3D12Device* pDevice = DX->GetDevice<ID3D12Device>();
 
     // ヒープの設定
     D3D12_HEAP_PROPERTIES heapprop = {};
@@ -192,7 +192,7 @@ void GfxD3D12MeshBuffer::Bind(unsigned int slot) const
     UNREFERENCED_PARAMETER(slot);
 
     // コマンドリストの取得
-    auto pCommandList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
+    auto pCommandList = DX->GetRenderCommand<ID3D12GraphicsCommandList>();
 
     // 頂点バッファーの設定
     pCommandList->IASetVertexBuffers(0, 1, &m_vertexBufferView);

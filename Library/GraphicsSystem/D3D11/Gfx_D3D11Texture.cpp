@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11Texture.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -20,8 +20,8 @@ GfxD3D11Texture::GfxD3D11Texture(Description desc)
 {
     HRESULT hr = S_OK;
 
-    ID3D11Device* pDevice = GRAPHICS->GetDevice<ID3D11Device>();
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11Device* pDevice = DX->GetDevice<ID3D11Device>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     
     D3D11_TEXTURE2D_DESC desc2D;
     desc2D.Width = desc.width;                     // テクスチャの幅
@@ -89,7 +89,7 @@ GfxD3D11Texture::~GfxD3D11Texture()
 
 void GfxD3D11Texture::BindVS(unsigned slot) const
 {
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     pContext->PSSetShaderResources(slot, 1, m_pShaderResourceView.GetAddressOf());
 }
 
@@ -102,7 +102,7 @@ void GfxD3D11Texture::BindVS(unsigned slot) const
 //------------------------------------------------------------------------------
 void GfxD3D11Texture::BindPS(unsigned slot) const
 {
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     pContext->PSSetShaderResources(slot, 1, m_pShaderResourceView.GetAddressOf());
     pContext->PSSetSamplers(slot, 1, m_pSamplerState.GetAddressOf());
 }

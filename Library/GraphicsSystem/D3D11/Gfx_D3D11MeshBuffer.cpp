@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11MeshBuffer.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -51,7 +51,7 @@ GfxD3D11MeshBuffer::~GfxD3D11MeshBuffer()
 //------------------------------------------------------------------------------
 HRESULT GfxD3D11MeshBuffer::CreateVertexBuffer()
 {
-    ID3D11Device* pDevice = GRAPHICS->GetDevice<ID3D11Device>();
+    ID3D11Device* pDevice = DX->GetDevice<ID3D11Device>();
 
     // 作成するバッファ情報
     D3D11_BUFFER_DESC bufDesc = {};
@@ -95,7 +95,7 @@ HRESULT GfxD3D11MeshBuffer::CreateIndexBuffer()
         break;
     }
 
-    ID3D11Device* pDevice = GRAPHICS->GetDevice<ID3D11Device>();
+    ID3D11Device* pDevice = DX->GetDevice<ID3D11Device>();
 
     // バッファの情報を設定
     D3D11_BUFFER_DESC bufDesc = {};
@@ -123,7 +123,7 @@ HRESULT GfxD3D11MeshBuffer::CreateIndexBuffer()
 void GfxD3D11MeshBuffer::Write(void* pData)
 {
     HRESULT hr;
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     D3D11_MAPPED_SUBRESOURCE mapResource;
 
     // データコピー
@@ -150,7 +150,7 @@ void GfxD3D11MeshBuffer::Write(void* pData)
 //------------------------------------------------------------------------------
 void GfxD3D11MeshBuffer::Bind(unsigned int indexCount) const
 {
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     UINT stride = m_desc.vertexSize;
     UINT offset = 0;
     // トポロジーのセット

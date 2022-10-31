@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11PixelShader.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 #include <GraphicsSystem\Interface\Gfx_ConstantBuffer.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11Texture.h>
@@ -21,7 +21,7 @@
 GfxD3D11PixelShader::GfxD3D11PixelShader(const wchar_t* fileName)
     : GfxPixelShader(KIND::KIND_PS)
 {
-    ID3D11Device* pDevice = GRAPHICS->GetDevice<ID3D11Device>();
+    ID3D11Device* pDevice = DX->GetDevice<ID3D11Device>();
 
     // エラー対応
     Microsoft::WRL::ComPtr<ID3DBlob> pErrorBlob;
@@ -91,6 +91,6 @@ void GfxD3D11PixelShader::Bind(unsigned int slot) const
         }
     }
 
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     pContext->PSSetShader(m_pPS.Get(), nullptr, 0);
 }

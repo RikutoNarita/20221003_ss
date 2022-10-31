@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\Interface\Gfx_ConstantBuffer.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
 
 #include <GraphicsSystem\D3D11\Gfx_D3D11ConstantBuffer.h>
@@ -48,21 +48,21 @@ GfxConstantBuffer::Ptr GfxConstantBuffer::Create(const GfxTag& tag, Description 
     // APIごとに生成方法を変える
     switch (GRAPHICS->GetAPIKind())
     {
-    case GfxGraphicsManager::API_KIND::DIRECT3D_11: // DX11で生成
+    case API_KIND::DIRECT3D_11: // DX11で生成
     {
         pConstantBuff = std::make_shared<GfxD3D11ConstantBuffer>(desc);
         break;
     }
-    case GfxGraphicsManager::API_KIND::DIRECT3D_12: // DX12で生成
+    case API_KIND::DIRECT3D_12: // DX12で生成
     {
         pConstantBuff = std::make_shared<GfxD3D12ConstantBuffer>(desc);
         break;
     }
-    case GfxGraphicsManager::API_KIND::OPEN_GL:    // OpenGLで生成
+    case API_KIND::OPEN_GL:    // OpenGLで生成
     {
         break;
     }
-    case GfxGraphicsManager::API_KIND::VULKAN:    // Vulkanで生成
+    case API_KIND::VULKAN:    // Vulkanで生成
     {
         break;
     }

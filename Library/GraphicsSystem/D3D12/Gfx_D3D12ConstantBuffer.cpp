@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12ConstantBuffer.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -18,7 +18,7 @@
 GfxD3D12ConstantBuffer::GfxD3D12ConstantBuffer(Description desc)
     : GfxConstantBuffer(desc)
 {
-    ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
+    ID3D12Device* pDevice = DX->GetDevice<ID3D12Device>();
 
     // 定数バッファのヒーププロパティの設定
     D3D12_HEAP_PROPERTIES constHeapProp = {};

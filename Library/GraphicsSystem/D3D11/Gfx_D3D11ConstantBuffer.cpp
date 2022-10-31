@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11ConstantBuffer.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -31,7 +31,7 @@ GfxD3D11ConstantBuffer::GfxD3D11ConstantBuffer(Description desc)
     bufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
     // バッファの作成
-    ID3D11Device * pDevice = GRAPHICS->GetDevice<ID3D11Device>();
+    ID3D11Device * pDevice = DX->GetDevice<ID3D11Device>();
     hr = pDevice->CreateBuffer(&bufDesc, nullptr, &m_pBuffer);
 
     Write(desc.pData);
@@ -56,7 +56,7 @@ GfxD3D11ConstantBuffer::~GfxD3D11ConstantBuffer()
 void GfxD3D11ConstantBuffer::Write(void* pData)
 {
     // 定数バッファへの書き込み
-    ID3D11DeviceContext* pContext = GRAPHICS->GetRenderCommand<ID3D11DeviceContext>();
+    ID3D11DeviceContext* pContext = DX->GetRenderCommand<ID3D11DeviceContext>();
     pContext->UpdateSubresource(m_pBuffer.Get(), 0, nullptr, pData, 0, 0);
 }
 
@@ -69,7 +69,7 @@ void GfxD3D11ConstantBuffer::Write(void* pData)
 //------------------------------------------------------------------------------
 void GfxD3D11ConstantBuffer::BindPS(unsigned slot)
 {
-    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->PSSetConstantBuffers(
+    DX->GetRenderCommand<ID3D11DeviceContext>()->PSSetConstantBuffers(
         slot, 1, m_pBuffer.GetAddressOf());
 }
 
@@ -82,7 +82,7 @@ void GfxD3D11ConstantBuffer::BindPS(unsigned slot)
 //------------------------------------------------------------------------------
 void GfxD3D11ConstantBuffer::BindVS(unsigned slot)
 {
-    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->VSSetConstantBuffers(
+    DX->GetRenderCommand<ID3D11DeviceContext>()->VSSetConstantBuffers(
         slot, 1, m_pBuffer.GetAddressOf());
 }
 

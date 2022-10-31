@@ -6,7 +6,7 @@
 
 /// インクルード
 #include <GraphicsSystem\D3D11\Gfx_D3D11ViewPort_Impl.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -49,5 +49,5 @@ GfxD3D11ViewPort::~GfxD3D11ViewPort()
 //------------------------------------------------------------------------------
 void GfxD3D11ViewPort::Bind() const
 {
-    GRAPHICS->GetRenderCommand<ID3D11DeviceContext>()->RSSetViewports(1, &m_viewPort);
+    DX->GetRenderCommand<ID3D11DeviceContext>()->RSSetViewports(1, &m_viewPort);
 }

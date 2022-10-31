@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\Interface\Gfx_MeshBuffer.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\Interface\Gfx_GraphicsResource.h>
 
 #include <GraphicsSystem\D3D11\Gfx_D3D11MeshBuffer.h>
@@ -46,21 +46,21 @@ GfxMeshBuffer::Ptr GfxMeshBuffer::Create(const GfxTag& tag, Description desc)
     // APIごとに生成方法を変える
     switch (GRAPHICS->GetAPIKind())
     {
-    case GfxGraphicsManager::API_KIND::DIRECT3D_11: // Direct3D 11
+    case API_KIND::DIRECT3D_11: // Direct3D 11
     {
         // メッシュデータの作成
         pMeshBuffer = std::make_shared<GfxD3D11MeshBuffer>(desc);
         break;
     }
-    case GfxGraphicsManager::API_KIND::DIRECT3D_12: // Direct3D 12
+    case API_KIND::DIRECT3D_12: // Direct3D 12
     {
         // メッシュデータの作成
         pMeshBuffer = std::make_shared<GfxD3D12MeshBuffer>(desc);
         break;
     }
 
-    case GfxGraphicsManager::API_KIND::OPEN_GL: break;
-    case GfxGraphicsManager::API_KIND::VULKAN: break;
+    case API_KIND::OPEN_GL: break;
+    case API_KIND::VULKAN: break;
     default: break;
     }
 

@@ -10,7 +10,7 @@
 #include <GraphicsSystem\D3D11\Gfx_D3D11ViewPort_Impl.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11ScissorRect_Impl.h>
 #include <GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 
 //------------------------------------------------------------------------------
 /// コンストラクタ
@@ -91,5 +91,5 @@ void GfxD3D11RenderCommand::OMSetRenderTargets(
 //------------------------------------------------------------------------------
 void GfxD3D11RenderCommand::EndDraw()
 {
-    GRAPHICS->GetSwapChain<IDXGISwapChain>()->Present(1, 0);
+    DX->GetSwapChain<IDXGISwapChain>()->Present(1, 0);
 }

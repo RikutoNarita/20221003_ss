@@ -60,6 +60,18 @@
     <Filter Include="GameSystem\gameObjct">
       <UniqueIdentifier>{899ea2af-e4c6-40b0-b6cf-aa2022d28616}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenGL">
+      <UniqueIdentifier>{b2ec6243-8129-4bfc-80a4-bef8d9d0c4e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL\system">
+      <UniqueIdentifier>{17ff577b-f54e-47e8-9b80-0cf78515d57a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL\resource">
+      <UniqueIdentifier>{67719d40-fc57-40c6-9469-5174786164d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenGL\manager">
+      <UniqueIdentifier>{0737eb29-06dd-4e8e-8c1e-6fc38e385665}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="small.ico">
@@ -70,7 +82,7 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\Win_Window.cpp">
+    <ClCompile Include="..\Source\Platfrom_Windows_Impl.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Win_Main.cpp">
@@ -139,7 +151,7 @@
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.cpp">
       <Filter>GraphicsSystem\System\manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.cpp">
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DXManager.cpp">
       <Filter>GraphicsSystem\System\manager</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Tag.cpp">
@@ -208,9 +220,21 @@
     <ClCompile Include="..\Library\GameSystem\Object\Game_ObjSphere.cpp">
       <Filter>GameSystem\gameObjct</Filter>
     </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.cpp">
+      <Filter>GraphicsSystem\System\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.cpp">
+      <Filter>OpenGL\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\IPlatform.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Glfw_Window_Impl.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\Win_Window.h">
+    <ClInclude Include="..\Source\Platfrom_Windows_Impl.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Win_Main.h">
@@ -282,7 +306,7 @@
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.h">
       <Filter>GraphicsSystem\System\manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.h">
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DXManager.h">
       <Filter>GraphicsSystem\System\manager</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_Tag.h">
@@ -371,6 +395,18 @@
     </ClInclude>
     <ClInclude Include="..\Library\GameSystem\Object\Game_ObjSphere.h">
       <Filter>GameSystem\gameObjct</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.h">
+      <Filter>GraphicsSystem\System\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.h">
+      <Filter>OpenGL\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\IPlatform.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Glfw_Window_Impl.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

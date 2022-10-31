@@ -188,15 +188,19 @@
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_ConstantBuffer.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphiccsBinder.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DXManager.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.cpp" />
+    <ClCompile Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResource.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_MeshBuffer.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Shader.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Tag.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Texture.cpp" />
+    <ClCompile Include="..\Source\Glfw_Window_Impl.cpp" />
+    <ClCompile Include="..\Source\IPlatform.cpp" />
     <ClCompile Include="..\Source\Win_Main.cpp" />
-    <ClCompile Include="..\Source\Win_Window.cpp" />
+    <ClCompile Include="..\Source\Platfrom_Windows_Impl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Library\CoreSystem\Input.h" />
@@ -236,7 +240,9 @@
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_ConstantBuffer.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphiccsBinder.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsManager.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DXManager.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.h" />
+    <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResource.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GrapicsObjectBase.h" />
@@ -251,8 +257,10 @@
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ScissorRect.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_SwapChain.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ViewPort.h" />
+    <ClInclude Include="..\Source\Glfw_Window_Impl.h" />
+    <ClInclude Include="..\Source\IPlatform.h" />
     <ClInclude Include="..\Source\Win_Main.h" />
-    <ClInclude Include="..\Source\Win_Window.h" />
+    <ClInclude Include="..\Source\Platfrom_Windows_Impl.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="memo.txt" />

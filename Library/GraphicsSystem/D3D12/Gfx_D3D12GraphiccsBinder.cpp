@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12GraphiccsBinder.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12PixelShader.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12VertexShader.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12ConstantBuffer.h>

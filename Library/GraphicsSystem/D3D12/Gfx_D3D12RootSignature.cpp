@@ -6,7 +6,7 @@
 
 // インクルード
 #include <GraphicsSystem\D3D12\Gfx_D3D12RootSignature.h>
-#include <GraphicsSystem\Interface\Gfx_GraphicsManager.h>
+#include <GraphicsSystem\Interface\Gfx_DXManager.h>
 #include <GraphicsSystem\D3D12\Gfx_D3D12DescriptorHeap.h>
 
 //------------------------------------------------------------------------------
@@ -37,7 +37,7 @@ GfxD3D12RootSignature::~GfxD3D12RootSignature()
 //------------------------------------------------------------------------------
 void GfxD3D12RootSignature::Create(GfxD3D12DescriptorHeap* pDescriptorHeap)
 {
-    ID3D12Device* pDevice = GRAPHICS->GetDevice<ID3D12Device>();
+    ID3D12Device* pDevice = DX->GetDevice<ID3D12Device>();
     HRESULT hr = S_OK;
     Microsoft::WRL::ComPtr<ID3DBlob> pErrorBlob;
 
@@ -93,6 +93,6 @@ void GfxD3D12RootSignature::Create(GfxD3D12DescriptorHeap* pDescriptorHeap)
 void GfxD3D12RootSignature::Bind(unsigned slot) const
 {
     UNREFERENCED_PARAMETER(slot);
-    auto pCommandList = GRAPHICS->GetRenderCommand<ID3D12GraphicsCommandList>();
+    auto pCommandList = DX->GetRenderCommand<ID3D12GraphicsCommandList>();
     pCommandList->SetGraphicsRootSignature(m_pRootSignature.Get());
 }
