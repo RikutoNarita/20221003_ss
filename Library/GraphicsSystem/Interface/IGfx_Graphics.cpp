@@ -7,7 +7,7 @@
 // インクルード
 #include <GraphicsSystem\Interface\IGfx_Graphics.h>
 #include <GraphicsSystem\Interface\Gfx_DXManager.h>
-#include <GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.h>
+//#include <GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.h>
 
 #include <GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.h>
 
@@ -33,7 +33,7 @@ void IGfxGraphics::Create(API_KIND apiKind)
 		m_pGraphics = std::make_unique<GfxDXManager>();
 		break;
 	case API_KIND::OPEN_GL:
-		m_pGraphics = std::make_unique<GfxOpenGL>();
+		//m_pGraphics = std::make_unique<GfxOpenGL>();
 		break;
 	case API_KIND::VULKAN:
 		break;

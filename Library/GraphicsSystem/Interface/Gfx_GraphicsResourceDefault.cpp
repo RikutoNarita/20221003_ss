@@ -17,22 +17,23 @@
 #include <vector>
 #include <DirectXMath.h>
 
+// 2D頂点フォーマット
 struct Vertex2D
 {
     float pos[3];
     float uv[2];
 };
-
+// 3D頂点フォーマット
 struct Vertex3D
 {
-    //DirectX::XMFLOAT3 pos;       // 座標
-    //DirectX::XMFLOAT3 normal;    // 法線
-    //DirectX::XMFLOAT2 uv;        // uv
-    //DirectX::XMFLOAT4 diffuse;   // カラー
-    float pos[3];       // 座標
-    float normal[3];    // 法線
-    float uv[2];        // uv
-    float diffuse[4];   // カラー
+    //float pos[3];       // 座標
+    //float normal[3];    // 法線
+    //float uv[2];        // uv
+    //float diffuse[4];   // カラー
+    DirectX::XMFLOAT3 pos;       // 座標
+    DirectX::XMFLOAT3 normal;    // 法線
+    DirectX::XMFLOAT2 uv;        // uv
+    DirectX::XMFLOAT4 diffuse;   // カラー
 };
 
 // プロトタイプ宣言
@@ -46,14 +47,11 @@ void CreateDefaultTexture();
 void CreateGeometoryCube();
 void CreateGeometorySprite();
 void CreateGeometorySphere();
+void CreateGeometoryPrism();
 void CreateCBDefault();
 
-//void CreateCBWorld();
-//void CreateCBViewProj();
-//void CreateCBColor();
+
 void CreateCBLight();
-//void CreateGeometoryPlane();
-//void CreateGeometorySpehre();
 
 //-----------------------------------------------------------------------------
 /// デフォルトリソースの作成し
@@ -83,12 +81,13 @@ void CreateGraphicsResource()
     CreateGeometoryCube();
     CreateGeometorySprite();
     CreateGeometorySphere();
+    CreateGeometoryPrism();
 }
 
 // 定数バッファ
 void CreateCBLight()
 {
-    DirectX::XMFLOAT4 light(-1.0f, -1.0f, -0.5f, 0.0f);
+    DirectX::XMFLOAT4 light(1.0f, -1.0f, 0.5f, 0.0f);
     GfxConstantBuffer::Description CBVdesc = {};
     CBVdesc.pData = &light;
     CBVdesc.size = sizeof(DirectX::XMFLOAT4);
@@ -367,30 +366,19 @@ void CreateGeometoryCube()
         //外積で法線算出
         DirectX::XMFLOAT3 v1 =
         {
-            vtx1.pos[0] - vtx0.pos[0], vtx1.pos[1] - vtx0.pos[1], vtx1.pos[2] - vtx0.pos[2]
+            vtx1.pos.x - vtx0.pos.x, vtx1.pos.y - vtx0.pos.y, vtx1.pos.z - vtx0.pos.z
         };
         DirectX::XMFLOAT3 v2 =
         {
-            vtx2.pos[0] - vtx0.pos[0], vtx2.pos[1] - vtx0.pos[1], vtx2.pos[2] - vtx0.pos[2]
+            vtx2.pos.x - vtx0.pos.x, vtx2.pos.y - vtx0.pos.y, vtx2.pos.z - vtx0.pos.z
         };
         const auto n = DirectX::XMVector3Normalize(
             DirectX::XMVector3Cross(
                 DirectX::XMLoadFloat3(&v1), DirectX::XMLoadFloat3(&v2)));
         //データ格納
-        //DirectX::XMStoreFloat3(&vertices3D[i].normal, n);
-        //DirectX::XMStoreFloat3(&vertices3D[i + 1].normal, n);
-        //DirectX::XMStoreFloat3(&vertices3D[i + 2].normal, n);
-        DirectX::XMFLOAT3 normal;
-        DirectX::XMStoreFloat3(&normal, n);
-        float norm[3] = {
-            normal.x, normal.y, normal.z
-        };
-        vtx0.normal[0] = vtx1.normal[0] = vtx2.normal[0] = norm[0];
-        vtx0.normal[1] = vtx1.normal[1] = vtx2.normal[1] = norm[1];
-        vtx0.normal[2] = vtx1.normal[2] = vtx2.normal[2] = norm[2];
-        //vertices3D[indexList[i]].normal = norm;
-        //vertices3D[indexList[i] + 1].normal =
-        //vertices3D[indexList[i] + 2].normal = norm;
+        DirectX::XMStoreFloat3(&vertices3D[i].normal, n);
+        DirectX::XMStoreFloat3(&vertices3D[i + 1].normal, n);
+        DirectX::XMStoreFloat3(&vertices3D[i + 2].normal, n);
     }
     meshDesc.pVertexData = vertices3D;
     meshDesc.vertexCount = _countof(vertices3D);
@@ -483,122 +471,120 @@ void CreateGeometorySphere()
 
 void CreateGeometoryPrism()
 {
-    //namespace dx = DirectX;
+    namespace dx = DirectX;
 
-    //// オブジェクトのリソースの中身を作成
-    //GfxMeshBuffer::Description meshDesc = {};
+    // オブジェクトのリソースの中身を作成
+    GfxMeshBuffer::Description meshDesc = {};
 
-    //const int longDiv = 100;
-    //const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
-    //const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
-    //const float longitudeAngle = 2.0f * DirectX::XM_PI / longDiv;
+    const int longDiv = 3;
+    const auto base = dx::XMVectorSet(1.0f, 0.0f, -1.0f, 0.0f);
+    const auto offset = dx::XMVectorSet(0.0f, 0.0f, 2.0f, 0.0f);
+    const float longitudeAngle = 2.0f * DirectX::XM_PI / longDiv;
 
-    //// near center
-    //std::vector<Vertex3D> vertices;
-    //vertices.emplace_back();
-    //vertices.back().pos = { 0.0f,0.0f,-1.0f };
-    //const auto iCenterNear = (unsigned short)(vertices.size() - 1);
-    //// far center
-    //vertices.emplace_back();
-    //vertices.back().pos = { 0.0f,0.0f,1.0f };
-    //const auto iCenterFar = (unsigned short)(vertices.size() - 1);
+    // near center
+    static std::vector<Vertex3D> vertices;
+    vertices.emplace_back();
+    vertices.back().pos = { 0.0f,0.0f,-1.0f };
+    const auto iCenterNear = (unsigned short)(vertices.size() - 1);
+    // far center
+    vertices.emplace_back();
+    vertices.back().pos = { 0.0f,0.0f,1.0f };
+    const auto iCenterFar = (unsigned short)(vertices.size() - 1);
 
-    //// base vertices
-    //for (int iLong = 0; iLong < longDiv; iLong++)
-    //{
-    //    // near base
-    //    {
-    //        vertices.emplace_back();
-    //        auto v = dx::XMVector3Transform(
-    //            base,
-    //            dx::XMMatrixRotationZ(longitudeAngle * iLong)
-    //        );
-    //        dx::XMStoreFloat3(&vertices.back().pos, v);
-    //    }
-    //    // far base
-    //    {
-    //        vertices.emplace_back();
-    //        auto v = dx::XMVector3Transform(
-    //            base,
-    //            dx::XMMatrixRotationZ(longitudeAngle * iLong)
-    //        );
-    //        v = dx::XMVectorAdd(v, offset);
-    //        dx::XMStoreFloat3(&vertices.back().pos, v);
-    //    }
-    //}
+    // base vertices
+    for (int iLong = 0; iLong < longDiv; iLong++)
+    {
+        // near base
+        {
+            vertices.emplace_back();
+            auto v = dx::XMVector3Transform(
+                base,
+                dx::XMMatrixRotationZ(longitudeAngle * iLong)
+            );
+            dx::XMStoreFloat3(&vertices.back().pos, v);
+        }
+        // far base
+        {
+            vertices.emplace_back();
+            auto v = dx::XMVector3Transform(
+                base,
+                dx::XMMatrixRotationZ(longitudeAngle * iLong)
+            );
+            v = dx::XMVectorAdd(v, offset);
+            dx::XMStoreFloat3(&vertices.back().pos, v);
+        }
+    }
 
-    //// side indices
-    //std::vector<unsigned short> indices;
-    //for (unsigned short iLong = 0; iLong < longDiv; iLong++)
-    //{
-    //    const unsigned short i = iLong * 2;
-    //    const auto mod = longDiv * 2;
-    //    indices.push_back(i + 2);
-    //    indices.push_back((i + 2) % mod + 2);
-    //    indices.push_back(i + 1 + 2);
-    //    indices.push_back((i + 2) % mod + 2);
-    //    indices.push_back((i + 3) % mod + 2);
-    //    indices.push_back(i + 1 + 2);
-    //}
+    // side indices
+    std::vector<unsigned short> indices;
+    for (unsigned short iLong = 0; iLong < longDiv; iLong++)
+    {
+        const unsigned short i = iLong * 2;
+        const auto mod = longDiv * 2;
+        indices.push_back(i + 2);
+        indices.push_back((i + 2) % mod + 2);
+        indices.push_back(i + 1 + 2);
+        indices.push_back((i + 2) % mod + 2);
+        indices.push_back((i + 3) % mod + 2);
+        indices.push_back(i + 1 + 2);
+    }
 
-    //// base indices
-    //for (unsigned short iLong = 0; iLong < longDiv; iLong++)
-    //{
-    //    const unsigned short i = iLong * 2;
-    //    const auto mod = longDiv * 2;
-    //    indices.push_back(i + 2);
-    //    indices.push_back(iCenterNear);
-    //    indices.push_back((i + 2) % mod + 2);
-    //    indices.push_back(iCenterFar);
-    //    indices.push_back(i + 1 + 2);
-    //    indices.push_back((i + 3) % mod + 2);
-    //}
+    // base indices
+    for (unsigned short iLong = 0; iLong < longDiv; iLong++)
+    {
+        const unsigned short i = iLong * 2;
+        const auto mod = longDiv * 2;
+        indices.push_back(i + 2);
+        indices.push_back(iCenterNear);
+        indices.push_back((i + 2) % mod + 2);
+        indices.push_back(iCenterFar);
+        indices.push_back(i + 1 + 2);
+        indices.push_back((i + 3) % mod + 2);
+    }
 
-    //for (size_t i = 0, Cnt = indices.size(); i < Cnt; i += 3)
-    //{
-    //    auto& vtx0 = vertices[indices[i]];
-    //    auto& vtx1 = vertices[indices[i + 1]];
-    //    auto& vtx2 = vertices[indices[i + 2]];
+    for (size_t i = 0, Cnt = indices.size(); i < Cnt; i += 3)
+    {
+        auto& vtx0 = vertices[indices[i]];
+        auto& vtx1 = vertices[indices[i + 1]];
+        auto& vtx2 = vertices[indices[i + 2]];
 
-    //    //外積で法線算出
-    //    DirectX::XMFLOAT3 v1 =
-    //    {
-    //        vtx1.pos.x - vtx0.pos.x, vtx1.pos.y - vtx0.pos.y, vtx1.pos.z - vtx0.pos.z
-    //    };
-    //    DirectX::XMFLOAT3 v2 =
-    //    {
-    //        vtx2.pos.x - vtx0.pos.x, vtx2.pos.y - vtx0.pos.y, vtx2.pos.z - vtx0.pos.z
-    //    };
-    //    const auto n = DirectX::XMVector3Normalize(
-    //        DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&v1), DirectX::XMLoadFloat3(&v2)));
-    //    //データ格納
-    //    DirectX::XMStoreFloat3(&vertices[indices[i]].normal, n);
-    //    DirectX::XMStoreFloat3(&vertices[indices[i + 1]].normal, n);
-    //    DirectX::XMStoreFloat3(&vertices[indices[i + 2]].normal, n);
-    //}
+        //外積で法線算出
+        DirectX::XMFLOAT3 v1 =
+        {
+            vtx1.pos.x - vtx0.pos.x, vtx1.pos.y - vtx0.pos.y, vtx1.pos.z - vtx0.pos.z
+        };
+        DirectX::XMFLOAT3 v2 =
+        {
+            vtx2.pos.x - vtx0.pos.x, vtx2.pos.y - vtx0.pos.y, vtx2.pos.z - vtx0.pos.z
+        };
+        const auto n = DirectX::XMVector3Normalize(
+            DirectX::XMVector3Cross(DirectX::XMLoadFloat3(&v1), DirectX::XMLoadFloat3(&v2)));
+        //データ格納
+        DirectX::XMStoreFloat3(&vertices[indices[i]].normal, n);
+        DirectX::XMStoreFloat3(&vertices[indices[i + 1]].normal, n);
+        DirectX::XMStoreFloat3(&vertices[indices[i + 2]].normal, n);
+    }
 
-    //for (size_t i = 0; i < vertices.size(); i++)
-    //{
-    //    vertices[i].diffuse = 
-    //    { (float)i / (float)vertices.size(), (float)i / (float)vertices.size(),
-    //    (float)i / (float)vertices.size() ,(float)i / (float)vertices.size() };
-    //}
+    for (size_t i = 0; i < vertices.size(); i++)
+    {
+        vertices[i].diffuse =
+        //    { 1.0f, 1.0f, 1.0f, 1.0f };
+        { (float)i / (float)vertices.size(), (float)i / (float)vertices.size(),
+        (float)i / (float)vertices.size() ,(float)i / (float)vertices.size() };
+    }
 
-    //for (size_t i = 0; i < vertices.size(); i++)
-    //{
-    //    vertices[i].uv = { (float)i / (float)vertices.size(), (float)i / (float)vertices.size() };
-    //}
+    for (size_t i = 0; i < vertices.size(); i++)
+    {
+        vertices[i].uv = { (float)i / (float)vertices.size(), (float)i / (float)vertices.size() };
+    }
 
-    ////std::move(vertices)
-    ////std::move(indices)
-
-    //meshDesc.pVertexData = vertices.data();
-    //meshDesc.vertexCount = (UINT)vertices.size();
-    //meshDesc.vertexSize = sizeof(Vertex3D);
-    //meshDesc.pIndexData = indices.data();
-    //meshDesc.indexCount = (UINT)indices.size();
-    //meshDesc.indexSize = sizeof(unsigned short);
-    //meshDesc.isWrite = true;
-    //meshDesc.tpology = GfxMeshBuffer::TOPOLOGY::TRIANGLE_LIST;
-    //GfxMeshBuffer::Create(GfxTag(GEOMETORY_SPHERE), meshDesc);
+    meshDesc.pVertexData = vertices.data();
+    meshDesc.vertexCount = (UINT)vertices.size();
+    meshDesc.vertexSize = sizeof(Vertex3D);
+    meshDesc.pIndexData = indices.data();
+    meshDesc.indexCount = (UINT)indices.size();
+    meshDesc.indexSize = sizeof(unsigned short);
+    meshDesc.isWrite = true;
+    meshDesc.tpology = GfxMeshBuffer::TOPOLOGY::TRIANGLE_LIST;
+    GfxMeshBuffer::Create(GfxTag(GEOMETRY_PRISM), meshDesc);
 }

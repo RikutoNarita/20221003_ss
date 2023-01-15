@@ -19,18 +19,6 @@ cbuffer lightInfo : register(b1)
     float4 lightDir; // ライトの向き
 }
 
-//// テクスチャフラグの定数バッファ
-//cbuffer textureFlag : register(b1)
-//{
-//    int texFlag; // テクスチャの有無(0の場合はテクスチャなし)
-//}
-
-// シェーダーリソース
-Texture2D g_texture : register(t0);
-
-// サンプラー
-SamplerState g_sampler : register(s0);
-
 // ランバートシェーダーのエントリーポイント
 float4 main(PS_IN pin) : SV_TARGET
 {
@@ -44,10 +32,5 @@ float4 main(PS_IN pin) : SV_TARGET
     // 色に反映
     color *= sahdow;
     
-    //if (false)
-    //{
-    // テクスチャ反映
-    //color *= g_texture.Sample(g_sampler, pin.uv);
-    //}
     return color;
 }

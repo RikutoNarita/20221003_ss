@@ -18,9 +18,6 @@
     <Filter Include="CoreSystem">
       <UniqueIdentifier>{114a617b-a87d-497f-811f-8a7454aab756}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CoreSystem\Debug">
-      <UniqueIdentifier>{cfcc7dc9-8a03-414b-b801-032930755f3f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GraphicsSystem\System">
       <UniqueIdentifier>{d63b1785-a9a9-42de-a30a-ccf0e337a2c0}</UniqueIdentifier>
     </Filter>
@@ -59,18 +56,6 @@
     </Filter>
     <Filter Include="GameSystem\gameObjct">
       <UniqueIdentifier>{899ea2af-e4c6-40b0-b6cf-aa2022d28616}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL">
-      <UniqueIdentifier>{b2ec6243-8129-4bfc-80a4-bef8d9d0c4e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL\system">
-      <UniqueIdentifier>{17ff577b-f54e-47e8-9b80-0cf78515d57a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL\resource">
-      <UniqueIdentifier>{67719d40-fc57-40c6-9469-5174786164d8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="OpenGL\manager">
-      <UniqueIdentifier>{0737eb29-06dd-4e8e-8c1e-6fc38e385665}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -214,23 +199,17 @@
     <ClCompile Include="..\Library\GameSystem\Object\Game_ObjectBase.cpp">
       <Filter>GameSystem\gameObjct</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjSprite.cpp">
-      <Filter>GameSystem\gameObjct</Filter>
-    </ClCompile>
     <ClCompile Include="..\Library\GameSystem\Object\Game_ObjSphere.cpp">
       <Filter>GameSystem\gameObjct</Filter>
     </ClCompile>
     <ClCompile Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.cpp">
       <Filter>GraphicsSystem\System\manager</Filter>
     </ClCompile>
-    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.cpp">
-      <Filter>OpenGL\manager</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\IPlatform.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Glfw_Window_Impl.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjPrism.cpp">
+      <Filter>GameSystem\gameObjct</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -390,23 +369,17 @@
     <ClInclude Include="..\Library\GameSystem\Object\Game_ObjectBase.h">
       <Filter>GameSystem\gameObjct</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjSprite.h">
-      <Filter>GameSystem\gameObjct</Filter>
-    </ClInclude>
     <ClInclude Include="..\Library\GameSystem\Object\Game_ObjSphere.h">
       <Filter>GameSystem\gameObjct</Filter>
     </ClInclude>
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.h">
       <Filter>GraphicsSystem\System\manager</Filter>
     </ClInclude>
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.h">
-      <Filter>OpenGL\manager</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\IPlatform.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Glfw_Window_Impl.h">
-      <Filter>ソース ファイル</Filter>
+    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjPrism.h">
+      <Filter>GameSystem\gameObjct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

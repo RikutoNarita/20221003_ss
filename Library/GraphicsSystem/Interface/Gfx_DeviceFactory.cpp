@@ -184,41 +184,6 @@ namespace DeviceFactory
             {
                 return hr;
             }
-
-            //// ファクトリーを作成
-            //Microsoft::WRL::ComPtr<IDXGIFactory> factory;
-            //hr = CreateDXGIFactory1(IID_PPV_ARGS(&factory));
-            //if (FAILED(hr))
-            //{
-            //    return hr;
-            //}
-            //
-            //// スワップチェイン作成(フロントバッファに表示可能なバックバッファを持つもの)
-            //DXGI_SWAP_CHAIN_DESC scDesc = {};                       // スワップチェーンの設定データ
-            //scDesc.BufferDesc.Width = desc.width;                   // 画面の幅
-            //scDesc.BufferDesc.Height = desc.height;                 // 画面の高さ
-            //scDesc.BufferDesc.Format = desc.fromat;                 // バッファの形式
-            //scDesc.BufferUsage = desc.bufferUsage;                  // バッファの使用方法
-            //scDesc.BufferCount = desc.bufferCount;                  // バッファの数
-            //scDesc.OutputWindow = desc.hWnd;                        // ウィンドウハンドル
-            //scDesc.SwapEffect = desc.swapEffect;
-            //scDesc.Flags = desc.flag;
-            //scDesc.Windowed = TRUE;                                 // ウィンドウモード
-            //scDesc.SampleDesc.Count = 1;                            // MSAAは使用しない
-            //scDesc.SampleDesc.Quality = 0;                          // MSAAは使用しない
-            //scDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-            //scDesc.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-            //scDesc.BufferDesc.RefreshRate.Numerator = 0;
-            //scDesc.BufferDesc.RefreshRate.Denominator = 1;
-            //// スワップチェインの作成
-            //hr = factory->CreateSwapChain(
-            //    dynamic_cast<GfxD3D11Device*>(pDevice)->GetDevice(),
-            //    &scDesc,
-            //    &dynamic_cast<GfxD3D11SwapChain*>(pSwapChain.get())->m_pSwapChain);
-            //if (FAILED(hr))
-            //{
-            //    return hr;
-            //}
             
             break;
         }
@@ -231,48 +196,6 @@ namespace DeviceFactory
             {
                 return hr;
             }
-//            // ファクトリーの生成
-//            Microsoft::WRL::ComPtr<IDXGIFactory6> pFactory;
-//#ifdef _DEBUG
-//            if (CreateDXGIFactory2(DXGI_CREATE_FACTORY_DEBUG, IID_PPV_ARGS(&pFactory)) != S_OK)
-//            {
-//                return E_FAIL;
-//            }
-//#else
-//            if (CreateDXGIFactory1(IID_PPV_ARGS(&pFactory)) != S_OK)
-//            {
-//                return E_FAIL;
-//            }
-//#endif // _DEBUG
-//
-//            // スワップチェーンの設定
-//            DXGI_SWAP_CHAIN_DESC1 swapChainDesc = {};
-//            swapChainDesc.Width = desc.width;
-//            swapChainDesc.Height = desc.height;
-//            swapChainDesc.Format = desc.fromat;
-//            swapChainDesc.BufferUsage = desc.bufferUsage;
-//            swapChainDesc.BufferCount = desc.bufferCount;
-//            swapChainDesc.SwapEffect = desc.swapEffect;
-//            swapChainDesc.Flags = desc.flag;
-//            swapChainDesc.Stereo = false;
-//            swapChainDesc.SampleDesc.Count = 1;                     // サンプルは1ピクセルづつ
-//            swapChainDesc.SampleDesc.Quality = 0;                   // クオリティは最低
-//            swapChainDesc.Scaling = DXGI_SCALING_STRETCH;           // バックバッファーは伸び縮み可能
-//            swapChainDesc.AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED;  // 指定なし
-//
-//            // スワップチェーンの生成
-//            Microsoft::WRL::ComPtr<IDXGISwapChain1> swapchain1;
-//            hr = pFactory->CreateSwapChainForHwnd(
-//                dynamic_cast<GfxD3D12RenderCommand*>(pRenderCommand)->GetCommadQueue(),
-//                desc.hWnd,
-//                &swapChainDesc,
-//                nullptr,
-//                nullptr,
-//                &swapchain1);
-//            if (FAILED(hr)) return hr;
-//
-//            // SwapChain4 → SwapChain1にする
-//            swapchain1.As(&dynamic_cast<GfxD3D12SwapChain*>(pSwapChain.get())->m_pSwapChain);
 
             break;
         }

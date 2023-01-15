@@ -23,7 +23,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{7ce542f7-9eb4-43ed-ac87-d989efa8f8df}</ProjectGuid>
     <RootNamespace>My20221003ss</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.20348.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -126,6 +126,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Library\OpenGL\glfw\lib\$(Configuration);$(SolutionDir)Library\OpenGL\glm\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -144,6 +145,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Library\OpenGL\glfw\lib\$(Configuration);$(SolutionDir)Library\OpenGL\glm\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -154,8 +156,8 @@
     <ClCompile Include="..\Library\CoreSystem\Input.cpp" />
     <ClCompile Include="..\Library\GameSystem\Object\Game_ObjCube.cpp" />
     <ClCompile Include="..\Library\GameSystem\Object\Game_ObjectBase.cpp" />
+    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjPrism.cpp" />
     <ClCompile Include="..\Library\GameSystem\Object\Game_ObjSphere.cpp" />
-    <ClCompile Include="..\Library\GameSystem\Object\Game_ObjSprite.cpp" />
     <ClCompile Include="..\Library\GameSystem\Scene\Scene_TestScene.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ConstantBuffer.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.cpp" />
@@ -189,7 +191,6 @@
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphiccsBinder.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_DXManager.cpp" />
-    <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResource.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.cpp" />
@@ -197,7 +198,6 @@
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Shader.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Tag.cpp" />
     <ClCompile Include="..\Library\GraphicsSystem\Interface\Gfx_Texture.cpp" />
-    <ClCompile Include="..\Source\Glfw_Window_Impl.cpp" />
     <ClCompile Include="..\Source\IPlatform.cpp" />
     <ClCompile Include="..\Source\Win_Main.cpp" />
     <ClCompile Include="..\Source\Platfrom_Windows_Impl.cpp" />
@@ -206,8 +206,8 @@
     <ClInclude Include="..\Library\CoreSystem\Input.h" />
     <ClInclude Include="..\Library\GameSystem\Object\Game_ObjCube.h" />
     <ClInclude Include="..\Library\GameSystem\Object\Game_ObjectBase.h" />
+    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjPrism.h" />
     <ClInclude Include="..\Library\GameSystem\Object\Game_ObjSphere.h" />
-    <ClInclude Include="..\Library\GameSystem\Object\Game_ObjSprite.h" />
     <ClInclude Include="..\Library\GameSystem\Scene\Scene_TestScene.h" />
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11ConstantBuffer.h" />
     <ClInclude Include="..\Library\GraphicsSystem\D3D11\Gfx_D3D11DepthStencilView_Impl.h" />
@@ -241,7 +241,6 @@
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DeviceFactory.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphiccsBinder.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_DXManager.h" />
-    <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_OpenGLManager_Impl.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_Graphics.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResource.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\Gfx_GraphicsResourceDefault.h" />
@@ -257,7 +256,6 @@
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ScissorRect.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_SwapChain.h" />
     <ClInclude Include="..\Library\GraphicsSystem\Interface\IGfx_ViewPort.h" />
-    <ClInclude Include="..\Source\Glfw_Window_Impl.h" />
     <ClInclude Include="..\Source\IPlatform.h" />
     <ClInclude Include="..\Source\Win_Main.h" />
     <ClInclude Include="..\Source\Platfrom_Windows_Impl.h" />

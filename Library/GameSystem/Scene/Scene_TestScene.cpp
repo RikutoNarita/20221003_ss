@@ -11,7 +11,7 @@
 
 #include <GameSystem\Object\Game_ObjCube.h>
 #include <GameSystem\Object\Game_ObjSphere.h>
-
+#include <GameSystem\Object\Game_ObjPrism.h>
 
 
 //------------------------------------------------------------------------------
@@ -44,7 +44,8 @@ void SceneTest::Init()
     // オブジェクトの設定
     pCube->SetPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_TEX));
     pCube->SetTexture(GfxGraphicsResource::Find<GfxTexture>(TEX_CHECKER));
-    pCube->SetPos(0, 0, 0); // 座標の設定
+    pCube->SetPos(0.0f, 0.0f, 0.0f);    // 座標の設定
+    pCube->SetRotate(0.0f, 20.0f, 0.0f);// 回転の設定
     // オブジェクトリストに追加
     m_pObjList.push_back(pCube);
 
@@ -53,9 +54,17 @@ void SceneTest::Init()
     // オブジェクトの設定
     pShere->SetPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_TEX));
     pShere->SetTexture(GfxGraphicsResource::Find<GfxTexture>(TEX_CHECKER));
-    pShere->SetPos(6.0f, 3.5f, 3); // 座標の設定
+    pShere->SetPos(-3.0f, -1.0f, 0.0f); // 座標の設定
     // オブジェクトリストに追加
     m_pObjList.push_back(pShere);
+
+    // 角柱オブジェクトの生成
+    std::shared_ptr<GameObjPrism> pPrism = std::make_shared<GameObjPrism>();
+    // オブジェクトの設定
+    pPrism->SetPos(4.0f, 0.0f, 0.0f);       // 座標の設定
+    pPrism->SetRotate(0.0f, 30.0f, -15.0f);   // 回転の設定
+    // オブジェクトリストに追加
+    m_pObjList.push_back(pPrism);
 
     // オブジェクトの初期化
     for (const auto& obj : m_pObjList)

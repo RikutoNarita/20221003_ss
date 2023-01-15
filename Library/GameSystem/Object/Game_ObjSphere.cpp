@@ -25,8 +25,6 @@ GameObjSphere::GameObjSphere()
     m_pGraphics->BindConstantBuffer(
         GfxGraphicsResource::Find<GfxConstantBuffer>(CB_LIGHT), GfxShader::KIND::KIND_PS, 1);
     m_pGraphics->BindPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_LAMBERT));
-    //m_pGraphics->BindPS(GfxGraphicsResource::Find<GfxPixelShader>(PS_TEX));
-    //m_pGraphics->BindTexture(GfxGraphicsResource::Find<GfxTexture>(CHECKER), GfxShader::KIND::KIND_PS);
 }
 
 //------------------------------------------------------------------------------
@@ -49,11 +47,18 @@ void GameObjSphere::Init()
     DirectX::XMMATRIX mat[3];
     DirectX::XMFLOAT4X4 fmat[3];
     mat[0] = DirectX::XMMatrixIdentity();   // world
+    // 回転
+    mat[0] = DirectX::XMMatrixMultiply(mat[0],
+        DirectX::XMMatrixRotationRollPitchYaw(
+            DirectX::XMConvertToRadians(m_fRot[0]),
+            DirectX::XMConvertToRadians(m_fRot[1]),
+            DirectX::XMConvertToRadians(m_fRot[2])));
+    // 座標
     mat[0] = DirectX::XMMatrixMultiply(mat[0],
         DirectX::XMMatrixTranslation(m_fPos[0], m_fPos[1], m_fPos[2]));
 
     mat[1] = DirectX::XMMatrixLookAtLH(     // view
-        DirectX::XMVectorSet(8, 4, 5, 0),  // カメラ座標
+        DirectX::XMVectorSet(1, 4, -6, 0),  // カメラ座標
         DirectX::XMVectorSet(0, 0, 0, 0),   // 注視点
         DirectX::XMVectorSet(0, 1, 0, 0));  // 上方ベクトル
     mat[2] = DirectX::XMMatrixPerspectiveFovLH( // projection
@@ -92,11 +97,18 @@ void GameObjSphere::Update()
     DirectX::XMMATRIX mat[3];
     DirectX::XMFLOAT4X4 fmat[3];
     mat[0] = DirectX::XMMatrixIdentity();   // world
+    // 回転
+    mat[0] = DirectX::XMMatrixMultiply(mat[0],
+        DirectX::XMMatrixRotationRollPitchYaw(
+            DirectX::XMConvertToRadians(m_fRot[0]),
+            DirectX::XMConvertToRadians(m_fRot[1]),
+            DirectX::XMConvertToRadians(m_fRot[2])));
+    // 座標
     mat[0] = DirectX::XMMatrixMultiply(mat[0],
         DirectX::XMMatrixTranslation(m_fPos[0], m_fPos[1], m_fPos[2]));
 
     mat[1] = DirectX::XMMatrixLookAtLH(     // view
-        DirectX::XMVectorSet(8, 4, 5, 0),   // カメラ座標
+        DirectX::XMVectorSet(1, 4, -6, 0),   // カメラ座標
         DirectX::XMVectorSet(0, 0, 0, 0),   // 注視点
         DirectX::XMVectorSet(0, 1, 0, 0));  // 上方ベクトル
     mat[2] = DirectX::XMMatrixPerspectiveFovLH( // projection
